@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { handle } from './promise';
 
 type HandlerObject = {
   [key: string]: (req: NextApiRequest, res: NextApiResponse) => Promise<void>;
@@ -13,7 +12,7 @@ const apiHandler = (handler: HandlerObject) => {
     }
 
     try {
-      await handle(handler[method](req, res));
+      await handler[method](req, res);
     } catch (e: unknown) {
       // Run error handler middleware here
       return res.status(500).end(`oopsie woopsie`);
