@@ -5,16 +5,15 @@ import { apiHandler, parseQuery } from '../../../lib/utils/api';
 import { handle } from '../../../lib/utils/promise';
 
 const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
-  const queryParams = parseQuery(req.query, ['count', 'skip']);
+  const queryParams = parseQuery(req.query, ['count', 'skip', 'fields']);
 
-  let count = Number.parseInt(queryParams.count as string);
-  let skip = Number.parseInt(queryParams.skip as string);
-  if (isNaN(count) || count === 0) count = 20;
-  if (isNaN(skip)) skip = 0;
+  const count = Number.parseInt(queryParams.count as string);
+  const skip = Number.parseInt(queryParams.skip as string);
+  const fields = (queryParams.fields as string)?.split(',').join(' ');
 
   await connectToDatabase();
   const [error, data] = await handle<IComicDocument[]>(
-    getAllComics(count, skip)
+    getAllComics(count, skip, fields)
   );
   if (error) return Promise.reject(error);
 

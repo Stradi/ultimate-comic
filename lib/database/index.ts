@@ -33,14 +33,18 @@ const disconnectFromDatabase = async (): Promise<void> => {
 
 const getAllComics = async (
   count = 20,
-  skip = 0
+  skip = 0,
+  fields = 'name slug isCompleted releaseDate coverImage summary'
 ): Promise<IComicDocument[]> => {
-  const query = ComicModel.find({}).limit(count).skip(skip);
+  const query = ComicModel.find({}).limit(count).skip(skip).select(fields);
   return await query.exec();
 };
 
-const getComicById = async (id: string): Promise<IComicDocument> => {
-  const query = ComicModel.findById(id);
+const getComicById = async (
+  id: string,
+  fields = 'name slug isCompleted releaseDate coverImage summary'
+): Promise<IComicDocument> => {
+  const query = ComicModel.findById(id).select(fields);
   const result = await query.exec();
 
   if (result) {
@@ -50,8 +54,11 @@ const getComicById = async (id: string): Promise<IComicDocument> => {
   }
 };
 
-const getComicBySlug = async (slug: string): Promise<IComicDocument> => {
-  const query = ComicModel.findOne({ slug });
+const getComicBySlug = async (
+  slug: string,
+  fields = 'name slug isCompleted releaseDate coverImage summary'
+): Promise<IComicDocument> => {
+  const query = ComicModel.findOne({ slug }).select(fields);
   const result = await query.exec();
 
   if (result) {
