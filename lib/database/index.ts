@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
-
-let __DBCONNECTION = {};
+import { ComicModel, IComicDocument } from './models';
 
 const connectToDatabase = async (): Promise<void> => {
-  if (__DBCONNECTION) {
+  if (mongoose.connections[0].readyState === 1) {
     return Promise.resolve();
   }
 
@@ -13,12 +12,11 @@ const connectToDatabase = async (): Promise<void> => {
   }
 
   try {
-    const conn = await mongoose.connect(connectionString, {
+    await mongoose.connect(connectionString, {
       serverSelectionTimeoutMS: 2000,
     });
-    __DBCONNECTION = conn.connection;
     return Promise.resolve();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.log(error);
     return Promise.reject(error);
   }
@@ -28,9 +26,17 @@ const disconnectFromDatabase = async (): Promise<void> => {
   try {
     await mongoose.disconnect();
     return Promise.resolve();
-  } catch (error: any) {
+  } catch (error: unknown) {
     return Promise.reject();
   }
 };
 
-export { connectToDatabase, disconnectFromDatabase };
+const getAllComics = async (
+  count = 20,
+  skip = 0
+): Promise<IComicDocument[]> => {
+  const query = ComicModel.find({}).limit(count).skip(skip);
+  return await query.exec();
+};
+
+export { connectToDatabase, disconnectFromDatabase, getAllComics };
