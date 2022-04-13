@@ -39,4 +39,32 @@ const getAllComics = async (
   return await query.exec();
 };
 
-export { connectToDatabase, disconnectFromDatabase, getAllComics };
+const getComicById = async (id: string): Promise<IComicDocument> => {
+  const query = ComicModel.findById(id);
+  const result = await query.exec();
+
+  if (result) {
+    return Promise.resolve(result);
+  } else {
+    return Promise.reject(`${id} does not exists.`);
+  }
+};
+
+const getComicBySlug = async (slug: string): Promise<IComicDocument> => {
+  const query = ComicModel.findOne({ slug });
+  const result = await query.exec();
+
+  if (result) {
+    return Promise.resolve(result);
+  } else {
+    return Promise.reject(`${slug} does not exists.`);
+  }
+};
+
+export {
+  connectToDatabase,
+  disconnectFromDatabase,
+  getAllComics,
+  getComicById,
+  getComicBySlug,
+};
