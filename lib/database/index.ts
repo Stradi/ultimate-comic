@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { getPopulatableFields } from '../utils/database';
+import { ApiError, DatabaseError } from '../utils/error';
 import { ComicModel, IComicDocument } from './models';
 
 const connectToDatabase = async (): Promise<void> => {
@@ -9,7 +10,13 @@ const connectToDatabase = async (): Promise<void> => {
 
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
-    return Promise.reject("DATABASE_URL in environment file couldn't found");
+    return Promise.reject(
+      new DatabaseError(
+        "Connection string couldn't found.",
+        "Connection string for connecting to database couldn't found on any '.env*' files.",
+        'Provide a connection string in .env* file.'
+      )
+    );
   }
 
   try {
@@ -18,7 +25,6 @@ const connectToDatabase = async (): Promise<void> => {
     });
     return Promise.resolve();
   } catch (error: unknown) {
-    console.log(error);
     return Promise.reject(error);
   }
 };
@@ -69,7 +75,14 @@ const getComicById = async (
   if (result) {
     return Promise.resolve(result);
   } else {
-    return Promise.reject(`${id} does not exists.`);
+    return Promise.reject(
+      new ApiError(
+        404,
+        `'${id}' does not exists.`,
+        `There is no matching document that has '_id=${id}'.`,
+        `Enter a valid '_id'`
+      )
+    );
   }
 };
 
@@ -91,7 +104,14 @@ const getComicBySlug = async (
   if (result) {
     return Promise.resolve(result);
   } else {
-    return Promise.reject(`${slug} does not exists.`);
+    return Promise.reject(
+      new ApiError(
+        404,
+        `'${slug}' does not exists.`,
+        `There is no matching document that has 'slug=${slug}'.`,
+        `Enter a valid 'slug'`
+      )
+    );
   }
 };
 
