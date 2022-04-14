@@ -12,8 +12,8 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
     'populate',
   ]);
 
-  const count = Number.parseInt(queryParams.count as string);
-  const skip = Number.parseInt(queryParams.skip as string);
+  const count = Number.parseInt(queryParams.count as string) || undefined;
+  const skip = Number.parseInt(queryParams.skip as string) || undefined;
   const fields = (queryParams.fields as string)?.split(',').join(' ');
   const populate = (queryParams.populate as string)?.split(',');
 
