@@ -5,6 +5,8 @@ interface IAuthorDocument extends mongoose.Document {
   name: string;
   slug: string;
   comics?: mongoose.Types.DocumentArray<IComicDocument>;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const AuthorSchema = new mongoose.Schema<IAuthorDocument>(

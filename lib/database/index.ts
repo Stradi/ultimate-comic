@@ -45,7 +45,9 @@ const getAllComics = async (
   populate: string[] = []
 ): Promise<IComicDocument[]> => {
   const query = ComicModel.find({});
-  query.limit(count);
+  if (count !== -1) {
+    query.limit(count);
+  }
   query.skip(skip);
   query.select(fields);
 

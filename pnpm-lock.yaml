@@ -13,6 +13,7 @@ specifiers:
   eslint-config-next: 12.1.4
   eslint-config-prettier: ^8.5.0
   eslint-plugin-prettier: ^4.0.0
+  eslint-plugin-tailwindcss: ^3.5.0
   husky: ^7.0.4
   mongoose: ^6.2.10
   next: 12.1.4
@@ -42,6 +43,7 @@ devDependencies:
   eslint-config-next: 12.1.4_57d845948e13b1864c5a396265280d12
   eslint-config-prettier: 8.5.0_eslint@8.13.0
   eslint-plugin-prettier: 4.0.0_1815ac95b7fb26c13c7d48a8eef62d0f
+  eslint-plugin-tailwindcss: 3.5.0_autoprefixer@10.4.4
   husky: 7.0.4
   postcss: 8.4.12
   prettier: 2.6.2
@@ -1467,6 +1469,18 @@ packages:
       resolve: 2.0.0-next.3
       semver: 6.3.0
       string.prototype.matchall: 4.0.7
+    dev: true
+
+  /eslint-plugin-tailwindcss/3.5.0_autoprefixer@10.4.4:
+    resolution: {integrity: sha512-m1NyKX1qii3arb+zWrsNO5R15b27aaEm6m1ie9JM9a6yBrU9Q8H62obzT/U8PSITIucMY864uxljV8MiP7H6xg==}
+    engines: {node: '>=12.13.0'}
+    dependencies:
+      fast-glob: 3.2.11
+      postcss: 8.4.12
+      tailwindcss: 3.0.23_autoprefixer@10.4.4
+    transitivePeerDependencies:
+      - autoprefixer
+      - ts-node
     dev: true
 
   /eslint-scope/5.1.1:

@@ -4,10 +4,11 @@
     "next/core-web-vitals",
     "eslint:recommended",
     "prettier",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:tailwindcss/recommended"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["prettier", "@typescript-eslint"],
+  "plugins": ["prettier", "@typescript-eslint", "tailwindcss"],
   "rules": {
     "prettier/prettier": ["error"]
   }

@@ -1,4 +1,6 @@
 import { Types } from 'mongoose';
+import { connectToDatabase } from '../database';
+import { handle } from './promise';
 
 const isValidObjectID = (str: string): boolean => {
   try {
@@ -19,4 +21,16 @@ const getPopulatableFields = (fields: string, populate: string[]): string[] => {
   return available;
 };
 
-export { isValidObjectID, getPopulatableFields };
+const callDb = async <T>(
+  promise: Promise<T>,
+  serialize = false
+): Promise<T> => {
+  await connectToDatabase();
+  const [error, data] = await handle<T>(promise);
+  if (error) return Promise.reject(error);
+
+  if (serialize) return JSON.parse(JSON.stringify(data as T));
+  else return data as T;
+};
+
+export { isValidObjectID, getPopulatableFields, callDb };
