@@ -1,7 +1,13 @@
 import mongoose from 'mongoose';
 import { getPopulatableFields } from '../utils/database';
 import { ApiError, DatabaseError } from '../utils/error';
-import { ComicModel, IComicDocument } from './models';
+import { handle } from '../utils/promise';
+import {
+  ComicModel,
+  IComicDocument,
+  IIssueDocument,
+  IssueModel,
+} from './models';
 
 const connectToDatabase = async (): Promise<void> => {
   if (mongoose.connections[0].readyState === 1) {
@@ -117,10 +123,35 @@ const getComicBySlug = async (
   }
 };
 
+const getIssueBySlug = async (
+  comicSlug: string,
+  issueSlug: string
+): Promise<IIssueDocument> => {
+  const [error, data] = await handle<IComicDocument>(
+    getComicBySlug(comicSlug, '')
+  );
+  if (error) return Promise.reject(error);
+
+  const query = IssueModel.findOne({ slug: issueSlug, comic: data._id });
+  const result = await query.exec();
+  if (result) {
+    return Promise.resolve(result);
+  } else {
+    return Promise.reject(
+      new ApiError(
+        404,
+        `'${comicSlug}' has no issue named '${issueSlug}'.`,
+        `There is no matching document that has 'slug=${issueSlug}' and 'comicId=${data._id}'`,
+        `Enter a valid 'comicSlug' and 'issueSlug'`
+      )
+    );
+  }
+};
 export {
   connectToDatabase,
   disconnectFromDatabase,
   getAllComics,
   getComicById,
   getComicBySlug,
+  getIssueBySlug,
 };
