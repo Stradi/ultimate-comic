@@ -5,6 +5,8 @@ interface IIssueDocument extends mongoose.Document {
   slug: string;
   comic?: mongoose.Types.ObjectId;
   images?: mongoose.Types.Array<string>;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const IssueSchema = new mongoose.Schema<IIssueDocument>(

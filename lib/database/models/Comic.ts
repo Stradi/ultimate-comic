@@ -13,6 +13,8 @@ interface IComicDocument extends mongoose.Document {
   issues?: mongoose.Types.DocumentArray<IIssueDocument>;
   authors?: mongoose.Types.DocumentArray<IAuthorDocument>;
   tags?: mongoose.Types.DocumentArray<ITagDocument>;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const ComicSchema = new mongoose.Schema<IComicDocument>(
