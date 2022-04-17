@@ -6,11 +6,11 @@ import {
 } from 'next';
 import Image from 'next/image';
 import { ParsedUrlQuery } from 'querystring';
-import { Container } from '../../components/Container';
-import { IssueList } from '../../components/IssueList';
-import { getAllComics, getComicBySlug } from '../../lib/database';
-import { IComicDocument, IIssueDocument } from '../../lib/database/models';
-import { callDb } from '../../lib/utils/database';
+import { Container } from '~/components/Container';
+import { IssueList } from '~/components/IssueList';
+import { getAllComics, getComicBySlug } from '~/lib/database';
+import { IComicDocument, IIssueDocument } from '~/lib/database/models';
+import { callDb } from '~/lib/utils/database';
 
 interface IComicSlugPageProps {
   comic: IComicDocument;
@@ -63,7 +63,7 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
 };
 
 interface IStaticPathsQuery extends ParsedUrlQuery {
-  slug: string;
+  comicSlug: string;
 }
 
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
@@ -72,7 +72,7 @@ export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
   );
 
   const paths = slugs.map((slug) => ({
-    params: { slug },
+    params: { comicSlug: slug },
   }));
 
   return {
@@ -85,7 +85,7 @@ export const getStaticProps: GetStaticProps<
   IComicSlugPageProps,
   IStaticPathsQuery
 > = async (context: GetStaticPropsContext<IStaticPathsQuery>) => {
-  const slug = (context.params as IStaticPathsQuery).slug;
+  const slug = (context.params as IStaticPathsQuery).comicSlug;
   const comic = await callDb(
     getComicBySlug(
       slug,
