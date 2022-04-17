@@ -9,7 +9,7 @@ import { ParsedUrlQuery } from 'querystring';
 import { Container } from '../../components/Container';
 import { IssueList } from '../../components/IssueList';
 import { getAllComics, getComicBySlug } from '../../lib/database';
-import { IComicDocument } from '../../lib/database/models';
+import { IComicDocument, IIssueDocument } from '../../lib/database/models';
 import { callDb } from '../../lib/utils/database';
 
 interface IComicSlugPageProps {
@@ -24,6 +24,7 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
   );
   const authors = comic.authors?.map((author) => author.name) as string[];
   const tags = comic.tags?.map((tag) => tag.name) as string[];
+  const issues = comic.issues as IIssueDocument[];
 
   return (
     <Container className="px-2">
@@ -56,7 +57,7 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
         <p className="text-xl">Summary:</p>
         <p>{comic.summary}</p>
       </div>
-      <IssueList issues={comic.issues} slug={comic.slug} />
+      <IssueList issues={issues} slug={comic.slug} />
     </Container>
   );
 };

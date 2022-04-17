@@ -9,12 +9,14 @@ interface ISingleIssueProps {
 }
 
 const SingleIssue = ({ issue, href }: ISingleIssueProps) => {
+  const images = issue.images as string[];
+  const coverImage = images[0];
   return (
     <Link href={href} passHref>
       <a className="group relative">
         <Image
           className="rounded-lg group-hover:brightness-[0.35] transition duration-100"
-          src={issue.images[0]}
+          src={coverImage}
           layout="responsive"
           width={1}
           height={1.3}
