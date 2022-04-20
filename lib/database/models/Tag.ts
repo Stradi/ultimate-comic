@@ -4,7 +4,7 @@ import { IComicDocument } from './Comic';
 interface ITagDocument extends mongoose.Document {
   name: string;
   slug: string;
-  comics?: mongoose.Types.DocumentArray<IComicDocument>;
+  comics?: IComicDocument[];
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 
+//TODO: Don't use mongoose types for fields.
 interface IIssueDocument extends mongoose.Document {
   name: string;
   slug: string;
   comic?: mongoose.Types.ObjectId;
-  images?: mongoose.Types.Array<string>;
+  images?: string[];
   createdAt: Date;
   updatedAt: Date;
 }

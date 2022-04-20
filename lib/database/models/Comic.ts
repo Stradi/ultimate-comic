@@ -10,9 +10,9 @@ interface IComicDocument extends mongoose.Document {
   releaseDate?: Date;
   coverImage?: string;
   summary?: string;
-  issues?: mongoose.Types.DocumentArray<IIssueDocument>;
-  authors?: mongoose.Types.DocumentArray<IAuthorDocument>;
-  tags?: mongoose.Types.DocumentArray<ITagDocument>;
+  issues?: IIssueDocument[];
+  authors?: IAuthorDocument[];
+  tags?: ITagDocument[];
   createdAt: Date;
   updatedAt: Date;
 }
