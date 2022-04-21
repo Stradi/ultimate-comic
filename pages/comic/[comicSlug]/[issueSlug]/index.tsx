@@ -36,7 +36,7 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
   };
 
   const issueNavDOM = (
-    <Container className="flex gap-4 justify-center my-2 ">
+    <div className="flex gap-4 justify-between my-2 mx-auto md:justify-end md:w-1/2">
       {prevIssue && (
         <Button
           type="default"
@@ -51,16 +51,16 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
           text="Next Issue"
         />
       )}
-    </Container>
+    </div>
   );
 
   return (
     <div>
-      <h1 className="text-4xl font-medium text-center">{`${comic.name}`}</h1>
-      <h2 className="text-2xl text-center">{issue.name}</h2>
-      {issueNavDOM}
+      <Container className="md:flex md:justify-between md:max-w-2xl">
+        <h1 className="self-center mx-auto w-1/2 text-2xl font-medium text-center md:text-left">{`${comic.name} ${issue.name}`}</h1>
+        {issueNavDOM}
+      </Container>
       <Reader images={issue.images as string[]} onFinished={goNextIssue} />
-      {issueNavDOM}
     </div>
   );
 };

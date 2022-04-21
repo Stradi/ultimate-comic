@@ -6,6 +6,7 @@ import {
 } from 'next';
 import Image from 'next/image';
 import { ParsedUrlQuery } from 'querystring';
+import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { IssueList } from '~/components/IssueList';
 import { getAllComics, getComicBySlug } from '~/lib/database';
@@ -26,36 +27,65 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
   const tags = comic.tags?.map((tag) => tag.name) as string[];
   const issues = comic.issues as IIssueDocument[];
 
+  //TODO: Go to tag page when clicked
+  const tagsDOM = tags.map((tag) => (
+    <span className="p-2 bg-neutral-800 rounded-md" key={tag}>
+      {tag}
+    </span>
+  ));
+
   return (
     <Container className="px-2">
-      <div className="gap-4 sm:flex">
-        <div className="mx-auto w-3/4 sm:mx-0 sm:w-1/3">
+      <div className="md:flex">
+        <div className="mx-auto w-10/12 sm:w-3/5 md:w-2/5 lg:w-1/3">
           <Image
             src={comic.coverImage as string}
             layout="responsive"
             width={1}
             height={1.35}
             alt={`${comic.name} cover image`}
-            className="rounded-xl"
+            className="rounded-md"
             priority
           />
         </div>
-        <div className="sm:w-2/3">
-          <h1 className="mb-2 text-3xl text-center sm:text-4xl sm:text-left">
+        <div className="p-4 m-auto w-full bg-neutral-900 rounded-md sm:w-10/12 md:w-3/5 md:rounded-r-md md:rounded-l-none lg:w-2/3">
+          <h1 className="mb-2 text-2xl font-medium text-left text-white">
             {comic.name}
           </h1>
-          <p className="text-xl">Release Year:</p>
-          <p>{releaseDate.getFullYear()}</p>
-          <p className="text-xl">Authors:</p>
-          <p>{authors.join(',')}</p>
-          <p className="text-xl">Tags:</p>
-          <p>{tags.join(',')}</p>
-          <br></br>
+          <div className="my-4">{tagsDOM}</div>
+          <p className="my-2 font-medium text-white">Summary:</p>
+          <p className="text-sm">{comic.summary}</p>
+          <div className="grid grid-cols-3 my-2">
+            <div>
+              <span className="font-medium text-white">Authors:</span>
+              <br></br>
+              <span className="text-sm">{authors}</span>
+            </div>
+            <div>
+              <span className="font-medium text-white">Status:</span> <br></br>
+              <span className="text-sm">
+                {comic.isCompleted ? 'Completed' : 'Ongoing'}
+              </span>
+            </div>
+            <div>
+              <span className="font-medium text-white">Release Year:</span>{' '}
+              <br></br>
+              <span className="text-sm">{releaseDate.getFullYear()}</span>
+            </div>
+          </div>
+          <div className="flex gap-2 mt-2">
+            <Button
+              href={`/comic/${comic.slug}/${issues[issues.length - 1].slug}`}
+              text="Read First Issue"
+              type="minimal"
+            />
+            <Button
+              href={`/comic/${comic.slug}/${issues[0].slug}`}
+              text="Read Latest Issue"
+              type="default"
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <p className="text-xl">Summary:</p>
-        <p>{comic.summary}</p>
       </div>
       <IssueList issues={issues} slug={comic.slug} />
     </Container>

@@ -99,7 +99,7 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
           Page
           <select
             ref={pageSelectRef}
-            className="p-1 mx-2 rounded-md focus:outline-none ring-2 ring-neutral-800 focus:ring-blue-600"
+            className="p-1 mx-2 bg-neutral-800 rounded-md focus:outline-none ring-2 ring-neutral-700 focus:ring-red-600"
             onChange={(e) => goToPage(Number.parseInt(e.currentTarget.value))}
             value={pageNumber}
           >
@@ -112,6 +112,7 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
           of <span className="font-medium">{images.length}</span>
         </div>
         <NextImg
+          className="rounded-md"
           src={images[pageNumber]}
           layout="responsive"
           width={1}
