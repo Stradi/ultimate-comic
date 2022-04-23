@@ -96,8 +96,9 @@ interface IStaticPathsQuery extends ParsedUrlQuery {
   comicSlug: string;
 }
 
+//TODO: Only generate most populer N pages.
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
-  const slugs = (await callDb(getAllComics(-1, 0, 'slug'))).map(
+  const slugs = (await callDb(getAllComics(5, 0, 'slug'))).map(
     (comic) => comic.slug
   );
 

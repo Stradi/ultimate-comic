@@ -9,7 +9,7 @@ import { ParsedUrlQuery } from 'querystring';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Reader } from '~/components/Reader';
-import { getAllComics, getComicBySlug, getIssueBySlug } from '~/lib/database';
+import { getComicBySlug, getIssueBySlug } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
 
@@ -70,32 +70,12 @@ interface IStaticPathsQuery extends ParsedUrlQuery {
   issueSlug: string;
 }
 
+// We are not generating and /[comicSlug]/[issueSlug] pages because
+// we only want to generate those pages when /[comicSlug] page is
+// generated.
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
-  const comics = (
-    await callDb(getAllComics(-1, 0, 'slug issues', ['issues']))
-  ).map((comic) => {
-    const issues = comic.issues as IIssueDocument[];
-    const issueSlugs = issues.map((issue) => issue.slug);
-    return {
-      slug: comic.slug,
-      issues: issueSlugs,
-    };
-  });
-
-  const paths = [];
-  for (const comic of comics) {
-    for (const iSlug of comic.issues) {
-      paths.push({
-        params: {
-          comicSlug: comic.slug,
-          issueSlug: iSlug,
-        },
-      });
-    }
-  }
-
   return {
-    paths,
+    paths: [],
     fallback: 'blocking',
   };
 };
