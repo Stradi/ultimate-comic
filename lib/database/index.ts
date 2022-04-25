@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { getPopulatableFields, getPopulateFields } from '../utils/database';
+import { getPopulatableFields, selectFromFields } from '../utils/database';
 import { ApiError, DatabaseError } from '../utils/error';
 import { handle } from '../utils/promise';
 import {
@@ -63,7 +63,7 @@ const getAllComics = async (
   populatableFields.forEach((fieldToPopulate) =>
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: getPopulateFields(fieldToPopulate.fields),
+      select: selectFromFields(fieldToPopulate.fields),
     })
   );
 
@@ -82,7 +82,7 @@ const getComicById = async (
   populatableFields.forEach((fieldToPopulate) =>
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: getPopulateFields(fieldToPopulate.fields),
+      select: selectFromFields(fieldToPopulate.fields),
     })
   );
 
@@ -114,7 +114,7 @@ const getComicBySlug = async (
   populatableFields.forEach((fieldToPopulate) => {
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: getPopulateFields(fieldToPopulate.fields),
+      select: selectFromFields(fieldToPopulate.fields),
     });
   });
 
@@ -158,6 +158,30 @@ const getIssueBySlug = async (
     );
   }
 };
+
+const getLatestIssues = async (
+  count = 20,
+  skip = 0,
+  fields = 'name slug createdAt',
+  populate: PopulationOption[] = []
+): Promise<IIssueDocument[]> => {
+  const query = IssueModel.find();
+  if (count !== -1) {
+    query.limit(count);
+  }
+  query.skip(skip);
+  query.select(selectFromFields(fields));
+
+  const populatableFields = getPopulatableFields(fields, populate);
+  populatableFields.forEach((fieldToPopulate) => {
+    query.populate({
+      path: fieldToPopulate.fieldName,
+      select: selectFromFields(fieldToPopulate.fields),
+    });
+  });
+
+  return await query.exec();
+};
 export {
   connectToDatabase,
   disconnectFromDatabase,
@@ -165,4 +189,5 @@ export {
   getComicById,
   getComicBySlug,
   getIssueBySlug,
+  getLatestIssues,
 };

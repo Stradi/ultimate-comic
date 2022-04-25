@@ -25,21 +25,24 @@ const getPopulatableFields = (
   return available;
 };
 
-const getPopulateFields = (fields: string): object => {
+const selectFromFields = (fields: string): object => {
   type ReturnType = { [key: string]: number | object };
-  const populateObject: ReturnType = {};
+  const selectObject: ReturnType = {};
   fields.split(' ').forEach((field) => {
-    if (field.indexOf('images.') === -1) {
-      populateObject[field] = 1;
+    if (field.indexOf('.') === -1) {
+      selectObject[field] = 1;
     } else {
-      const imageIdx = Number.parseInt(field.split('.')[1]);
-      populateObject['images'] = {
-        $arrayElemAt: ['$images', imageIdx],
+      const splittedField = field.split('.');
+      const fieldName = splittedField[0];
+      const arrIdx = Number.parseInt(splittedField[1]);
+
+      selectObject[fieldName] = {
+        $arrayElemAt: [`$${fieldName}`, arrIdx],
       };
     }
   });
 
-  return populateObject;
+  return selectObject;
 };
 
 const callDb = async <T>(
@@ -54,4 +57,4 @@ const callDb = async <T>(
   else return data as T;
 };
 
-export { isValidObjectID, getPopulatableFields, getPopulateFields, callDb };
+export { isValidObjectID, getPopulatableFields, selectFromFields, callDb };
