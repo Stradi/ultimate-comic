@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { getPopulatableFields } from '../utils/database';
+import { getPopulatableFields, getPopulateFields } from '../utils/database';
 import { ApiError, DatabaseError } from '../utils/error';
 import { handle } from '../utils/promise';
 import {
@@ -44,11 +44,13 @@ const disconnectFromDatabase = async (): Promise<void> => {
   }
 };
 
+//TODO: Add sort and sort by option
+
 const getAllComics = async (
   count = 20,
   skip = 0,
   fields = 'name slug isCompleted releaseDate coverImage summary',
-  populate: string[] = []
+  populate: PopulationOption[] = []
 ): Promise<IComicDocument[]> => {
   const query = ComicModel.find({});
   if (count !== -1) {
@@ -59,7 +61,10 @@ const getAllComics = async (
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) =>
-    query.populate(fieldToPopulate)
+    query.populate({
+      path: fieldToPopulate.fieldName,
+      select: getPopulateFields(fieldToPopulate.fields),
+    })
   );
 
   return await query.exec();
@@ -68,14 +73,17 @@ const getAllComics = async (
 const getComicById = async (
   id: string,
   fields = 'name slug isCompleted releaseDate coverImage summary',
-  populate: string[] = []
+  populate: PopulationOption[] = []
 ): Promise<IComicDocument> => {
   const query = ComicModel.findById(id);
   query.select(fields);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) =>
-    query.populate(fieldToPopulate)
+    query.populate({
+      path: fieldToPopulate.fieldName,
+      select: getPopulateFields(fieldToPopulate.fields),
+    })
   );
 
   const result = await query.exec();
@@ -97,15 +105,18 @@ const getComicById = async (
 const getComicBySlug = async (
   slug: string,
   fields = 'name slug isCompleted releaseDate coverImage summary',
-  populate: string[] = []
+  populate: PopulationOption[] = []
 ): Promise<IComicDocument> => {
   const query = ComicModel.findOne({ slug });
   query.select(fields);
 
   const populatableFields = getPopulatableFields(fields, populate);
-  populatableFields.forEach((fieldToPopulate) =>
-    query.populate(fieldToPopulate)
-  );
+  populatableFields.forEach((fieldToPopulate) => {
+    query.populate({
+      path: fieldToPopulate.fieldName,
+      select: getPopulateFields(fieldToPopulate.fields),
+    });
+  });
 
   const result = await query.exec();
 
