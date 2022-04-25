@@ -121,7 +121,11 @@ export const getStaticProps: GetStaticProps<
     getComicBySlug(
       slug,
       'name slug isCompleted releaseDate coverImage summary authors tags issues',
-      ['authors', 'tags', 'issues']
+      [
+        { fieldName: 'authors', fields: 'name' },
+        { fieldName: 'tags', fields: 'name' },
+        { fieldName: 'issues', fields: 'name slug createdAt images.0' },
+      ]
     ),
     true
   );

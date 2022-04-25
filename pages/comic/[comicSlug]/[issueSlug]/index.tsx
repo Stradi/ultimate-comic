@@ -90,7 +90,9 @@ export const getStaticProps: GetStaticProps<
 
   //TODO: We could do all of these in (probably) one getComicBySlug call.
   const comic = await callDb(
-    getComicBySlug(comicSlug, 'name slug issues', ['issues']),
+    getComicBySlug(comicSlug, 'name slug issues', [
+      { fieldName: 'issues', fields: 'images slug' },
+    ]),
     true
   );
 
