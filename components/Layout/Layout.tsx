@@ -28,13 +28,13 @@ const Layout = ({ children }: ILayoutProps) => {
     ],
   };
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Navbar left={navbarItems.left} right={navbarItems.right} />
       <br></br>
-      {children}
+      <main className="flex-1">{children}</main>
       <br></br>
       <Footer />
-    </>
+    </div>
   );
 };
 
