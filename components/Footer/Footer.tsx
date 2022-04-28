@@ -9,22 +9,28 @@ const Footer = () => {
         clause of{' '}
         <a
           href="https://www.copyright.gov/title17/"
-          className="text-neutral-400 hover:text-red-600"
+          className="text-neutral-400 hover:text-red-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-600"
         >
           Copyright Law
         </a>
         .<br></br>
         For more information see{' '}
         <Link href="/privacy-policy">
-          <a className="text-neutral-400 hover:text-red-600">Privacy Policy</a>
+          <a className="text-neutral-400 hover:text-red-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-600">
+            Privacy Policy
+          </a>
         </Link>
         ,{' '}
         <Link href="/dmca">
-          <a className="text-neutral-400 hover:text-red-600">DMCA</a>
+          <a className="text-neutral-400 hover:text-red-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-600">
+            DMCA
+          </a>
         </Link>
         ,{' '}
         <Link href="/contact">
-          <a className="text-neutral-400 hover:text-red-600">Contact Us</a>
+          <a className="text-neutral-400 hover:text-red-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-600">
+            Contact Us
+          </a>
         </Link>
         .
       </p>
