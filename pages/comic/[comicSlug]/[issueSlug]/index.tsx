@@ -7,7 +7,6 @@ import {
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
 import { Reader } from '~/components/Reader';
 import { getComicBySlug, getIssueBySlug } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
@@ -36,10 +35,10 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
   };
 
   const issueNavDOM = (
-    <div className="flex gap-4 justify-between my-2 mx-auto md:justify-end md:w-1/2">
+    <div className="flex gap-4 justify-center my-2 mx-auto md:justify-end md:w-1/2">
       {prevIssue && (
         <Button
-          type="default"
+          type="minimal"
           href={`/comic/${comic.slug}/${prevIssue.slug}`}
           text="Previous Issue"
         />
@@ -56,10 +55,20 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
 
   return (
     <div>
-      <Container className="md:flex md:justify-between md:max-w-2xl">
-        <h1 className="self-center mx-auto w-1/2 text-2xl font-medium text-center md:text-left">{`${comic.name} ${issue.name}`}</h1>
+      <div className="mx-auto md:flex md:justify-between md:max-w-4xl">
+        <h1 className="self-center mx-auto font-medium text-center md:w-1/2 md:text-left">
+          Back to{' '}
+          <Button
+            href={`/comic/${comic.slug}`}
+            text={comic.name}
+            type="minimal"
+          />
+        </h1>
+        <h2 className="grow self-center mt-2 min-w-max text-lg font-medium text-center md:mt-0">
+          {issue.name}
+        </h2>
         {issueNavDOM}
-      </Container>
+      </div>
       <Reader images={issue.images as string[]} onFinished={goNextIssue} />
     </div>
   );
