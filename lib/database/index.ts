@@ -7,6 +7,8 @@ import {
   IComicDocument,
   IIssueDocument,
   IssueModel,
+  ITagDocument,
+  TagModel,
 } from './models';
 
 const connectToDatabase = async (): Promise<void> => {
@@ -184,6 +186,65 @@ const getLatestIssues = async (
 
   return await query.exec();
 };
+
+const getAllTags = async (
+  count = 20,
+  skip = 0,
+  fields = 'name slug comics createdAt updatedAt',
+  populate: PopulationOption[] = [],
+  filter = {}
+): Promise<ITagDocument[]> => {
+  const query = TagModel.find(filter);
+  if (count !== -1) {
+    query.limit(count);
+  }
+
+  query.skip(skip);
+  query.select(fields);
+
+  const populatableFields = getPopulatableFields(fields, populate);
+  populatableFields.forEach((fieldToPopulate) =>
+    query.populate({
+      path: fieldToPopulate.fieldName,
+      select: selectFromFields(fieldToPopulate.fields),
+    })
+  );
+
+  return await query.exec();
+};
+
+const getTagBySlug = async (
+  slug: string,
+  fields = 'name slug comics createdAt updatedAt',
+  populate: PopulationOption[] = []
+): Promise<ITagDocument> => {
+  const query = TagModel.findOne({ slug });
+  query.select(fields);
+
+  const populatableFields = getPopulatableFields(fields, populate);
+  populatableFields.forEach((fieldToPopulate) => {
+    query.populate({
+      path: fieldToPopulate.fieldName,
+      select: selectFromFields(fieldToPopulate.fields),
+    });
+  });
+
+  const result = await query.exec();
+
+  if (result) {
+    return Promise.resolve(result);
+  } else {
+    return Promise.reject(
+      new ApiError(
+        404,
+        `'${slug}' does not exists.`,
+        `There is no matching document that has 'slug=${slug}'.`,
+        `Enter a valid 'slug'`
+      )
+    );
+  }
+};
+
 export {
   connectToDatabase,
   disconnectFromDatabase,
@@ -192,4 +253,6 @@ export {
   getComicBySlug,
   getIssueBySlug,
   getLatestIssues,
+  getAllTags,
+  getTagBySlug,
 };
