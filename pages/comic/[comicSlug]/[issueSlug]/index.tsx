@@ -7,6 +7,7 @@ import {
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import { Button } from '~/components/Button';
+import { Container } from '~/components/Container';
 import { Reader } from '~/components/Reader';
 import { getComicBySlug, getIssueBySlug } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
@@ -55,6 +56,16 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
 
   return (
     <div>
+      <Container className="p-2 bg-neutral-900 rounded-md">
+        <p className="text-sm">
+          <span className="font-medium text-red-600">Tip:</span> You can
+          navigate using A, D or{' '}
+          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+          <i className="align-middle ri-arrow-left-line" />,{' '}
+          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+          <i className="align-middle ri-arrow-right-line" /> arrow keys.
+        </p>
+      </Container>
       <div className="mx-auto md:flex md:justify-between md:max-w-4xl">
         <h1 className="self-center mx-auto font-medium text-center md:w-1/2 md:text-left">
           Back to{' '}
