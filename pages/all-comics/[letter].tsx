@@ -43,10 +43,10 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
 
   return (
     <Container>
-      {paginationDOM}
-      <h1 className="block p-2 mb-2 text-lg font-medium text-center text-white bg-neutral-900 rounded-md">
+      <h1 className="block mb-2 text-lg font-medium text-center text-white">
         {letter.toUpperCase()}
       </h1>
+      {paginationDOM}
       <p className="p-2 mb-2 text-sm bg-neutral-900 rounded-md">
         <span className="font-medium text-red-600">Note:</span> Completed comics
         have checkmark (
