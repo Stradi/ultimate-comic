@@ -10,7 +10,11 @@ import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { IssueList } from '~/components/IssueList';
 import { getAllComics, getComicBySlug } from '~/lib/database';
-import { IComicDocument, IIssueDocument } from '~/lib/database/models';
+import {
+  IComicDocument,
+  IIssueDocument,
+  ITagDocument,
+} from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
 
 interface IComicSlugPageProps {
@@ -24,14 +28,15 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
     Date.parse((comic.releaseDate as Date).toString())
   );
   const authors = comic.authors?.map((author) => author.name) as string[];
-  const tags = comic.tags?.map((tag) => tag.name) as string[];
   const issues = comic.issues as IIssueDocument[];
 
-  //TODO: Go to tag page when clicked
-  const tagsDOM = tags.map((tag) => (
-    <span className="p-2 bg-neutral-800 rounded-md" key={tag}>
-      {tag}
-    </span>
+  const tagsDOM = (comic.tags as ITagDocument[]).map((tag) => (
+    <Button
+      href={`/tag/${tag.slug}`}
+      text={tag.name}
+      type="minimal"
+      key={tag.slug}
+    />
   ));
 
   return (
@@ -123,7 +128,7 @@ export const getStaticProps: GetStaticProps<
       'name slug isCompleted releaseDate coverImage summary authors tags issues',
       [
         { fieldName: 'authors', fields: 'name' },
-        { fieldName: 'tags', fields: 'name' },
+        { fieldName: 'tags', fields: 'name slug' },
         { fieldName: 'issues', fields: 'name slug createdAt images.0' },
       ]
     ),
