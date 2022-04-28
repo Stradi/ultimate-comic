@@ -13,7 +13,7 @@ const SingleIssue = ({ issue }: ISingleIssueProps) => {
   const comic = issue.comic as unknown as IComicDocument;
   return (
     <Link href={`/comic/${comic.slug}/${issue.slug}`}>
-      <a className="group flex mb-2 bg-neutral-900 hover:bg-neutral-800 rounded-md transition duration-100 sm:mb-0">
+      <a className="group flex mb-2 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100 sm:mb-0">
         <div className="mr-2 w-1/2">
           <Image
             className="rounded-l-md"
