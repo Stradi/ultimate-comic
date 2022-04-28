@@ -38,9 +38,9 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
     (e: KeyboardEvent) => {
       if (pageSelectRef.current !== document.activeElement) {
         const { key } = e;
-        if (key === 'ArrowLeft' || key === 'a') {
+        if (key === 'ArrowLeft' || key === 'a' || key === 'A') {
           goToPage(pageNumber - 1);
-        } else if (key === 'ArrowRight' || key === 'd') {
+        } else if (key === 'ArrowRight' || key === 'd' || key === 'D') {
           goToPage(pageNumber + 1);
         }
       } else {
