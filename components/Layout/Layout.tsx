@@ -15,7 +15,7 @@ const Layout = ({ children }: ILayoutProps) => {
     right: [
       {
         text: 'All Comics',
-        href: '/all-comics',
+        href: '/all-comics/0',
       },
       {
         text: 'Popular Comics',
