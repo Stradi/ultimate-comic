@@ -50,9 +50,10 @@ const getAllComics = async (
   count = 20,
   skip = 0,
   fields = 'name slug isCompleted releaseDate coverImage summary',
-  populate: PopulationOption[] = []
+  populate: PopulationOption[] = [],
+  filter = {}
 ): Promise<IComicDocument[]> => {
-  const query = ComicModel.find({});
+  const query = ComicModel.find(filter);
   if (count !== -1) {
     query.limit(count);
   }
@@ -163,9 +164,10 @@ const getLatestIssues = async (
   count = 20,
   skip = 0,
   fields = 'name slug createdAt',
-  populate: PopulationOption[] = []
+  populate: PopulationOption[] = [],
+  filter = {}
 ): Promise<IIssueDocument[]> => {
-  const query = IssueModel.find();
+  const query = IssueModel.find(filter);
   if (count !== -1) {
     query.limit(count);
   }
