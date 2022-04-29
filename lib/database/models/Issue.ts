@@ -8,6 +8,7 @@ interface IIssueDocument extends mongoose.Document {
   images?: string[];
   createdAt: Date;
   updatedAt: Date;
+  viewCount: number;
 }
 
 const IssueSchema = new mongoose.Schema<IIssueDocument>(
@@ -25,6 +26,7 @@ const IssueSchema = new mongoose.Schema<IIssueDocument>(
       ref: 'Comic',
     },
     images: [String],
+    viewCount: Number,
   },
   {
     timestamps: true,
