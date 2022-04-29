@@ -137,6 +137,23 @@ const getComicBySlug = async (
   }
 };
 
+const getIssueById = async (id: string): Promise<IIssueDocument> => {
+  const query = IssueModel.findOne({ _id: id });
+  const result = await query.exec();
+  if (result) {
+    return Promise.resolve(result);
+  } else {
+    return Promise.reject(
+      new ApiError(
+        404,
+        `'${id}' does not exists.`,
+        `There is no matching document that has '_id=${id}'.`,
+        `Enter a valid '_id'`
+      )
+    );
+  }
+};
+
 const getIssueBySlug = async (
   comicSlug: string,
   issueSlug: string
@@ -251,6 +268,7 @@ export {
   getAllComics,
   getComicById,
   getComicBySlug,
+  getIssueById,
   getIssueBySlug,
   getLatestIssues,
   getAllTags,
