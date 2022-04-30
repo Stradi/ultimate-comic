@@ -10,6 +10,7 @@ interface IComicDocument extends mongoose.Document {
   releaseDate?: Date;
   coverImage?: string;
   summary?: string;
+  totalViews: number;
   issues?: IIssueDocument[];
   authors?: IAuthorDocument[];
   tags?: ITagDocument[];
@@ -37,6 +38,7 @@ const ComicSchema = new mongoose.Schema<IComicDocument>(
     releaseDate: Date,
     coverImage: String,
     summary: String,
+    totalViews: Number,
     issues: [
       {
         type: mongoose.Types.ObjectId,
