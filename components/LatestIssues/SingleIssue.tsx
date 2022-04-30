@@ -9,8 +9,7 @@ interface ISingleIssueProps {
 
 const SingleIssue = ({ issue }: ISingleIssueProps) => {
   const coverImage = (issue.images as string[])[0];
-  //TODO: Remove unknown from here.
-  const comic = issue.comic as unknown as IComicDocument;
+  const comic = issue.comic as IComicDocument;
   return (
     <Link href={`/comic/${comic.slug}/${issue.slug}`}>
       <a className="group flex mb-2 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100 sm:mb-0">

@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
+import { IComicDocument } from './Comic';
 
 //TODO: Don't use mongoose types for fields.
 interface IIssueDocument extends mongoose.Document {
   name: string;
   slug: string;
-  comic?: mongoose.Types.ObjectId;
+  comic?: IComicDocument;
   images?: string[];
   createdAt: Date;
   updatedAt: Date;
