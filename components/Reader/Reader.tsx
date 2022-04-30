@@ -15,7 +15,7 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
   const [pageNumber, setPageNumber] = useState(0);
   const [inEnd, setInEnd] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState('sm:w-2/3');
 
   const pageSelectRef = useRef<HTMLSelectElement>(null);
 
@@ -44,7 +44,7 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
         } else if (key === 'ArrowRight' || key === 'd' || key === 'D') {
           goToPage(pageNumber + 1);
         } else if (key === 'z' || key === 'Z') {
-          setZoom(zoom === 1 ? 2 : 1);
+          setZoom(zoom === 'sm:w-1/3' ? 'sm:w-2/3' : 'sm:w-1/3');
         }
       } else {
         pageSelectRef.current?.blur();
@@ -97,7 +97,7 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
           </button>
         </div>
       </Modal>
-      <div className={`mx-auto w-full sm:w-${zoom}/3`}>
+      <div className={`mx-auto ${zoom}`}>
         <div className="my-2 text-center">
           Page
           <select
