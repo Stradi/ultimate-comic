@@ -5,7 +5,9 @@ interface ISidebarProps {
 
 const Sidebar = ({ children, width }: ISidebarProps) => {
   return (
-    <aside className={`sticky top-2 px-2 w-${width} h-fit`}>{children}</aside>
+    <aside className={`md:sticky top-2 px-2 md:w-${width} h-fit`}>
+      {children}
+    </aside>
   );
 };
 

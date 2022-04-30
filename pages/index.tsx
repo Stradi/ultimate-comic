@@ -55,8 +55,8 @@ const Home: NextPage<IHomePageProps> = ({
           </Link>
         </div>
       </div>
-      <div className="flex">
-        <div className="w-3/4">
+      <div className="md:flex">
+        <div className="md:w-3/4">
           <h2 className="mb-2 text-xl font-medium">Latest Issues</h2>
           <LatestIssues issues={newIssues} />
         </div>
