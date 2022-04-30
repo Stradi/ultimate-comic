@@ -6,9 +6,21 @@ import { toHumanReadable } from '../../lib/utils/date';
 interface ISingleIssueProps {
   issue: IIssueDocument;
   href: string;
+  isBig?: boolean;
 }
 
-const SingleIssue = ({ issue, href }: ISingleIssueProps) => {
+//TODO: Refactor
+const MiniSingleIssue = ({ issue, href }: ISingleIssueProps) => {
+  return (
+    <Link href={href}>
+      <a className="p-2 hover:text-white truncate bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+        {issue.name}
+      </a>
+    </Link>
+  );
+};
+
+const BigSingleIssue = ({ issue, href }: ISingleIssueProps) => {
   const images = issue.images as string[];
   const coverImage = images[0];
   return (
@@ -35,6 +47,11 @@ const SingleIssue = ({ issue, href }: ISingleIssueProps) => {
       </a>
     </Link>
   );
+};
+
+const SingleIssue = ({ isBig, issue, href }: ISingleIssueProps) => {
+  if (isBig) return <BigSingleIssue issue={issue} href={href} />;
+  else return <MiniSingleIssue issue={issue} href={href} />;
 };
 
 export { SingleIssue };

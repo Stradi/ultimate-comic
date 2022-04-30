@@ -8,40 +8,64 @@ interface IIssueListProps {
   slug: string;
 }
 
-//TODO: Add SingleIssue without image for loading
-//issues multiple times in order to decrease network load and
-//increase user experience by providing users a minimal way
-//to see issues. After clicking 2 times to load more button,
-//next clicks should insert MiniSingleIssue component instead
-//of BigSingleIssue component.
+//TODO: Refactor if you can
 const IssueList = ({ issues, slug }: IIssueListProps) => {
-  const [sliceCount, setSliceCount] = useState(7);
+  const SLICE_COUNT = 7;
   const [searchTerm, setSearchTerm] = useState('');
   const [issuesDOM, setIssuesDOM] = useState<ReactElement[]>([]);
+  const [showAll, setShowAll] = useState(false);
 
   const getFilteredIssues = () => {
-    return issues
-      .filter(
-        (issue) =>
-          issue.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
-      )
-      .slice(0, sliceCount)
-      .map((issue) => (
-        <SingleIssue
-          issue={issue}
-          key={issue._id}
-          href={`${slug}/${issue.slug}`}
-        />
-      ));
+    const filteredIssues = issues.filter(
+      (issue) =>
+        issue.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
+    );
+
+    if (showAll) {
+      const bigIssues = filteredIssues
+        .slice(0, 8)
+        .map((issue) => (
+          <SingleIssue
+            issue={issue}
+            key={issue._id}
+            href={`${slug}/${issue.slug}`}
+            isBig={true}
+          />
+        ));
+
+      const smallIssues = filteredIssues
+        .slice(8)
+        .map((issue) => (
+          <SingleIssue
+            issue={issue}
+            key={issue._id}
+            href={`${slug}/${issue.slug}`}
+            isBig={false}
+          />
+        ));
+
+      return [...bigIssues, ...smallIssues];
+    } else {
+      return filteredIssues
+        .slice(0, SLICE_COUNT)
+        .map((issue) => (
+          <SingleIssue
+            issue={issue}
+            key={issue._id}
+            href={`${slug}/${issue.slug}`}
+            isBig={true}
+          />
+        ));
+    }
   };
 
   useEffect(() => {
     setIssuesDOM(getFilteredIssues());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm, sliceCount, slug, issues]);
+  }, [searchTerm, slug, issues, showAll]);
 
   const loadMoreIssues = () => {
-    setSliceCount(sliceCount + 8);
+    setShowAll(true);
   };
 
   const applyFilter = (e: ChangeEvent<HTMLInputElement>) => {
@@ -61,8 +85,8 @@ const IssueList = ({ issues, slug }: IIssueListProps) => {
       </div>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {issuesDOM}
-        {/* Render load more button if we have more issues */}
-        {getFilteredIssues().length >= sliceCount && (
+        {/* Render load more button if user didn't click it yet. */}
+        {!showAll && (
           <button className="group relative" onClick={loadMoreIssues}>
             <Image
               unoptimized
