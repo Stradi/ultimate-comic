@@ -23,7 +23,7 @@ const IssueList = ({ issues, slug }: IIssueListProps) => {
 
     if (showAll) {
       const bigIssues = filteredIssues
-        .slice(0, 8)
+        .slice(0, SLICE_COUNT + 1)
         .map((issue) => (
           <SingleIssue
             issue={issue}
@@ -34,7 +34,7 @@ const IssueList = ({ issues, slug }: IIssueListProps) => {
         ));
 
       const smallIssues = filteredIssues
-        .slice(8)
+        .slice(SLICE_COUNT + 1)
         .map((issue) => (
           <SingleIssue
             issue={issue}
@@ -86,7 +86,7 @@ const IssueList = ({ issues, slug }: IIssueListProps) => {
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {issuesDOM}
         {/* Render load more button if user didn't click it yet. */}
-        {!showAll && (
+        {!showAll && issues.length > SLICE_COUNT && (
           <button className="group relative" onClick={loadMoreIssues}>
             <Image
               unoptimized
