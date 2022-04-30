@@ -10,6 +10,7 @@ import {
   ITagDocument,
   TagModel,
 } from './models';
+import { PopulationOption, SortOption } from './types';
 
 const connectToDatabase = async (): Promise<void> => {
   if (mongoose.connections[0].readyState === 1) {
@@ -46,14 +47,13 @@ const disconnectFromDatabase = async (): Promise<void> => {
   }
 };
 
-//TODO: Add sort and sort by option
-
 const getAllComics = async (
   count = 20,
   skip = 0,
   fields = 'name slug isCompleted releaseDate coverImage summary',
   populate: PopulationOption[] = [],
-  filter = {}
+  filter = {},
+  sort: SortOption = {}
 ): Promise<IComicDocument[]> => {
   const query = ComicModel.find(filter);
   if (count !== -1) {
@@ -61,6 +61,7 @@ const getAllComics = async (
   }
   query.skip(skip);
   query.select(fields);
+  query.sort(sort);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) =>
@@ -209,7 +210,8 @@ const getLatestIssues = async (
   skip = 0,
   fields = 'name slug createdAt',
   populate: PopulationOption[] = [],
-  filter = {}
+  filter = {},
+  sort: SortOption = {}
 ): Promise<IIssueDocument[]> => {
   const query = IssueModel.find(filter);
   if (count !== -1) {
@@ -217,6 +219,7 @@ const getLatestIssues = async (
   }
   query.skip(skip);
   query.select(selectFromFields(fields));
+  query.sort(sort);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) => {
@@ -234,7 +237,8 @@ const getAllTags = async (
   skip = 0,
   fields = 'name slug comics createdAt updatedAt',
   populate: PopulationOption[] = [],
-  filter = {}
+  filter = {},
+  sort: SortOption = {}
 ): Promise<ITagDocument[]> => {
   const query = TagModel.find(filter);
   if (count !== -1) {
@@ -243,6 +247,7 @@ const getAllTags = async (
 
   query.skip(skip);
   query.select(fields);
+  query.sort(sort);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) =>
