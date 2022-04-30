@@ -6,6 +6,7 @@ import {
 } from 'next';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
+import { useEffect } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Reader } from '~/components/Reader';
@@ -34,6 +35,22 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
       router.push(`/comic/${comic.slug}`);
     }
   };
+
+  useEffect(() => {
+    const incrementView = async () => {
+      await fetch('/api/view', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          issueId: issue._id,
+        }),
+      });
+    };
+
+    incrementView();
+  });
 
   const issueNavDOM = (
     <div className="flex gap-4 justify-center my-2 mx-auto md:justify-end md:w-1/2">
