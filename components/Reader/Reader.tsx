@@ -15,6 +15,7 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
   const [pageNumber, setPageNumber] = useState(0);
   const [inEnd, setInEnd] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [zoom, setZoom] = useState(1);
 
   const pageSelectRef = useRef<HTMLSelectElement>(null);
 
@@ -42,13 +43,15 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
           goToPage(pageNumber - 1);
         } else if (key === 'ArrowRight' || key === 'd' || key === 'D') {
           goToPage(pageNumber + 1);
+        } else if (key === 'z' || key === 'Z') {
+          setZoom(zoom === 1 ? 2 : 1);
         }
       } else {
         pageSelectRef.current?.blur();
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pageNumber]
+    [pageNumber, zoom]
   );
 
   const goToPage = (page: number) => {
@@ -94,7 +97,7 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
           </button>
         </div>
       </Modal>
-      <div className="mx-auto w-full sm:w-2/3">
+      <div className={`mx-auto w-full sm:w-${zoom}/3`}>
         <div className="my-2 text-center">
           Page
           <select

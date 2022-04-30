@@ -63,7 +63,8 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
           {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
           <i className="align-middle ri-arrow-left-line" />,{' '}
           {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="align-middle ri-arrow-right-line" /> arrow keys.
+          <i className="align-middle ri-arrow-right-line" /> arrow keys and zoom
+          in and out using Z key.
         </p>
       </Container>
       <div className="mx-auto md:flex md:justify-between md:max-w-4xl">
