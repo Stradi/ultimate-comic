@@ -84,7 +84,7 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
           in and out using Z key.
         </p>
       </Container>
-      <div className="mx-auto md:flex md:justify-between md:max-w-4xl">
+      <div className="mx-auto mt-4 md:flex md:justify-between md:max-w-4xl">
         <h1 className="self-center mx-auto font-medium text-center md:w-1/2 md:text-left">
           Back to{' '}
           <Button
