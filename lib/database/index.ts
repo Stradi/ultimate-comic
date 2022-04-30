@@ -137,8 +137,22 @@ const getComicBySlug = async (
   }
 };
 
-const getIssueById = async (id: string): Promise<IIssueDocument> => {
+const getIssueById = async (
+  id: string,
+  fields = 'name slug createdAt',
+  populate: PopulationOption[] = []
+): Promise<IIssueDocument> => {
   const query = IssueModel.findOne({ _id: id });
+  query.select(fields);
+
+  const populatableFields = getPopulatableFields(fields, populate);
+  populatableFields.forEach((fieldToPopulate) => {
+    query.populate({
+      path: fieldToPopulate.fieldName,
+      select: selectFromFields(fieldToPopulate.fields),
+    });
+  });
+
   const result = await query.exec();
   if (result) {
     return Promise.resolve(result);
@@ -156,7 +170,9 @@ const getIssueById = async (id: string): Promise<IIssueDocument> => {
 
 const getIssueBySlug = async (
   comicSlug: string,
-  issueSlug: string
+  issueSlug: string,
+  fields = 'name slug createdAt',
+  populate: PopulationOption[] = []
 ): Promise<IIssueDocument> => {
   const [error, data] = await handle<IComicDocument>(
     getComicBySlug(comicSlug, '')
@@ -164,6 +180,15 @@ const getIssueBySlug = async (
   if (error) return Promise.reject(error);
 
   const query = IssueModel.findOne({ slug: issueSlug, comic: data._id });
+
+  const populatableFields = getPopulatableFields(fields, populate);
+  populatableFields.forEach((fieldToPopulate) => {
+    query.populate({
+      path: fieldToPopulate.fieldName,
+      select: selectFromFields(fieldToPopulate.fields),
+    });
+  });
+
   const result = await query.exec();
   if (result) {
     return Promise.resolve(result);
