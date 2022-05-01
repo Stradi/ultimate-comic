@@ -2,6 +2,7 @@ import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
 import 'remixicon/fonts/remixicon.css';
 import { Layout } from '~/components/Layout';
+import { WebSiteJsonLd } from '~/components/SEO/WebSiteJsonLd';
 import { SEO } from '../configs/seo';
 import '../styles/globals.css';
 
@@ -33,6 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           cardType: SEO.HEAD.SOCIAL.TWITTER.CARD_TYPE,
         }}
       />
+      <WebSiteJsonLd name={SEO.WEBSITE_NAME} url={SEO.URL} />
       <Layout>
         <Component {...pageProps} />
       </Layout>

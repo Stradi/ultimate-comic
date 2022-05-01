@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Reader } from '~/components/Reader';
+import { ComicIssueJsonLd } from '~/components/SEO/ComicIssueJsonLd';
 import { getComicBySlug, getIssueBySlug } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
@@ -90,6 +91,14 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
             },
           ],
         }}
+      />
+      <ComicIssueJsonLd
+        issueNumber={issue.name
+          .replace('Issue', '')
+          .replace('#', '')
+          .replace(' ', '')}
+        pageStart={1}
+        pageEnd={(issue.images as string[]).length}
       />
       <div>
         <Container className="p-2 bg-neutral-900 rounded-md">

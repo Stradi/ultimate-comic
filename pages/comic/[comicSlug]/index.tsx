@@ -10,6 +10,7 @@ import { ParsedUrlQuery } from 'querystring';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { IssueList } from '~/components/IssueList';
+import { ComicSeriesJsonLd } from '~/components/SEO/ComicSeriesJsonLd';
 import { getAllComics, getComicBySlug } from '~/lib/database';
 import {
   IComicDocument,
@@ -62,6 +63,11 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
             },
           ],
         }}
+      />
+      <ComicSeriesJsonLd
+        name={comic.name}
+        description={comic.summary as string}
+        startDate={releaseDate.getFullYear()}
       />
       <Container className="px-2">
         <div className="md:flex">
