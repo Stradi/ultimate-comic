@@ -17,6 +17,7 @@ specifiers:
   husky: ^7.0.4
   mongoose: ^6.3.1
   next: 12.1.5
+  next-seo: ^5.4.0
   postcss: ^8.4.13
   prettier: ^2.6.2
   react: 18.0.0
@@ -29,6 +30,7 @@ specifiers:
 dependencies:
   mongoose: 6.3.1
   next: 12.1.5_react-dom@18.0.0+react@18.0.0
+  next-seo: 5.4.0_1cf2cc49e2c27648b440cc4e09213966
   react: 18.0.0
   react-dom: 18.0.0_react@18.0.0
   remixicon: 2.5.0
@@ -2513,6 +2515,18 @@ packages:
   /natural-compare/1.4.0:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
     dev: true
+
+  /next-seo/5.4.0_1cf2cc49e2c27648b440cc4e09213966:
+    resolution: {integrity: sha512-R9DhajPwJnR/lsF2hZ8cN8uqr5CVITsRrCG1AF5+ufcaybKYOvnH8sH9MaH4/hpkps3PQ9H71S7J7SPYixAYzQ==}
+    peerDependencies:
+      next: ^8.1.1-canary.54 || >=9.0.0
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+    dependencies:
+      next: 12.1.5_react-dom@18.0.0+react@18.0.0
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
+    dev: false
 
   /next/12.1.5_react-dom@18.0.0+react@18.0.0:
     resolution: {integrity: sha512-YGHDpyfgCfnT5GZObsKepmRnne7Kzp7nGrac07dikhutWQug7hHg85/+sPJ4ZW5Q2pDkb+n0FnmLkmd44htIJQ==}

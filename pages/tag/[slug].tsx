@@ -4,6 +4,7 @@ import {
   GetStaticPropsContext,
   NextPage,
 } from 'next';
+import { NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
@@ -19,23 +20,29 @@ interface ITagPageProps {
 const TagPage: NextPage<ITagPageProps> = ({ tag }: ITagPageProps) => {
   const comics = tag.comics as IComicDocument[];
   return (
-    <Container>
-      <h1 className="block p-2 mb-2 text-lg font-medium text-center bg-neutral-900 rounded-md">
-        Comics about <span className="text-white">{tag.name}</span>
-      </h1>
-      {comics.length > 0 ? (
-        <MiniComicList comics={comics} />
-      ) : (
-        <div className="text-center">
-          <p className="mb-4 text-xl font-medium">No comics found</p>
-          <Button
-            href="/all-comics/0"
-            text="Go to All Comics"
-            type="default"
-          />{' '}
-        </div>
-      )}
-    </Container>
+    <>
+      <NextSeo
+        title={`${tag.name}`}
+        description={`Read the latest and most popular comics about ${tag.name} online for free.`}
+      />
+      <Container>
+        <h1 className="block p-2 mb-2 text-lg font-medium text-center bg-neutral-900 rounded-md">
+          Comics about <span className="text-white">{tag.name}</span>
+        </h1>
+        {comics.length > 0 ? (
+          <MiniComicList comics={comics} />
+        ) : (
+          <div className="text-center">
+            <p className="mb-4 text-xl font-medium">No comics found</p>
+            <Button
+              href="/all-comics/0"
+              text="Go to All Comics"
+              type="default"
+            />{' '}
+          </div>
+        )}
+      </Container>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import {
   GetStaticPropsContext,
   NextPage,
 } from 'next';
+import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import { useEffect } from 'react';
@@ -13,6 +14,7 @@ import { Reader } from '~/components/Reader';
 import { getComicBySlug, getIssueBySlug } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
+import { toHumanReadable } from '~/lib/utils/date';
 
 interface IIssueSlugPageProps {
   issue: IIssueDocument;
@@ -72,34 +74,52 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
   );
 
   return (
-    <div>
-      <Container className="p-2 bg-neutral-900 rounded-md">
-        <p className="text-sm">
-          <span className="font-medium text-red-600">Tip:</span> You can
-          navigate using A, D or{' '}
-          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="align-middle ri-arrow-left-line" />,{' '}
-          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="align-middle ri-arrow-right-line" /> arrow keys and zoom
-          in and out using Z key.
-        </p>
-      </Container>
-      <div className="mx-auto mt-4 md:flex md:justify-between md:max-w-4xl">
-        <h1 className="self-center mx-auto font-medium text-center md:w-1/2 md:text-left">
-          Back to{' '}
-          <Button
-            href={`/comic/${comic.slug}`}
-            text={comic.name}
-            type="minimal"
-          />
-        </h1>
-        <h2 className="grow self-center mt-2 min-w-max text-lg font-medium text-center md:mt-0">
-          {issue.name}
-        </h2>
-        {issueNavDOM}
+    <>
+      <NextSeo
+        title={`${issue.name} of ${comic.name}`}
+        description={`Read ${issue.name} of ${comic.name} online for free. ${
+          issue.name
+        } is published at ${toHumanReadable(issue.createdAt)} and has ${
+          (issue.images as string[]).length
+        } pages in total.`}
+        openGraph={{
+          images: [
+            {
+              url: (issue.images as string[])[0],
+              alt: `Cover image of ${issue.name} of ${comic.name} comic.`,
+            },
+          ],
+        }}
+      />
+      <div>
+        <Container className="p-2 bg-neutral-900 rounded-md">
+          <p className="text-sm">
+            <span className="font-medium text-red-600">Tip:</span> You can
+            navigate using A, D or{' '}
+            {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+            <i className="align-middle ri-arrow-left-line" />,{' '}
+            {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+            <i className="align-middle ri-arrow-right-line" /> arrow keys and
+            zoom in and out using Z key.
+          </p>
+        </Container>
+        <div className="mx-auto mt-4 md:flex md:justify-between md:max-w-4xl">
+          <h1 className="self-center mx-auto font-medium text-center md:w-1/2 md:text-left">
+            Back to{' '}
+            <Button
+              href={`/comic/${comic.slug}`}
+              text={comic.name}
+              type="minimal"
+            />
+          </h1>
+          <h2 className="grow self-center mt-2 min-w-max text-lg font-medium text-center md:mt-0">
+            {issue.name}
+          </h2>
+          {issueNavDOM}
+        </div>
+        <Reader images={issue.images as string[]} onFinished={goNextIssue} />
       </div>
-      <Reader images={issue.images as string[]} onFinished={goNextIssue} />
-    </div>
+    </>
   );
 };
 
@@ -129,7 +149,7 @@ export const getStaticProps: GetStaticProps<
   //TODO: We could do all of these in (probably) one getComicBySlug call.
   const comic = await callDb(
     getComicBySlug(comicSlug, 'name slug issues', [
-      { fieldName: 'issues', fields: 'images slug' },
+      { fieldName: 'issues', fields: 'name images slug' },
     ]),
     true
   );

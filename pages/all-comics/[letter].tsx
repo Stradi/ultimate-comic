@@ -5,6 +5,7 @@ import {
   GetStaticPropsContext,
   NextPage,
 } from 'next';
+import { NextSeo } from 'next-seo';
 import Link from 'next/link';
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from '~/components/Container';
@@ -42,33 +43,39 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
   );
 
   return (
-    <Container>
-      <h1 className="block mb-2 text-lg font-medium text-center text-white">
-        {letter.toUpperCase()}
-      </h1>
-      {paginationDOM}
-      <p className="p-2 mb-2 text-sm bg-neutral-900 rounded-md">
-        <span className="font-medium text-red-600">Note:</span> Completed comics
-        have checkmark (
-        {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-        <i className="text-green-500 align-middle ri-check-line ri-fw" />) on
-        left, ongoing comics have cross (
-        {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-        <i className="text-red-500 align-middle ri-close-line ri-fw" />
-        ).
-      </p>
-      {comics.length > 0 ? (
-        <MiniComicList comics={comics} />
-      ) : (
-        <div className="text-center">
-          <p className="text-xl font-medium">No comics found</p>
-          <p className="text-sm text-neutral-500">
-            Try selecting another letter
-          </p>
-        </div>
-      )}
-      {comics.length > 0 && paginationDOM}
-    </Container>
+    <>
+      <NextSeo
+        title="All Comics"
+        description="Full list of the largest comics database for Marvel, DC Comics, Dark Horse Comics, Image Comics, Valiant Comics, IDW Publishing Comics and more."
+      />
+      <Container>
+        <h1 className="block mb-2 text-lg font-medium text-center text-white">
+          {letter.toUpperCase()}
+        </h1>
+        {paginationDOM}
+        <p className="p-2 mb-2 text-sm bg-neutral-900 rounded-md">
+          <span className="font-medium text-red-600">Note:</span> Completed
+          comics have checkmark (
+          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+          <i className="text-green-500 align-middle ri-check-line ri-fw" />) on
+          left, ongoing comics have cross (
+          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+          <i className="text-red-500 align-middle ri-close-line ri-fw" />
+          ).
+        </p>
+        {comics.length > 0 ? (
+          <MiniComicList comics={comics} />
+        ) : (
+          <div className="text-center">
+            <p className="text-xl font-medium">No comics found</p>
+            <p className="text-sm text-neutral-500">
+              Try selecting another letter
+            </p>
+          </div>
+        )}
+        {comics.length > 0 && paginationDOM}
+      </Container>
+    </>
   );
 };
 
