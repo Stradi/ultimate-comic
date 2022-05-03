@@ -52,7 +52,7 @@ const callDb = async <T>(
 ): Promise<T> => {
   await connectToDatabase();
   const [error, data] = await handle<T>(promise);
-  if (error) return Promise.reject(error);
+  if (error) return Promise.reject(JSON.stringify(error));
 
   if (serialize) return JSON.parse(JSON.stringify(data as T));
   else return data as T;
