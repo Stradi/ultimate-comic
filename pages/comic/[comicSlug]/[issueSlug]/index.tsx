@@ -16,6 +16,7 @@ import { getComicBySlug, getIssueBySlug } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
 import { toHumanReadable } from '~/lib/utils/date';
+import { handle } from '~/lib/utils/promise';
 
 interface IIssueSlugPageProps {
   issue: IIssueDocument;
@@ -156,15 +157,26 @@ export const getStaticProps: GetStaticProps<
   const issueSlug = slugs.issueSlug;
 
   //TODO: We could do all of these in (probably) one getComicBySlug call.
-  const comic = await callDb(
-    getComicBySlug(comicSlug, 'name slug issues', [
-      { fieldName: 'issues', fields: 'name images slug' },
-    ]),
-    true
+  const [comicError, comic] = await handle(
+    callDb(
+      getComicBySlug(comicSlug, 'name slug issues', [
+        { fieldName: 'issues', fields: 'name images slug' },
+      ]),
+      true
+    )
   );
 
+  if (comicError) {
+    throw comicError;
+  }
+
   const comicIssues = comic.issues as IIssueDocument[];
-  const issue = await callDb(getIssueBySlug(comicSlug, issueSlug), true);
+  const [issueError, issue] = await handle(
+    callDb(getIssueBySlug(comicSlug, issueSlug), true)
+  );
+  if (issueError) {
+    throw issueError;
+  }
 
   const issueIndex = comicIssues.findIndex((i) => i._id == issue._id);
   const nextIssue = issueIndex === 0 ? null : comicIssues[issueIndex - 1];

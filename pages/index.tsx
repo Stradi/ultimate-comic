@@ -8,6 +8,7 @@ import { Sidebar } from '~/components/Sidebar';
 import { getAllComics, getLatestIssues } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
+import { handle } from '~/lib/utils/promise';
 
 interface IHomePageProps {
   newIssues: IIssueDocument[];
@@ -94,29 +95,41 @@ const Home: NextPage<IHomePageProps> = ({
 };
 
 export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
-  const newIssues = await callDb(
-    getLatestIssues(18, 0, 'name slug images.0 comic createdAt', [
-      {
-        fieldName: 'comic',
-        fields: 'name slug',
-      },
-    ]),
-    true
+  const [newIssuesError, newIssues] = await handle(
+    callDb(
+      getLatestIssues(18, 0, 'name slug images.0 comic createdAt', [
+        {
+          fieldName: 'comic',
+          fields: 'name slug',
+        },
+      ]),
+      true
+    )
   );
 
-  const popularComics = await callDb(
-    getAllComics(
-      10,
-      0,
-      'name slug coverImage totalViews',
-      [],
-      {},
-      {
-        totalViews: 'descending',
-      }
-    ),
-    true
+  if (newIssuesError) {
+    throw newIssuesError;
+  }
+
+  const [popularComicsError, popularComics] = await handle(
+    callDb(
+      getAllComics(
+        10,
+        0,
+        'name slug coverImage totalViews',
+        [],
+        {},
+        {
+          totalViews: 'descending',
+        }
+      ),
+      true
+    )
   );
+
+  if (popularComicsError) {
+    throw popularComicsError;
+  }
 
   return {
     props: {

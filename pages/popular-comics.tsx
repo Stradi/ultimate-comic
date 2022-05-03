@@ -5,6 +5,7 @@ import { MiniComicList } from '~/components/MiniComicList';
 import { getAllComics } from '~/lib/database';
 import { IComicDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
+import { handle } from '~/lib/utils/promise';
 
 interface IPopularComicsPageProps {
   comics: IComicDocument[];
@@ -42,17 +43,23 @@ const PopularComicsPage: NextPage<IPopularComicsPageProps> = ({
 export const getStaticProps: GetStaticProps<
   IPopularComicsPageProps
 > = async () => {
-  const popularComics = await callDb(
-    getAllComics(
-      100,
-      0,
-      'name slug isCompleted totalViews',
-      [],
-      {},
-      { totalViews: 'descending' }
-    ),
-    true
+  const [error, popularComics] = await handle(
+    callDb(
+      getAllComics(
+        100,
+        0,
+        'name slug isCompleted totalViews',
+        [],
+        {},
+        { totalViews: 'descending' }
+      ),
+      true
+    )
   );
+
+  if (error) {
+    throw error;
+  }
 
   return {
     props: {

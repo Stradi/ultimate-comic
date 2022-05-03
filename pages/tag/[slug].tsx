@@ -12,6 +12,7 @@ import { MiniComicList } from '~/components/MiniComicList';
 import { getAllTags, getTagBySlug } from '~/lib/database';
 import { IComicDocument, ITagDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
+import { handle } from '~/lib/utils/promise';
 
 interface ITagPageProps {
   tag: ITagDocument;
@@ -68,15 +69,21 @@ export const getStaticProps: GetStaticProps<
   IStaticPathsQuery
 > = async (context: GetStaticPropsContext<IStaticPathsQuery>) => {
   const slug = (context.params as IStaticPathsQuery).slug;
-  const tag = await callDb(
-    getTagBySlug(slug, 'name slug comics', [
-      {
-        fieldName: 'comics',
-        fields: 'name slug isCompleted',
-      },
-    ]),
-    true
+  const [error, tag] = await handle(
+    callDb(
+      getTagBySlug(slug, 'name slug comics', [
+        {
+          fieldName: 'comics',
+          fields: 'name slug isCompleted',
+        },
+      ]),
+      true
+    )
   );
+
+  if (error) {
+    throw error;
+  }
 
   //Show only N amount of comics.
   // tag.comics = tag.comics?.slice(0, N);
