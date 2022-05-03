@@ -13,7 +13,7 @@ const LatestIssues = ({ issues, title }: ILatestIssuesProps) => {
   return (
     <div>
       <h2 className="text-lg font-medium text-white">{title}</h2>
-      <div className="sm:grid sm:grid-cols-2 sm:gap-2 md:grid-cols-3">
+      <div className="sm:grid sm:grid-cols-2 sm:gap-2 md:grid-cols-2 lg:grid-cols-3">
         {issuesDOM}
       </div>
     </div>
