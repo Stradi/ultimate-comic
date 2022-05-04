@@ -45,6 +45,7 @@ const otherPages = [
   `${SEO.URL}/all-comics/y`,
   `${SEO.URL}/all-comics/z`,
   `${SEO.URL}/popular-comics`,
+  `${SEO.URL}/genres`,
 ];
 
 const getSitemap = async (index?: number) => {
