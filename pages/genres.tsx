@@ -3,7 +3,7 @@ import { NextSeo } from 'next-seo';
 import { Container } from '~/components/Container';
 import { MiniTagList } from '~/components/MiniTagList';
 import { getAllTags } from '~/lib/database';
-import { IComicDocument, ITagDocument } from '~/lib/database/models';
+import { ITagDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
 import { handle } from '~/lib/utils/promise';
 
@@ -22,10 +22,6 @@ const GenresPage: NextPage<IGenresPageProps> = ({ tags }: IGenresPageProps) => {
         <h1 className="block mb-2 text-lg font-medium text-center text-white">
           Most Popular Genres
         </h1>
-        <p className="p-2 mb-2 text-sm bg-neutral-900 rounded-md">
-          <span className="font-medium text-red-600">Note:</span> Hover to see
-          comic count of the genre.
-        </p>
         <MiniTagList tags={tags} />
       </Container>
     </>
@@ -34,7 +30,7 @@ const GenresPage: NextPage<IGenresPageProps> = ({ tags }: IGenresPageProps) => {
 
 export const getStaticProps: GetStaticProps<IGenresPageProps> = async () => {
   const [error, tags] = await handle(
-    callDb(getAllTags(-1, 0, 'slug name comics'), true)
+    callDb(getAllTags(-1, 0, 'slug name'), true)
   );
   if (error) {
     throw error;
@@ -42,11 +38,7 @@ export const getStaticProps: GetStaticProps<IGenresPageProps> = async () => {
 
   return {
     props: {
-      tags: tags.sort(
-        (a, b) =>
-          (b.comics as IComicDocument[]).length -
-          (a.comics as IComicDocument[]).length
-      ),
+      tags,
     },
   };
 };
