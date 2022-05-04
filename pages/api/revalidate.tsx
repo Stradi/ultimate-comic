@@ -1,7 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { resolve } from 'path';
 import { apiHandler, parseQuery } from '~/lib/utils/api';
 import { ApiError } from '~/lib/utils/error';
+import { deleteAllFilesFromDirectory } from '~/lib/utils/fs';
 
+//TODO: Refactor!
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = parseQuery(req.query, ['secret', 'path']);
   if (!query.path) {
@@ -44,7 +47,16 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
         absPath = `/${path}`;
       }
 
-      return { promise: res.unstable_revalidate(absPath), path: absPath };
+      //TODO: Append a url to sitemap instead of regenerating?
+      if (absPath === '/sitemap') {
+        return {
+          promise: deleteAllFilesFromDirectory(
+            resolve(process.cwd(), 'public', 'sitemap')
+          ),
+        };
+      } else {
+        return { promise: res.unstable_revalidate(absPath), path: absPath };
+      }
     });
 
     const values = await Promise.allSettled(promises.map((p) => p.promise)); // array of results
@@ -73,7 +85,11 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
     absPath = `/${query.path}`;
   }
 
-  const result = await Promise.allSettled([res.unstable_revalidate(absPath)]);
+  const result = await Promise.allSettled([
+    absPath === '/sitemap'
+      ? deleteAllFilesFromDirectory(resolve(process.cwd(), 'public', 'sitemap'))
+      : res.unstable_revalidate(absPath),
+  ]);
   if (result[0].status === 'fulfilled') {
     return res.status(200).json({
       data: {
