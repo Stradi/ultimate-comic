@@ -1,5 +1,6 @@
 const WEBSITE_NAME = 'Read Comix';
-const URL = 'example.com';
+const URL =
+  process.env.NODE_ENV === 'development' ? 'localhost:3000' : 'example.com';
 const HEAD = {
   TITLE: `Read Online Comics for Free`,
   TITLE_TEMPLATE: `%s | ${WEBSITE_NAME}`,
