@@ -1,3 +1,4 @@
+import { PAGES } from 'configs/ui';
 import mongoose from 'mongoose';
 import {
   GetStaticPaths,
@@ -17,16 +18,20 @@ import { handle } from '~/lib/utils/promise';
 
 interface IComicWithLetterPageProps {
   comics: IComicDocument[];
+  readableLetter: string;
   letter: string;
+  pageNo: number;
 }
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
 
 const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
   comics,
+  readableLetter,
   letter,
+  pageNo,
 }: IComicWithLetterPageProps) => {
-  const paginationLinksDOM = `#${ALPHABET}`.split('').map((char) => (
+  const letterNavigationLinksDOM = `#${ALPHABET}`.split('').map((char) => (
     <Link
       href={`/all-comics/${char === '#' ? '0' : char}`}
       key={char === '#' ? '0' : char}
@@ -37,9 +42,9 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
     </Link>
   ));
 
-  const paginationDOM = (
+  const letterNavigationDOM = (
     <div className="block p-2 my-2 text-center bg-neutral-900 rounded-md">
-      {paginationLinksDOM}
+      {letterNavigationLinksDOM}
     </div>
   );
 
@@ -51,9 +56,9 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
       />
       <Container>
         <h1 className="block mb-2 text-lg font-medium text-center text-white">
-          {letter.toUpperCase()}
+          {readableLetter.toUpperCase()}
         </h1>
-        {paginationDOM}
+        {letterNavigationDOM}
         <p className="p-2 mb-2 text-sm bg-neutral-900 rounded-md">
           <span className="font-medium text-red-600">Note:</span> Completed
           comics have checkmark (
@@ -67,14 +72,65 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
         {comics.length > 0 ? (
           <MiniComicList comics={comics} />
         ) : (
-          <div className="text-center">
+          <div className="mb-2 text-center">
             <p className="text-xl font-medium">No comics found</p>
             <p className="text-sm text-neutral-500">
               Try selecting another letter
             </p>
           </div>
         )}
-        {comics.length > 0 && paginationDOM}
+        {comics.length > 0 && letterNavigationDOM}
+        <div className="flex gap-1 justify-center">
+          {pageNo !== 0 ? (
+            <>
+              <Link href={`/all-comics/${letter}/${pageNo - 1}`}>
+                <a className="py-1 px-2 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                  {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+                  <i className="align-middle ri-arrow-left-s-line ri-fw" />
+                </a>
+              </Link>
+              <Link href={`/all-comics/${letter}/${pageNo - 1}`}>
+                <a className="py-1 px-3 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                  {pageNo - 1}
+                </a>
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+                -
+              </div>
+              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+                -
+              </div>
+            </>
+          )}
+          <div className="py-1 px-3 bg-neutral-800 rounded-md">{pageNo}</div>
+          {comics.length == PAGES.ALL_COMICS.COMIC_PER_PAGE ? (
+            <>
+              <Link href={`/all-comics/${letter}/${pageNo + 1}`}>
+                <a className="py-1 px-3 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                  {pageNo + 1}
+                </a>
+              </Link>
+              <Link href={`/all-comics/${letter}/${pageNo + 1}`}>
+                <a className="py-1 px-2 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                  {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+                  <i className="align-middle ri-arrow-right-s-line ri-fw" />
+                </a>
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+                -
+              </div>
+              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+                -
+              </div>
+            </>
+          )}
+        </div>
       </Container>
     </>
   );
@@ -82,17 +138,18 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
 
 interface IStaticPathsQuery extends ParsedUrlQuery {
   letter: string;
+  pageNo: string;
 }
 
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
   const alphabetStr = `${ALPHABET}0`;
   const paths = alphabetStr.split('').map((char) => ({
-    params: { letter: char },
+    params: { letter: char, pageNo: '0' },
   }));
 
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 
@@ -100,7 +157,9 @@ export const getStaticProps: GetStaticProps<
   IComicWithLetterPageProps,
   IStaticPathsQuery
 > = async (context: GetStaticPropsContext<IStaticPathsQuery>) => {
-  const letter = (context.params as IStaticPathsQuery).letter;
+  const params = context.params as IStaticPathsQuery;
+  const letter = params.letter;
+  const pageNo = Number.parseInt(params.pageNo);
 
   let readableLetter = letter;
   let regexStr = '';
@@ -116,7 +175,16 @@ export const getStaticProps: GetStaticProps<
   };
 
   const [error, comics] = await handle(
-    callDb(getAllComics(-1, 0, 'name slug isCompleted', [], filter), true)
+    callDb(
+      getAllComics(
+        PAGES.ALL_COMICS.COMIC_PER_PAGE,
+        pageNo * PAGES.ALL_COMICS.COMIC_PER_PAGE,
+        'name slug isCompleted',
+        [],
+        filter
+      ),
+      true
+    )
   );
 
   if (error) {
@@ -126,7 +194,9 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       comics,
-      letter: readableLetter,
+      readableLetter,
+      letter,
+      pageNo: pageNo,
     },
   };
 };

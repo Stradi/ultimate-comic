@@ -14,6 +14,10 @@ const nextConfig = {
         source: `/sitemap-:index(\\d+).xml`,
         destination: '/api/sitemap?index=:index',
       },
+      {
+        source: '/all-comics/:letter',
+        destination: '/all-comics/:letter/0',
+      },
     ];
   },
 };
