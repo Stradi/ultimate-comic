@@ -4,6 +4,18 @@ const nextConfig = {
   images: {
     domains: ['2.bp.blogspot.com'],
   },
+  rewrites: async () => {
+    return [
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap',
+      },
+      {
+        source: `/sitemap-:index(\\d+).xml`,
+        destination: '/api/sitemap?index=:index',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
