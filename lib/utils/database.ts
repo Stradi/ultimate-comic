@@ -1,6 +1,5 @@
 import { Types } from 'mongoose';
 import { connectToDatabase } from '../database';
-import { PopulationOption } from '../database/types';
 import { handle } from './promise';
 
 const isValidObjectID = (str: string): boolean => {
