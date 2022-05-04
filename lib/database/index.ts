@@ -10,7 +10,6 @@ import {
   ITagDocument,
   TagModel,
 } from './models';
-import { PopulationOption, SortOption } from './types';
 
 const connectToDatabase = async (): Promise<void> => {
   if (mongoose.connections[0].readyState === 1) {
@@ -53,7 +52,7 @@ const getAllComics = async (
   fields = 'name slug isCompleted releaseDate coverImage summary',
   populate: PopulationOption[] = [],
   filter = {},
-  sort: SortOption = {}
+  sort: SortOption<IComicDocument> = {}
 ): Promise<IComicDocument[]> => {
   const query = ComicModel.find(filter);
   if (count !== -1) {
@@ -211,7 +210,7 @@ const getLatestIssues = async (
   fields = 'name slug createdAt',
   populate: PopulationOption[] = [],
   filter = {},
-  sort: SortOption = {}
+  sort: SortOption<IIssueDocument> = {}
 ): Promise<IIssueDocument[]> => {
   const query = IssueModel.find(filter);
   if (count !== -1) {
@@ -238,7 +237,7 @@ const getAllTags = async (
   fields = 'name slug comics createdAt updatedAt',
   populate: PopulationOption[] = [],
   filter = {},
-  sort: SortOption = {}
+  sort: SortOption<ITagDocument> = {}
 ): Promise<ITagDocument[]> => {
   const query = TagModel.find(filter);
   if (count !== -1) {
