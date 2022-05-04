@@ -22,8 +22,8 @@ const Layout = ({ children }: ILayoutProps) => {
         href: '/popular-comics',
       },
       {
-        text: 'Latest Comics',
-        href: '/latest-comics',
+        text: 'All Genres',
+        href: '/genres',
       },
     ],
   };
