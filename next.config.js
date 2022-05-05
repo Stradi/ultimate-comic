@@ -18,6 +18,10 @@ const nextConfig = {
         source: '/all-comics/:letter',
         destination: '/all-comics/:letter/0',
       },
+      {
+        source: '/tag/:tag',
+        destination: '/tag/:tag/0',
+      },
     ];
   },
 };

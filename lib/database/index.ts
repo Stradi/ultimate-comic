@@ -262,7 +262,9 @@ const getAllTags = async (
 const getTagBySlug = async (
   slug: string,
   fields = 'name slug comics createdAt updatedAt',
-  populate: PopulationOption[] = []
+  populate: PopulationOption[] = [],
+  count = 20,
+  skip = 0
 ): Promise<ITagDocument> => {
   const query = TagModel.findOne({ slug });
   query.select(fields);
@@ -272,6 +274,10 @@ const getTagBySlug = async (
     query.populate({
       path: fieldToPopulate.fieldName,
       select: selectFromFields(fieldToPopulate.fields),
+      options: {
+        limit: count,
+        skip,
+      },
     });
   });
 
