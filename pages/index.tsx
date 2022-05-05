@@ -97,12 +97,24 @@ const Home: NextPage<IHomePageProps> = ({
 export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
   const [newIssuesError, newIssues] = await handle(
     callDb(
-      getLatestIssues(18, 0, 'name slug images.0 comic createdAt', [
+      getLatestIssues(
+        18,
+        0,
+        'name slug images.0 comic createdAt',
+        [
+          {
+            fieldName: 'comic',
+            fields: 'name slug',
+          },
+        ],
+        {},
         {
-          fieldName: 'comic',
-          fields: 'name slug',
-        },
-      ]),
+          // TODO: Gives error in dev environment because
+          // some comics of issues doesn't exists on database.
+          // Should work fine (hopefully) in prod.
+          // createdAt: 'descending',
+        }
+      ),
       true
     )
   );
