@@ -25,6 +25,10 @@ const Layout = ({ children }: ILayoutProps) => {
         text: 'All Genres',
         href: '/genres',
       },
+      {
+        text: 'Articles',
+        href: '/blog',
+      },
     ],
   };
   return (
