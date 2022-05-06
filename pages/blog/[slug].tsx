@@ -13,14 +13,21 @@ interface IBlogSlugPageProps {
   post: BlogPost;
 }
 
-//TODO: Add remark to parse markdown.
+//TODO: Add remark-directive for adding custom classnames and
+//other directives in Markdown.
 const BlogSlugPage: NextPage<IBlogSlugPageProps> = ({
   post,
 }: IBlogSlugPageProps) => {
   return (
-    <Container className="prose prose-invert">
-      <h1>{post.title}</h1>
-      <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+    <Container>
+      <h1 className="text-3xl font-black text-center text-white">
+        {post.title}
+      </h1>
+      <br></br>
+      <div
+        className="mx-auto prose prose-invert"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      ></div>
     </Container>
   );
 };

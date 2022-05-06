@@ -1,3 +1,7 @@
+import rehypeStringify from 'rehype-stringify';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import { unified } from 'unified';
 import { BaseError } from './error';
 import { handle } from './promise';
 
@@ -40,10 +44,15 @@ const getBlogPostBySlug = async (slug: string) => {
 
   const postData = data[0].attributes;
 
+  const [conversionError, htmlContent] = await handle(
+    convertMarkdownToHtml(postData.content)
+  );
+  if (conversionError) return Promise.reject(conversionError);
+
   const returnData: BlogPost = {
     title: postData.title,
     slug: postData.slug,
-    content: postData.content,
+    content: htmlContent,
     coverImage: postData.coverImage || null,
     seo: {
       description: postData.seo.description,
@@ -53,4 +62,27 @@ const getBlogPostBySlug = async (slug: string) => {
   return returnData;
 };
 
-export { getBlogPostBySlug };
+const convertMarkdownToHtml = async (content: string) => {
+  const [error, html] = await handle(
+    unified()
+      .use(remarkParse)
+      .use(remarkRehype)
+      .use(rehypeStringify)
+      .process(content)
+  );
+
+  if (error) {
+    return Promise.reject(
+      new BaseError(
+        'Remark',
+        'Error converting Markdown content to HTML.',
+        error.message,
+        'Wait'
+      )
+    );
+  }
+
+  return String(html);
+};
+
+export { getBlogPostBySlug, convertMarkdownToHtml };
