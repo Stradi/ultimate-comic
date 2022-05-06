@@ -47,6 +47,7 @@ interface IStaticPathsQuery extends ParsedUrlQuery {
   slug: string;
 }
 
+//TODO: Generate all posts in build-time.
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
   return {
     paths: [],
