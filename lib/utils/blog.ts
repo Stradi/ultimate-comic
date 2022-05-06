@@ -37,7 +37,9 @@ const fetchCMS = async (path: string) => {
 };
 
 const getAllPosts = async () => {
-  const [error, data] = await handle(fetchCMS(`blog-posts?populate=seo`));
+  const [error, data] = await handle(
+    fetchCMS(`blog-posts?populate=seo&sort=publishedAt:desc`)
+  );
   if (error) return Promise.reject(error);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
