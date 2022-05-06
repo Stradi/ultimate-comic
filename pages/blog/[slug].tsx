@@ -36,7 +36,7 @@ const BlogSlugPage: NextPage<IBlogSlugPageProps> = ({
       </h1>
       <br></br>
       <div
-        className="mx-auto prose prose-invert"
+        className="mx-auto prose-li:marker:font-bold prose-a:text-inherit prose-li:marker:text-red-600 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-a:transition prose-a:duration-100 prose prose-invert"
         dangerouslySetInnerHTML={{ __html: post.content }}
       ></div>
     </Container>
