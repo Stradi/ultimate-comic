@@ -8,7 +8,7 @@ interface ISinglePostProps {
 const SinglePost = ({ post }: ISinglePostProps) => {
   return (
     <Link href={`/blog/${post.slug}`}>
-      <a className="group block py-2 px-3 hover:text-white bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+      <a className="group block py-2 px-3 mb-2 hover:text-white bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
         <div className="flex justify-between">
           <p className="relative transition duration-100 group-hover:translate-x-4 group-focus:translate-x-4">
             <span className="mr-2 -ml-4 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition duration-100">
