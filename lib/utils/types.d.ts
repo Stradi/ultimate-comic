@@ -6,4 +6,6 @@ type BlogPost = {
   seo: {
     description: string;
   };
+  publishedAt: Date;
+  updatedAt: Date;
 };

@@ -54,7 +54,7 @@ export const getStaticProps: GetStaticProps<
 
   return {
     props: {
-      post,
+      post: JSON.parse(JSON.stringify(post)),
     },
   };
 };

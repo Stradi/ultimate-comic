@@ -36,6 +36,23 @@ const fetchCMS = async (path: string) => {
   return jsonData.data;
 };
 
+const getAllPosts = async () => {
+  const [error, data] = await handle(fetchCMS(`blog-posts?populate=seo`));
+  if (error) return Promise.reject(error);
+
+  return data.map((post: any) => ({
+    title: post.attributes.title,
+    slug: post.attributes.slug,
+    coverImage: post.attributes.coverImage || null,
+    content: post.attributes.content,
+    seo: {
+      description: post.attributes.seo.description,
+    },
+    publishedAt: new Date(post.attributes.publishedAt),
+    updatedAt: new Date(post.attributes.updatedAt),
+  })) as BlogPost[];
+};
+
 const getBlogPostBySlug = async (slug: string) => {
   const [error, data] = await handle(
     fetchCMS(`blog-posts?filters[slug][$eq]=${slug}&populate=seo`)
@@ -57,6 +74,8 @@ const getBlogPostBySlug = async (slug: string) => {
     seo: {
       description: postData.seo.description,
     },
+    publishedAt: new Date(postData.publishedAt),
+    updatedAt: new Date(postData.updatedAt),
   };
 
   return returnData;
@@ -85,4 +104,4 @@ const convertMarkdownToHtml = async (content: string) => {
   return String(html);
 };
 
-export { getBlogPostBySlug, convertMarkdownToHtml };
+export { getBlogPostBySlug, getAllPosts, convertMarkdownToHtml };
