@@ -1,9 +1,11 @@
+import { SEO } from 'configs/seo';
 import {
   GetStaticPaths,
   GetStaticProps,
   GetStaticPropsContext,
   NextPage,
 } from 'next';
+import { ArticleJsonLd, NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from '~/components/Container';
 import { getBlogPostBySlug } from '~/lib/utils/blog';
@@ -20,6 +22,15 @@ const BlogSlugPage: NextPage<IBlogSlugPageProps> = ({
 }: IBlogSlugPageProps) => {
   return (
     <Container>
+      <NextSeo title={post.title} description={post.seo.description} />
+      <ArticleJsonLd
+        authorName={SEO.WEBSITE_NAME}
+        datePublished={post.publishedAt.toString()}
+        description={post.seo.description}
+        title={post.title}
+        url={`${SEO.URL}/blog/${post.slug}`}
+        images={[]}
+      />
       <h1 className="text-3xl font-black text-center text-white">
         {post.title}
       </h1>

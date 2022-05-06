@@ -1,4 +1,5 @@
 import { GetStaticProps, NextPage } from 'next';
+import { NextSeo } from 'next-seo';
 import { Container } from '~/components/Container';
 import { PostList } from '~/components/PostList';
 import { getAllPosts } from '~/lib/utils/blog';
@@ -13,6 +14,10 @@ const BlogListPage: NextPage<IBlogListPageProps> = ({
 }: IBlogListPageProps) => {
   return (
     <Container>
+      <NextSeo
+        title="Articles"
+        description="Latest news and articles from comic world."
+      />
       <h1 className="block mb-2 text-lg font-medium text-center text-white">
         All Articles
       </h1>
