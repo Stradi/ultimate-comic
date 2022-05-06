@@ -40,6 +40,7 @@ const getAllPosts = async () => {
   const [error, data] = await handle(fetchCMS(`blog-posts?populate=seo`));
   if (error) return Promise.reject(error);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return data.map((post: any) => ({
     title: post.attributes.title,
     slug: post.attributes.slug,
