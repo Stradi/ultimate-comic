@@ -118,7 +118,7 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
             Back to{' '}
             <Button
               href={`/comic/${comic.slug}`}
-              text={comic.name}
+              text="Comic Page"
               type="minimal"
             />
           </h1>
