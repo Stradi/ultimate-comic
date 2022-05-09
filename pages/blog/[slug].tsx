@@ -8,7 +8,7 @@ import {
 import { ArticleJsonLd, NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from '~/components/Container';
-import { getBlogPostBySlug } from '~/lib/utils/blog';
+import { getAllPosts, getBlogPostBySlug } from '~/lib/utils/blog';
 import { handle } from '~/lib/utils/promise';
 
 interface IBlogSlugPageProps {
@@ -47,10 +47,15 @@ interface IStaticPathsQuery extends ParsedUrlQuery {
   slug: string;
 }
 
-//TODO: Generate all posts in build-time.
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
+  const [error, posts] = await handle(getAllPosts());
+  if (error) throw JSON.stringify(error);
+
+  const paths = posts.map((post) => ({
+    params: { slug: post.slug },
+  }));
   return {
-    paths: [],
+    paths,
     fallback: 'blocking',
   };
 };
