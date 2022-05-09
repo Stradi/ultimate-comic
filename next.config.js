@@ -15,6 +15,10 @@ const nextConfig = {
         destination: '/api/sitemap?index=:index',
       },
       {
+        source: '/all-comics',
+        destination: '/all-comics/0/0',
+      },
+      {
         source: '/all-comics/:letter',
         destination: '/all-comics/:letter/0',
       },
