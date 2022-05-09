@@ -1,3 +1,4 @@
+import { PAGES } from 'configs/ui';
 import {
   GetStaticPaths,
   GetStaticProps,
@@ -136,7 +137,14 @@ interface IStaticPathsQuery extends ParsedUrlQuery {
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
   const slugs = (
     await callDb(
-      getAllComics(10, 0, 'slug', [], {}, { totalViews: 'descending' })
+      getAllComics(
+        PAGES.COMIC.GENERATE_ON_BUILD,
+        0,
+        'slug',
+        [],
+        {},
+        { totalViews: 'descending' }
+      )
     )
   ).map((comic) => comic.slug);
 

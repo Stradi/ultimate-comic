@@ -107,7 +107,9 @@ interface IStaticPathsQuery extends ParsedUrlQuery {
 }
 
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
-  const tags = (await callDb(getAllTags(5, 0, 'slug'))).map((tag) => tag.slug);
+  const tags = (
+    await callDb(getAllTags(PAGES.TAG.GENERATE_ON_BUILD, 0, 'slug'))
+  ).map((tag) => tag.slug);
 
   const paths = tags.map((slug) => ({
     params: { slug, pageNo: '0' },
