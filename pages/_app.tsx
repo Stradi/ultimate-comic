@@ -6,7 +6,6 @@ import { WebSiteJsonLd } from '~/components/SEO/WebSiteJsonLd';
 import { SEO } from '../configs/seo';
 import '../styles/globals.css';
 
-//TODO: Add JSON-LD.
 //TODO: Add image for website.
 function MyApp({ Component, pageProps }: AppProps) {
   return (
