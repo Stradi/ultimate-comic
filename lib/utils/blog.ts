@@ -60,7 +60,18 @@ const getBlogPostBySlug = async (slug: string) => {
   const [error, data] = await handle(
     fetchCMS(`blog-posts?filters[slug][$eq]=${slug}&populate=seo`)
   );
+
   if (error) return Promise.reject(error);
+  if (!data.length) {
+    return Promise.reject(
+      new BaseError(
+        'strapi',
+        `'${slug}' could not found.`,
+        `Provided '${slug}' parameter does not match any of the object in the strapi database.`,
+        'Repeat this request with a valid slug.'
+      )
+    );
+  }
 
   const postData = data[0].attributes;
 
@@ -104,6 +115,16 @@ const getStaticPageBySlug = async (slug: string) => {
   );
 
   if (error) return Promise.reject(error);
+  if (!data.length) {
+    return Promise.reject(
+      new BaseError(
+        'strapi',
+        `'${slug}' could not found.`,
+        `Provided '${slug}' parameter does not match any of the object in the strapi database.`,
+        'Repeat this request with a valid slug.'
+      )
+    );
+  }
 
   const staticPageData = data[0].attributes;
 
