@@ -21,7 +21,15 @@ const BlogListPage: NextPage<IBlogListPageProps> = ({
       <h1 className="block mb-2 text-lg font-medium text-center text-white">
         All Articles
       </h1>
-      <PostList posts={posts} />
+      {posts.length > 0 ? (
+        <div>
+          <PostList posts={posts} />
+        </div>
+      ) : (
+        <div className="text-center">
+          <p className="text-xl font-medium">There are no articles yet.</p>
+        </div>
+      )}
     </Container>
   );
 };
