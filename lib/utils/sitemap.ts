@@ -3,8 +3,8 @@ import path from 'path';
 import { SEO } from '../../configs/seo';
 import { getAllComics, getAllTags } from '../database';
 import { IIssueDocument } from '../database/models';
+import { getAllPosts, getAllStaticPages } from './blog';
 import { callDb } from './database';
-import { DatabaseError } from './error';
 import {
   createDirectoryIfNotExits,
   deleteAllFilesFromDirectory,
@@ -107,16 +107,24 @@ const generateSitemaps = async () => {
     )
   );
   if (comicError) {
-    return Promise.reject(
-      new DatabaseError(comicError.name, comicError.message, 'Wait')
-    );
+    return Promise.reject(comicError);
   }
 
   const [tagError, tags] = await handle(callDb(getAllTags(-1, 0, 'slug -_id')));
   if (tagError) {
-    return Promise.reject(
-      new DatabaseError(tagError.name, tagError.message, 'Wait')
-    );
+    return Promise.reject(tagError);
+  }
+
+  const [blogPagesError, blogPages] = await handle(callDb(getAllPosts()));
+  if (blogPagesError) {
+    return Promise.reject(blogPagesError);
+  }
+
+  const [staticPagesError, staticPages] = await handle(
+    callDb(getAllStaticPages())
+  );
+  if (staticPagesError) {
+    return Promise.reject(staticPagesError);
   }
 
   const urlList = [...otherPages];
@@ -137,6 +145,12 @@ const generateSitemaps = async () => {
   );
 
   urlList.push(...tags.map((tag) => `${SEO.URL}/tag/${tag.slug}`));
+  urlList.push(
+    ...staticPages.map((staticPage) => `${SEO.URL}/${staticPage.slug}`)
+  );
+  urlList.push(
+    ...blogPages.map((blogPage) => `${SEO.URL}/blog/${blogPage.slug}`)
+  );
 
   const generatedSitemaps = [];
   const chunkSize = 45000;
