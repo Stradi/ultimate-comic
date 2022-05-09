@@ -9,3 +9,11 @@ type BlogPost = {
   publishedAt: Date;
   updatedAt: Date;
 };
+
+type StaticPage = {
+  title: string;
+  slug: string;
+  content: string;
+  publishedAt: Date;
+  updatedAt: Date;
+};

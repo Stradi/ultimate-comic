@@ -84,6 +84,31 @@ const getBlogPostBySlug = async (slug: string) => {
   return returnData;
 };
 
+const getStaticPageBySlug = async (slug: string) => {
+  const [error, data] = await handle(
+    fetchCMS(`static-pages?filters[slug][$eq]=${slug}&populate=seo`)
+  );
+
+  if (error) return Promise.reject(error);
+
+  const staticPageData = data[0].attributes;
+
+  const [conversionError, htmlContent] = await handle(
+    convertMarkdownToHtml(staticPageData.content)
+  );
+  if (conversionError) return Promise.reject(conversionError);
+
+  const returnData: StaticPage = {
+    title: staticPageData.title,
+    slug: staticPageData.slug,
+    content: htmlContent,
+    publishedAt: new Date(staticPageData.publishedAt),
+    updatedAt: new Date(staticPageData.updatedAt),
+  };
+
+  return returnData;
+};
+
 const convertMarkdownToHtml = async (content: string) => {
   const [error, html] = await handle(
     unified()
@@ -107,4 +132,9 @@ const convertMarkdownToHtml = async (content: string) => {
   return String(html);
 };
 
-export { getBlogPostBySlug, getAllPosts, convertMarkdownToHtml };
+export {
+  getBlogPostBySlug,
+  getAllPosts,
+  getStaticPageBySlug,
+  convertMarkdownToHtml,
+};
