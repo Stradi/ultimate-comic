@@ -5,3 +5,15 @@
 body {
   @apply bg-[#0d0d0d] text-stone-300;
 }
+
+#nprogress .bar {
+  @apply bg-red-600 h-1 !important;
+}
+
+#nprogress .peg {
+  @apply shadow-red-600 shadow-2xl !important;
+}
+
+#nprogress .spinner-icon {
+  @apply border-t-red-600 border-l-red-600 border-4 !important;
+}

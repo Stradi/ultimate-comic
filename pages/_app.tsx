@@ -1,5 +1,8 @@
 import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
+import Router from 'next/router';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 import 'remixicon/fonts/remixicon.css';
 import { Layout } from '~/components/Layout';
 import { WebSiteJsonLd } from '~/components/SEO/WebSiteJsonLd';
@@ -8,6 +11,10 @@ import '../styles/globals.css';
 
 //TODO: Add image for website.
 function MyApp({ Component, pageProps }: AppProps) {
+  Router.events.on('routeChangeStart', () => NProgress.start());
+  Router.events.on('routeChangeComplete', () => NProgress.done());
+  Router.events.on('routeChangeError', () => NProgress.done());
+
   return (
     <>
       <DefaultSeo
