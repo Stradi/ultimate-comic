@@ -67,7 +67,11 @@ export const getStaticProps: GetStaticProps<
   const slug = (context.params as IStaticPathsQuery).slug;
   const [error, post] = await handle(getBlogPostBySlug(slug));
 
-  if (error) throw JSON.stringify(error);
+  if (error) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: {

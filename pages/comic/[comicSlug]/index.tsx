@@ -179,7 +179,9 @@ export const getStaticProps: GetStaticProps<
   );
 
   if (error) {
-    throw error;
+    return {
+      notFound: true,
+    };
   }
 
   return {

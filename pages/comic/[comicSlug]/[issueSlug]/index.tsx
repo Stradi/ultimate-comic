@@ -167,7 +167,9 @@ export const getStaticProps: GetStaticProps<
   );
 
   if (comicError) {
-    throw comicError;
+    return {
+      notFound: true,
+    };
   }
 
   const comicIssues = comic.issues as IIssueDocument[];

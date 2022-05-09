@@ -57,7 +57,11 @@ export const getStaticProps: GetStaticProps<
   const pageSlug = (context.params as IStaticPathsQuery).slug[0];
   const [error, post] = await handle(getStaticPageBySlug(pageSlug));
 
-  if (error) throw JSON.stringify(error);
+  if (error) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: {
