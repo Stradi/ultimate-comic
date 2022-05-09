@@ -84,6 +84,20 @@ const getBlogPostBySlug = async (slug: string) => {
   return returnData;
 };
 
+const getAllStaticPages = async () => {
+  const [error, data] = await handle(fetchCMS(`static-pages`));
+  if (error) return Promise.reject(error);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return data.map((post: any) => ({
+    title: post.attributes.title,
+    slug: post.attributes.slug,
+    content: post.attributes.content,
+    publishedAt: new Date(post.attributes.publishedAt),
+    updatedAt: new Date(post.attributes.updatedAt),
+  })) as StaticPage[];
+};
+
 const getStaticPageBySlug = async (slug: string) => {
   const [error, data] = await handle(
     fetchCMS(`static-pages?filters[slug][$eq]=${slug}&populate=seo`)
@@ -136,5 +150,6 @@ export {
   getBlogPostBySlug,
   getAllPosts,
   getStaticPageBySlug,
+  getAllStaticPages,
   convertMarkdownToHtml,
 };

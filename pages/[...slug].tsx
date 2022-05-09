@@ -6,7 +6,7 @@ import {
 } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from '~/components/Container';
-import { getStaticPageBySlug } from '~/lib/utils/blog';
+import { getAllStaticPages, getStaticPageBySlug } from '~/lib/utils/blog';
 import { handle } from '~/lib/utils/promise';
 
 interface ICatchAllIndexPageProps {
@@ -31,12 +31,21 @@ const CatchAllIndexPage: NextPage<ICatchAllIndexPageProps> = ({
 };
 
 interface IStaticPathsQuery extends ParsedUrlQuery {
-  slug: string;
+  slug: string[];
 }
 
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
+  const [error, staticPages] = await handle(getAllStaticPages());
+  if (error) throw error;
+
+  const paths = staticPages.map((staticPage) => {
+    return {
+      params: { slug: [staticPage.slug] },
+    };
+  });
+
   return {
-    paths: [],
+    paths,
     fallback: 'blocking',
   };
 };
@@ -45,7 +54,7 @@ export const getStaticProps: GetStaticProps<
   ICatchAllIndexPageProps,
   IStaticPathsQuery
 > = async (context: GetStaticPropsContext<IStaticPathsQuery>) => {
-  const pageSlug = (context.params as IStaticPathsQuery).slug;
+  const pageSlug = (context.params as IStaticPathsQuery).slug[0];
   const [error, post] = await handle(getStaticPageBySlug(pageSlug));
 
   if (error) throw JSON.stringify(error);
