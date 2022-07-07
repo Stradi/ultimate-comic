@@ -12,7 +12,7 @@ import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Reader } from '~/components/Reader';
 import { ComicIssueJsonLd } from '~/components/SEO/ComicIssueJsonLd';
-import { getComicBySlug, getIssueBySlug } from '~/lib/database';
+import { getAllIssues, getIssueBySlug } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
 import { toHumanReadable } from '~/lib/utils/date';
@@ -156,42 +156,71 @@ export const getStaticProps: GetStaticProps<
   const comicSlug = slugs.comicSlug;
   const issueSlug = slugs.issueSlug;
 
-  //TODO: We could do all of these in (probably) one getComicBySlug call.
-  const [comicError, comic] = await handle(
+  const [currentIssueError, currentIssue] = await handle(
     callDb(
-      getComicBySlug(comicSlug, 'name slug issues', [
-        { fieldName: 'issues', fields: 'name images slug' },
+      getIssueBySlug(comicSlug, issueSlug, 'name images comic createdAt', [
+        {
+          fieldName: 'comic',
+          fields: 'name slug',
+        },
       ]),
       true
     )
   );
 
-  if (comicError) {
+  if (currentIssueError) {
     return {
       notFound: true,
     };
   }
 
-  const comicIssues = comic.issues as IIssueDocument[];
-  const [issueError, issue] = await handle(
-    callDb(getIssueBySlug(comicSlug, issueSlug), true)
+  const [, nextIssue] = await handle(
+    callDb(
+      getAllIssues(
+        1,
+        0,
+        'slug',
+        [],
+        {
+          _id: {
+            $gt: currentIssue._id,
+          },
+        },
+        {
+          _id: 'ascending',
+        }
+      ),
+      true
+    )
   );
-  if (issueError) {
-    throw issueError;
-  }
 
-  const issueIndex = comicIssues.findIndex((i) => i._id == issue._id);
-  const nextIssue = issueIndex === 0 ? null : comicIssues[issueIndex - 1];
-  const prevIssue =
-    issueIndex === comicIssues.length - 1 ? null : comicIssues[issueIndex + 1];
+  const [, previousIssue] = await handle(
+    callDb(
+      getAllIssues(
+        1,
+        0,
+        'slug',
+        [],
+        {
+          _id: {
+            $gt: currentIssue._id,
+          },
+        },
+        {
+          _id: 'descending',
+        }
+      ),
+      true
+    )
+  );
 
   return {
     props: {
-      issue,
-      comic,
-      nextIssue,
-      prevIssue,
-      key: issue._id,
+      issue: currentIssue,
+      comic: currentIssue.comic as IComicDocument,
+      nextIssue: (nextIssue as IIssueDocument[])[0] || null,
+      prevIssue: (previousIssue as IIssueDocument[])[0] || null,
+      key: currentIssue._id,
     },
   };
 };
