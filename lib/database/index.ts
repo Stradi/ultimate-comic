@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { getPopulatableFields, selectFromFields } from '../utils/database';
+import { getPopulatableFields } from '../utils/database';
 import { ApiError, DatabaseError } from '../utils/error';
 import { handle } from '../utils/promise';
 import {
@@ -54,19 +54,18 @@ const getAllComics = async (
   filter = {},
   sort: SortOption<IComicDocument> = {}
 ): Promise<IComicDocument[]> => {
-  const query = ComicModel.find(filter);
+  const query = ComicModel.find(filter, fields);
   if (count !== -1) {
     query.limit(count);
   }
   query.skip(skip);
-  query.select(fields);
   query.sort(sort);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) =>
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: selectFromFields(fieldToPopulate.fields),
+      select: fieldToPopulate.fields,
     })
   );
 
@@ -78,14 +77,13 @@ const getComicById = async (
   fields = 'name slug isCompleted releaseDate coverImage summary',
   populate: PopulationOption[] = []
 ): Promise<IComicDocument> => {
-  const query = ComicModel.findById(id);
-  query.select(fields);
+  const query = ComicModel.findById(id, fields);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) =>
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: selectFromFields(fieldToPopulate.fields),
+      select: fieldToPopulate.fields,
     })
   );
 
@@ -110,21 +108,20 @@ const getComicBySlug = async (
   fields = 'name slug isCompleted releaseDate coverImage summary',
   populate: PopulationOption[] = []
 ): Promise<IComicDocument> => {
-  const query = ComicModel.findOne({ slug });
-  query.select(fields);
+  const query = ComicModel.find({ slug }, fields);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) => {
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: selectFromFields(fieldToPopulate.fields),
+      select: fieldToPopulate.fields,
     });
   });
 
   const result = await query.exec();
 
   if (result) {
-    return Promise.resolve(result);
+    return Promise.resolve(result[0]);
   } else {
     return Promise.reject(
       new ApiError(
@@ -137,19 +134,44 @@ const getComicBySlug = async (
   }
 };
 
+const getAllIssues = async (
+  count = 20,
+  skip = 0,
+  fields = 'name slug',
+  populate: PopulationOption[] = [],
+  filter = {},
+  sort: SortOption<IIssueDocument> = {}
+): Promise<IIssueDocument[]> => {
+  const query = IssueModel.find(filter, fields);
+  if (count !== -1) {
+    query.limit(count);
+  }
+  query.skip(skip);
+  query.sort(sort);
+
+  const populatableFields = getPopulatableFields(fields, populate);
+  populatableFields.forEach((fieldToPopulate) =>
+    query.populate({
+      path: fieldToPopulate.fieldName,
+      select: fieldToPopulate.fields,
+    })
+  );
+
+  return await query.exec();
+};
+
 const getIssueById = async (
   id: string,
   fields = 'name slug createdAt',
   populate: PopulationOption[] = []
 ): Promise<IIssueDocument> => {
-  const query = IssueModel.findOne({ _id: id });
-  query.select(fields);
+  const query = IssueModel.findOne({ _id: id }, fields);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) => {
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: selectFromFields(fieldToPopulate.fields),
+      select: fieldToPopulate.fields,
     });
   });
 
@@ -179,13 +201,16 @@ const getIssueBySlug = async (
   );
   if (error) return Promise.reject(error);
 
-  const query = IssueModel.findOne({ slug: issueSlug, comic: data._id });
+  const query = IssueModel.findOne(
+    { slug: issueSlug, comic: data._id },
+    fields
+  );
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) => {
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: selectFromFields(fieldToPopulate.fields),
+      select: fieldToPopulate.fields,
     });
   });
 
@@ -212,19 +237,18 @@ const getLatestIssues = async (
   filter = {},
   sort: SortOption<IIssueDocument> = {}
 ): Promise<IIssueDocument[]> => {
-  const query = IssueModel.find(filter);
+  const query = IssueModel.find(filter, fields);
   if (count !== -1) {
     query.limit(count);
   }
   query.skip(skip);
-  query.select(selectFromFields(fields));
   query.sort(sort);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) => {
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: selectFromFields(fieldToPopulate.fields),
+      select: fieldToPopulate.fields,
     });
   });
 
@@ -239,20 +263,19 @@ const getAllTags = async (
   filter = {},
   sort: SortOption<ITagDocument> = {}
 ): Promise<ITagDocument[]> => {
-  const query = TagModel.find(filter);
+  const query = TagModel.find(filter, fields);
   if (count !== -1) {
     query.limit(count);
   }
 
   query.skip(skip);
-  query.select(fields);
   query.sort(sort);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) =>
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: selectFromFields(fieldToPopulate.fields),
+      select: fieldToPopulate.fields,
     })
   );
 
@@ -266,14 +289,13 @@ const getTagBySlug = async (
   count = 20,
   skip = 0
 ): Promise<ITagDocument> => {
-  const query = TagModel.findOne({ slug });
-  query.select(fields);
+  const query = TagModel.findOne({ slug }, fields);
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) => {
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: selectFromFields(fieldToPopulate.fields),
+      select: fieldToPopulate.fields,
       options: {
         limit: count,
         skip,
@@ -303,6 +325,7 @@ export {
   getAllComics,
   getComicById,
   getComicBySlug,
+  getAllIssues,
   getIssueById,
   getIssueBySlug,
   getLatestIssues,
