@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@commitlint/cli': ^16.2.4
   '@commitlint/config-conventional': ^16.2.4
+  '@tailwindcss/line-clamp': ^0.4.0
   '@tailwindcss/typography': ^0.5.2
   '@types/node': 17.0.25
   '@types/nprogress': ^0.2.0
@@ -51,6 +52,7 @@ dependencies:
 devDependencies:
   '@commitlint/cli': 16.2.4
   '@commitlint/config-conventional': 16.2.4
+  '@tailwindcss/line-clamp': 0.4.0_tailwindcss@3.0.24
   '@tailwindcss/typography': 0.5.2_tailwindcss@3.0.24
   '@types/node': 17.0.25
   '@types/nprogress': 0.2.0
@@ -452,6 +454,14 @@ packages:
 
   /@rushstack/eslint-patch/1.0.8:
     resolution: {integrity: sha512-ZK5v4bJwgXldAUA8r3q9YKfCwOqoHTK/ZqRjSeRXQrBXWouoPnS4MQtgC4AXGiiBuUu5wxrRgTlv0ktmM4P1Aw==}
+    dev: true
+
+  /@tailwindcss/line-clamp/0.4.0_tailwindcss@3.0.24:
+    resolution: {integrity: sha512-HQZo6gfx1D0+DU3nWlNLD5iA6Ef4JAXh0LeD8lOGrJwEDBwwJNKQza6WoXhhY1uQrxOuU8ROxV7CqiQV4CoiLw==}
+    peerDependencies:
+      tailwindcss: '>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1'
+    dependencies:
+      tailwindcss: 3.0.24
     dev: true
 
   /@tailwindcss/typography/0.5.2_tailwindcss@3.0.24:

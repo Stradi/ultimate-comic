@@ -26,7 +26,9 @@ const SingleIssue = ({ issue }: ISingleIssueProps) => {
         </div>
         <div className="flex flex-col justify-between py-2 w-1/2">
           <div>
-            <p className="font-medium group-hover:text-white">{comic.name}</p>
+            <p className="font-medium group-hover:text-white md:line-clamp-2">
+              {comic.name}
+            </p>
             <p className="group-hover:text-white">{issue.name}</p>
           </div>
           <p className="text-sm">{toHumanReadable(issue.createdAt as Date)}</p>
