@@ -1,147 +1,93 @@
+import fs from 'fs';
+import path from 'path';
+
+import matter from 'gray-matter';
 import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
+
 import { BaseError } from './error';
 import { handle } from './promise';
 
-const fetchCMS = async (path: string) => {
-  const [error, data] = await handle(
-    fetch(`${process.env.STRAPI_URL}/api/${path}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.STRAPI_AUTH_TOKEN}`,
-      },
-    })
-  );
-
-  if (error) {
-    return Promise.reject(
-      new BaseError('strapi', error.message, error.stack as string, 'Wait')
-    );
-  }
-
-  const jsonData = await data.json();
-
-  if (jsonData.error) {
-    return Promise.reject(
-      new BaseError(
-        'strapi',
-        'An error occured in Strapi side.',
-        jsonData.error,
-        'Wait'
-      )
-    );
-  }
-
-  return jsonData.data;
-};
+const BLOG_DIRECTORY = path.join(process.cwd(), '_blog');
+const POSTS_DIRECTORY = path.join(BLOG_DIRECTORY, 'posts');
+const STATIC_PAGES_DIRECTORY = path.join(BLOG_DIRECTORY, 'staticPages');
 
 const getAllPosts = async () => {
-  const [error, data] = await handle(
-    fetchCMS(`blog-posts?populate=seo&sort=publishedAt:desc`)
+  const allPostsDirectory = fs.readdirSync(POSTS_DIRECTORY);
+  const mdContents = allPostsDirectory.flatMap((slug) =>
+    matter(fs.readFileSync(path.join(POSTS_DIRECTORY, slug, 'index.md')))
   );
-  if (error) return Promise.reject(error);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return data.map((post: any) => ({
-    title: post.attributes.title,
-    slug: post.attributes.slug,
-    coverImage: post.attributes.coverImage || null,
-    content: post.attributes.content,
+  return mdContents.map((content) => ({
+    title: content.data.title,
+    slug: content.data.slug,
+    coverImage: content.data.coverImage || null,
+    content: content.content,
     seo: {
-      description: post.attributes.seo.description,
+      description: content.data.seoDescription,
     },
-    publishedAt: new Date(post.attributes.publishedAt),
-    updatedAt: new Date(post.attributes.updatedAt),
+    publishedAt: new Date(content.data.publishedAt),
+    updatedAt: new Date(content.data.updatedAt),
   })) as BlogPost[];
 };
 
 const getBlogPostBySlug = async (slug: string) => {
-  const [error, data] = await handle(
-    fetchCMS(`blog-posts?filters[slug][$eq]=${slug}&populate=seo`)
+  const mdContent = matter(
+    fs.readFileSync(path.join(POSTS_DIRECTORY, slug, 'index.md'))
   );
 
-  if (error) return Promise.reject(error);
-  if (!data.length) {
-    return Promise.reject(
-      new BaseError(
-        'strapi',
-        `'${slug}' could not found.`,
-        `Provided '${slug}' parameter does not match any of the object in the strapi database.`,
-        'Repeat this request with a valid slug.'
-      )
-    );
-  }
-
-  const postData = data[0].attributes;
-
   const [conversionError, htmlContent] = await handle(
-    convertMarkdownToHtml(postData.content)
+    convertMarkdownToHtml(mdContent.content)
   );
   if (conversionError) return Promise.reject(conversionError);
 
-  const returnData: BlogPost = {
-    title: postData.title,
-    slug: postData.slug,
+  return {
+    title: mdContent.data.title,
+    slug: mdContent.data.slug,
+    coverImage: mdContent.data.coverImage || null,
     content: htmlContent,
-    coverImage: postData.coverImage || null,
     seo: {
-      description: postData.seo.description,
+      description: mdContent.data.seoDescription,
     },
-    publishedAt: new Date(postData.publishedAt),
-    updatedAt: new Date(postData.updatedAt),
-  };
-
-  return returnData;
+    publishedAt: new Date(mdContent.data.publishedAt),
+    updatedAt: new Date(mdContent.data.updatedAt),
+  } as BlogPost;
 };
 
 const getAllStaticPages = async () => {
-  const [error, data] = await handle(fetchCMS(`static-pages`));
-  if (error) return Promise.reject(error);
+  const allStaticPagesDirectory = fs.readdirSync(STATIC_PAGES_DIRECTORY);
+  const mdContents = allStaticPagesDirectory.flatMap((slug) =>
+    matter(fs.readFileSync(path.join(STATIC_PAGES_DIRECTORY, slug, 'index.md')))
+  );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return data.map((post: any) => ({
-    title: post.attributes.title,
-    slug: post.attributes.slug,
-    content: post.attributes.content,
-    publishedAt: new Date(post.attributes.publishedAt),
-    updatedAt: new Date(post.attributes.updatedAt),
+  return mdContents.map((content) => ({
+    title: content.data.title,
+    slug: content.data.slug,
+    content: content.data.content,
+    publishedAt: new Date(content.data.publishedAt),
+    updatedAt: new Date(content.data.updatedAt),
   })) as StaticPage[];
 };
 
 const getStaticPageBySlug = async (slug: string) => {
-  const [error, data] = await handle(
-    fetchCMS(`static-pages?filters[slug][$eq]=${slug}&populate=seo`)
+  const mdContent = matter(
+    fs.readFileSync(path.join(STATIC_PAGES_DIRECTORY, slug, 'index.md'))
   );
 
-  if (error) return Promise.reject(error);
-  if (!data.length) {
-    return Promise.reject(
-      new BaseError(
-        'strapi',
-        `'${slug}' could not found.`,
-        `Provided '${slug}' parameter does not match any of the object in the strapi database.`,
-        'Repeat this request with a valid slug.'
-      )
-    );
-  }
-
-  const staticPageData = data[0].attributes;
-
   const [conversionError, htmlContent] = await handle(
-    convertMarkdownToHtml(staticPageData.content)
+    convertMarkdownToHtml(mdContent.content)
   );
   if (conversionError) return Promise.reject(conversionError);
 
-  const returnData: StaticPage = {
-    title: staticPageData.title,
-    slug: staticPageData.slug,
+  return {
+    title: mdContent.data.title,
+    slug: mdContent.data.slug,
     content: htmlContent,
-    publishedAt: new Date(staticPageData.publishedAt),
-    updatedAt: new Date(staticPageData.updatedAt),
-  };
-
-  return returnData;
+    publishedAt: new Date(mdContent.data.publishedAt),
+    updatedAt: new Date(mdContent.data.updatedAt),
+  } as StaticPage;
 };
 
 const convertMarkdownToHtml = async (content: string) => {
