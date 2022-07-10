@@ -1,7 +1,6 @@
-import fs from 'fs';
 import path from 'path';
 
-import fse from 'fs-extra';
+import fs from 'fs-extra';
 import matter from 'gray-matter';
 import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
@@ -133,9 +132,11 @@ const moveImagesToPublicFolder = (
     'images'
   );
 
+  fs.ensureDirSync(directory);
+
   const images = fs.readdirSync(directory);
   images.forEach((name) => {
-    fse.copySync(
+    fs.copySync(
       path.join(directory, name),
       path.join(PUBLIC_IMAGES_PATH, type, slug, name),
       {
