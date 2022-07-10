@@ -37,6 +37,7 @@ specifiers:
   tailwindcss: ^3.0.24
   typescript: 4.6.3
   unified: ^10.1.2
+  unist-util-visit: ^4.1.0
 
 dependencies:
   fs-extra: 10.1.0
@@ -53,6 +54,7 @@ dependencies:
   remixicon: 2.5.0
   sharp: 0.30.4
   unified: 10.1.2
+  unist-util-visit: 4.1.0
 
 devDependencies:
   '@commitlint/cli': 16.2.4
@@ -4192,7 +4194,7 @@ packages:
       is-buffer: 2.0.5
       is-plain-obj: 4.0.0
       trough: 2.1.0
-      vfile: 5.3.2
+      vfile: 5.3.4
     dev: false
 
   /unist-builder/3.0.0:
@@ -4297,8 +4299,8 @@ packages:
       unist-util-stringify-position: 3.0.2
     dev: false
 
-  /vfile/5.3.2:
-    resolution: {integrity: sha512-w0PLIugRY3Crkgw89TeMvHCzqCs/zpreR31hl4D92y6SOE07+bfJe+dK5Q2akwS+i/c801kzjoOr9gMcTe6IAA==}
+  /vfile/5.3.4:
+    resolution: {integrity: sha512-KI+7cnst03KbEyN1+JE504zF5bJBZa+J+CrevLeyIMq0aPU681I2rQ5p4PlnQ6exFtWiUrg26QUdFMnAKR6PIw==}
     dependencies:
       '@types/unist': 2.0.6
       is-buffer: 2.0.5

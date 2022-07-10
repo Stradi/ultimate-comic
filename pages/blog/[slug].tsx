@@ -8,7 +8,11 @@ import {
 import { ArticleJsonLd, NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from '~/components/Container';
-import { getAllPosts, getBlogPostBySlug } from '~/lib/utils/blog';
+import {
+  getAllPosts,
+  getBlogPostBySlug,
+  moveImagesToPublicFolder,
+} from '~/lib/utils/blog';
 import { handle } from '~/lib/utils/promise';
 
 interface IBlogSlugPageProps {
@@ -72,6 +76,8 @@ export const getStaticProps: GetStaticProps<
       notFound: true,
     };
   }
+
+  moveImagesToPublicFolder(slug, 'blog');
 
   return {
     props: {

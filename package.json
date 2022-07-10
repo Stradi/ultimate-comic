@@ -27,7 +27,8 @@
     "remark-rehype": "^10.1.0",
     "remixicon": "^2.5.0",
     "sharp": "^0.30.4",
-    "unified": "^10.1.2"
+    "unified": "^10.1.2",
+    "unist-util-visit": "^4.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.4",

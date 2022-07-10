@@ -1,10 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 
+import fse from 'fs-extra';
 import matter from 'gray-matter';
 import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
+import { remarkNextImage } from '../remark/remark-next-image';
+
 import { unified } from 'unified';
 
 import { BaseError } from './error';
@@ -13,6 +16,8 @@ import { handle } from './promise';
 const BLOG_DIRECTORY = path.join(process.cwd(), '_blog');
 const POSTS_DIRECTORY = path.join(BLOG_DIRECTORY, 'posts');
 const STATIC_PAGES_DIRECTORY = path.join(BLOG_DIRECTORY, 'staticPages');
+
+const PUBLIC_IMAGES_PATH = path.join(process.cwd(), 'public', 'images');
 
 const getAllPosts = async () => {
   const allPostsDirectory = fs.readdirSync(POSTS_DIRECTORY);
@@ -39,7 +44,7 @@ const getBlogPostBySlug = async (slug: string) => {
   );
 
   const [conversionError, htmlContent] = await handle(
-    convertMarkdownToHtml(mdContent.content)
+    convertMarkdownToHtml(mdContent.content, 'blog', mdContent.data.slug)
   );
   if (conversionError) return Promise.reject(conversionError);
 
@@ -77,7 +82,7 @@ const getStaticPageBySlug = async (slug: string) => {
   );
 
   const [conversionError, htmlContent] = await handle(
-    convertMarkdownToHtml(mdContent.content)
+    convertMarkdownToHtml(mdContent.content, 'staticpage', mdContent.data.slug)
   );
   if (conversionError) return Promise.reject(conversionError);
 
@@ -90,10 +95,15 @@ const getStaticPageBySlug = async (slug: string) => {
   } as StaticPage;
 };
 
-const convertMarkdownToHtml = async (content: string) => {
+const convertMarkdownToHtml = async (
+  content: string,
+  type: 'blog' | 'staticpage',
+  slug: string
+) => {
   const [error, html] = await handle(
     unified()
       .use(remarkParse)
+      .use(remarkNextImage, { publicPath: `/images/${type}/${slug}` })
       .use(remarkRehype)
       .use(rehypeStringify)
       .process(content)
@@ -113,10 +123,34 @@ const convertMarkdownToHtml = async (content: string) => {
   return String(html);
 };
 
+const moveImagesToPublicFolder = (
+  slug: string,
+  type: 'blog' | 'staticpage'
+) => {
+  const directory = path.join(
+    type === 'blog' ? POSTS_DIRECTORY : STATIC_PAGES_DIRECTORY,
+    slug,
+    'images'
+  );
+
+  const images = fs.readdirSync(directory);
+  images.forEach((name) => {
+    fse.copySync(
+      path.join(directory, name),
+      path.join(PUBLIC_IMAGES_PATH, type, slug, name),
+      {
+        overwrite: true,
+        recursive: true,
+      }
+    );
+  });
+};
+
 export {
   getBlogPostBySlug,
   getAllPosts,
   getStaticPageBySlug,
   getAllStaticPages,
   convertMarkdownToHtml,
+  moveImagesToPublicFolder,
 };

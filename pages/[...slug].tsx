@@ -7,7 +7,11 @@ import {
 import { NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from '~/components/Container';
-import { getAllStaticPages, getStaticPageBySlug } from '~/lib/utils/blog';
+import {
+  getAllStaticPages,
+  getStaticPageBySlug,
+  moveImagesToPublicFolder,
+} from '~/lib/utils/blog';
 import { handle } from '~/lib/utils/promise';
 
 interface ICatchAllIndexPageProps {
@@ -64,6 +68,8 @@ export const getStaticProps: GetStaticProps<
       notFound: true,
     };
   }
+
+  moveImagesToPublicFolder(pageSlug, 'staticpage');
 
   return {
     props: {
