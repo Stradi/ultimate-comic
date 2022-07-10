@@ -4,6 +4,7 @@ import {
   GetStaticPropsContext,
   NextPage,
 } from 'next';
+import { NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from '~/components/Container';
 import { getAllStaticPages, getStaticPageBySlug } from '~/lib/utils/blog';
@@ -18,6 +19,7 @@ const CatchAllIndexPage: NextPage<ICatchAllIndexPageProps> = ({
 }: ICatchAllIndexPageProps) => {
   return (
     <Container>
+      <NextSeo title={post.title} />
       <h1 className="text-3xl font-black text-center text-white">
         {post.title}
       </h1>
