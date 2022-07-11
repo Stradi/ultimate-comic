@@ -7,6 +7,10 @@ import { ApiError } from '~/lib/utils/error';
 import { handle } from '~/lib/utils/promise';
 
 const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (process.env.NODE_ENV === 'development') {
+    return res.status(200).json({ msg: 'done' });
+  }
+
   const postData = parseQuery(req.body, ['issueId']);
   if (!postData.issueId)
     return Promise.reject(
