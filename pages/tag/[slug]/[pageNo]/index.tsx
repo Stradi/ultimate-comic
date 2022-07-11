@@ -71,7 +71,7 @@ const TagPage: NextPage<ITagPageProps> = ({ tag, pageNo }: ITagPageProps) => {
             </>
           )}
           <div className="py-1 px-3 bg-neutral-800 rounded-md">{pageNo}</div>
-          {comics.length == PAGES.ALL_COMICS.COMIC_PER_PAGE ? (
+          {comics.length == PAGES.TAG.COMIC_PER_PAGE ? (
             <>
               <Link href={`/tag/${tag.slug}/${pageNo + 1}`}>
                 <a className="py-1 px-3 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
@@ -134,12 +134,7 @@ export const getStaticProps: GetStaticProps<
       getTagBySlug(
         slug,
         'name slug comics',
-        [
-          {
-            fieldName: 'comics',
-            fields: 'name slug isCompleted',
-          },
-        ],
+        'name slug isCompleted',
         PAGES.TAG.COMIC_PER_PAGE,
         pageNo * PAGES.TAG.COMIC_PER_PAGE
       ),

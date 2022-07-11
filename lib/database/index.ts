@@ -285,29 +285,12 @@ const getAllTags = async (
 const getTagBySlug = async (
   slug: string,
   fields = 'name slug comics createdAt updatedAt',
-  populate: PopulationOption[] = [],
+  comicFields = '',
   count = 20,
   skip = 0
 ): Promise<ITagDocument> => {
-  const query = TagModel.findOne({ slug }, fields);
-
-  const populatableFields = getPopulatableFields(fields, populate);
-  populatableFields.forEach((fieldToPopulate) => {
-    query.populate({
-      path: fieldToPopulate.fieldName,
-      select: fieldToPopulate.fields,
-      options: {
-        limit: count,
-        skip,
-      },
-    });
-  });
-
-  const result = await query.exec();
-
-  if (result) {
-    return Promise.resolve(result);
-  } else {
+  const tag = await TagModel.findOne({ slug }, fields);
+  if (!tag) {
     return Promise.reject(
       new ApiError(
         404,
@@ -317,6 +300,23 @@ const getTagBySlug = async (
       )
     );
   }
+
+  const comicsQuery = ComicModel.find(
+    {
+      tags: {
+        $in: tag._id,
+      },
+    },
+    comicFields
+  );
+
+  comicsQuery.limit(count);
+  comicsQuery.skip(skip);
+
+  const comics = await comicsQuery.exec();
+  tag.comics = comics;
+
+  return Promise.resolve(tag);
 };
 
 export {
