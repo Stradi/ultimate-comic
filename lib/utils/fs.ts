@@ -53,9 +53,21 @@ const getFileContent = async (filePath: PathLike) => {
   return Promise.resolve(content);
 };
 
+const getAllFilesInDirectory = async (filePath: PathLike) => {
+  const [error, files] = await handle(readdir(filePath));
+  if (error) {
+    return Promise.reject(
+      new BaseError('fs', error.name, error.message, 'Wait')
+    );
+  }
+
+  return Promise.resolve(files);
+};
+
 export {
   createDirectoryIfNotExits,
   deleteAllFilesFromDirectory,
   writeToFile,
   getFileContent,
+  getAllFilesInDirectory,
 };

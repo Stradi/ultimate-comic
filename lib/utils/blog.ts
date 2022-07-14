@@ -10,6 +10,7 @@ import { remarkNextImage } from '../remark/remark-next-image';
 import { unified } from 'unified';
 
 import { BaseError } from './error';
+import { getAllFilesInDirectory, getFileContent } from './fs';
 import { handle } from './promise';
 
 const BLOG_DIRECTORY = path.join(process.cwd(), '_blog');
@@ -19,7 +20,11 @@ const STATIC_PAGES_DIRECTORY = path.join(BLOG_DIRECTORY, 'staticPages');
 const PUBLIC_IMAGES_PATH = path.join(process.cwd(), 'public', 'images');
 
 const getAllPosts = async () => {
-  const allPostsDirectory = fs.readdirSync(POSTS_DIRECTORY);
+  const [error, allPostsDirectory] = await handle(
+    getAllFilesInDirectory(POSTS_DIRECTORY)
+  );
+  if (error) return Promise.reject(error);
+
   const mdContents = allPostsDirectory.flatMap((slug) =>
     matter(fs.readFileSync(path.join(POSTS_DIRECTORY, slug, 'index.md')))
   );
@@ -38,9 +43,12 @@ const getAllPosts = async () => {
 };
 
 const getBlogPostBySlug = async (slug: string) => {
-  const mdContent = matter(
-    fs.readFileSync(path.join(POSTS_DIRECTORY, slug, 'index.md'))
+  const [error, fileContents] = await handle(
+    getFileContent(path.join(POSTS_DIRECTORY, slug, 'index.md'))
   );
+  if (error) return Promise.reject(error);
+
+  const mdContent = matter(fileContents);
 
   const [conversionError, htmlContent] = await handle(
     convertMarkdownToHtml(mdContent.content, 'blog', mdContent.data.slug)
@@ -61,7 +69,11 @@ const getBlogPostBySlug = async (slug: string) => {
 };
 
 const getAllStaticPages = async () => {
-  const allStaticPagesDirectory = fs.readdirSync(STATIC_PAGES_DIRECTORY);
+  const [error, allStaticPagesDirectory] = await handle(
+    getAllFilesInDirectory(STATIC_PAGES_DIRECTORY)
+  );
+  if (error) return Promise.reject(error);
+
   const mdContents = allStaticPagesDirectory.flatMap((slug) =>
     matter(fs.readFileSync(path.join(STATIC_PAGES_DIRECTORY, slug, 'index.md')))
   );
@@ -76,9 +88,12 @@ const getAllStaticPages = async () => {
 };
 
 const getStaticPageBySlug = async (slug: string) => {
-  const mdContent = matter(
-    fs.readFileSync(path.join(STATIC_PAGES_DIRECTORY, slug, 'index.md'))
+  const [error, fileContents] = await handle(
+    getFileContent(path.join(STATIC_PAGES_DIRECTORY, slug, 'index.md'))
   );
+  if (error) return Promise.reject(error);
+
+  const mdContent = matter(fileContents);
 
   const [conversionError, htmlContent] = await handle(
     convertMarkdownToHtml(mdContent.content, 'staticpage', mdContent.data.slug)
