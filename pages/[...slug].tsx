@@ -42,7 +42,7 @@ interface IStaticPathsQuery extends ParsedUrlQuery {
 
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
   const [error, staticPages] = await handle(getAllStaticPages());
-  if (error) throw error;
+  if (error) return { paths: [], fallback: 'blocking' };
 
   const paths = staticPages.map((staticPage) => {
     return {

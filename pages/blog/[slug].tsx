@@ -53,7 +53,7 @@ interface IStaticPathsQuery extends ParsedUrlQuery {
 
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
   const [error, posts] = await handle(getAllPosts());
-  if (error) throw JSON.stringify(error);
+  if (error) return { paths: [], fallback: 'blocking' };
 
   const paths = posts.map((post) => ({
     params: { slug: post.slug },
