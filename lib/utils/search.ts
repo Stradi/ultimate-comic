@@ -1,5 +1,15 @@
 import { getAllComics, getAllTags } from '../database';
+import { IComicDocument, ITagDocument } from '../database/models';
+
 import { handle } from './promise';
+
+type ComicSearchResult = IComicDocument[];
+type TagSearchResult = ITagDocument[];
+
+type SearchResult = {
+  comics: ComicSearchResult;
+  tags: TagSearchResult;
+};
 
 const searchComics = async (
   term: string,
@@ -15,7 +25,7 @@ const searchComics = async (
 
   if (error) return Promise.reject(error);
 
-  return Promise.resolve(results);
+  return Promise.resolve(results as ComicSearchResult);
 };
 
 const searchTags = async (
@@ -32,7 +42,7 @@ const searchTags = async (
 
   if (error) return Promise.reject(error);
 
-  return Promise.resolve(results);
+  return Promise.resolve(results as TagSearchResult);
 };
 
 const searchAll = async (
@@ -54,7 +64,36 @@ const searchAll = async (
   return {
     comics,
     tags,
-  };
+  } as SearchResult;
 };
 
-export { searchComics, searchTags, searchAll };
+const isComicSearchResult = (
+  obj: ComicSearchResult | TagSearchResult | SearchResult
+): obj is ComicSearchResult => {
+  return (obj as ComicSearchResult)[0].modelName === 'Comic';
+};
+
+const isTagSearchResult = (
+  obj: ComicSearchResult | TagSearchResult | SearchResult
+): obj is TagSearchResult => {
+  return (obj as TagSearchResult)[0].modelName === 'Tag';
+};
+
+const isSearchResult = (
+  obj: ComicSearchResult | TagSearchResult | SearchResult
+): obj is SearchResult => {
+  return (
+    (obj as SearchResult).comics !== undefined &&
+    (obj as SearchResult).tags !== undefined
+  );
+};
+
+export {
+  searchComics,
+  searchTags,
+  searchAll,
+  isComicSearchResult,
+  isTagSearchResult,
+  isSearchResult,
+};
+export { type ComicSearchResult, type TagSearchResult, type SearchResult };
