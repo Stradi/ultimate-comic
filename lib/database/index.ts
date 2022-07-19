@@ -46,6 +46,16 @@ const disconnectFromDatabase = async (): Promise<void> => {
   }
 };
 
+const getComicCount = async (): Promise<number> => {
+  const query = ComicModel.countDocuments();
+  return query.exec();
+};
+
+const getIssueCount = async (): Promise<number> => {
+  const query = IssueModel.countDocuments();
+  return query.exec();
+};
+
 const getAllComics = async (
   count = 20,
   skip = 0,
@@ -322,6 +332,8 @@ const getTagBySlug = async (
 export {
   connectToDatabase,
   disconnectFromDatabase,
+  getComicCount,
+  getIssueCount,
   getAllComics,
   getComicById,
   getComicBySlug,
