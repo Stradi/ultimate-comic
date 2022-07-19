@@ -1,10 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDatabase } from '~/lib/database';
-import { IComicDocument, ITagDocument } from '~/lib/database/models';
 import { apiHandler, parseQuery } from '~/lib/utils/api';
 import { ApiError } from '~/lib/utils/error';
 import { handle } from '~/lib/utils/promise';
-import { searchAll, searchComics, searchTags } from '~/lib/utils/search';
+import {
+  ComicSearchResult,
+  isComicSearchResult,
+  isSearchResult,
+  isTagSearchResult,
+  searchAll,
+  searchComics,
+  SearchResult,
+  searchTags,
+  TagSearchResult,
+} from '~/lib/utils/search';
 
 const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = parseQuery(req.query, [
@@ -115,14 +124,27 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const [searchError, searchResult] = await handle<
-    | IComicDocument[]
-    | ITagDocument[]
-    | { comics: IComicDocument[]; tags: ITagDocument[] }
+    ComicSearchResult | TagSearchResult | SearchResult
   >(fn(query.term as string, count, skip, query.fields as string));
 
   if (searchError) return Promise.reject(searchError);
 
-  return res.status(200).json(searchResult);
+  let responseJson = {
+    comics: [],
+    tags: [],
+  } as SearchResult;
+
+  if (isComicSearchResult(searchResult)) {
+    responseJson.comics = searchResult;
+  } else if (isTagSearchResult(searchResult)) {
+    responseJson.tags = searchResult;
+  } else if (isSearchResult(searchResult)) {
+    responseJson = searchResult;
+  }
+
+  console.log(responseJson);
+
+  return res.status(200).json(responseJson);
 };
 
 const handler = apiHandler({
