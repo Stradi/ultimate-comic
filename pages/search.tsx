@@ -6,6 +6,8 @@ import { callDb } from '~/lib/utils/database';
 import { handle } from '~/lib/utils/promise';
 
 import debounce from 'lodash.debounce';
+import { NextSeo } from 'next-seo';
+import { BigComicList } from '~/components/BigComicList';
 import { SearchResult } from '~/lib/utils/search';
 
 interface ISearchPageProps {
@@ -18,10 +20,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
   issueCount,
 }: ISearchPageProps) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<SearchResult>({
-    comics: [],
-    tags: [],
-  });
+  const [searchResults, setSearchResults] = useState<SearchResult>();
   const [error, setError] = useState({});
 
   const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +31,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
     const fn = async () => {
       const [error, response] = await handle(
         fetch(
-          `api/search?term=${searchTerm}&fields=name slug&type=comics&count=20`
+          `api/search?term=${searchTerm}&fields=name slug coverImage createdAt totalViews issues&type=comics&count=20`
         )
       );
 
@@ -45,11 +44,13 @@ const SearchPage: NextPage<ISearchPageProps> = ({
       setSearchResults(searchResults);
     };
 
-    fn();
+    if (searchTerm !== '') {
+      fn();
+    }
   }, [searchTerm]);
 
   const debouncedChangeHandler = useMemo(
-    () => debounce(changeHandler, 300),
+    () => debounce(changeHandler, 500),
     []
   );
 
@@ -61,6 +62,10 @@ const SearchPage: NextPage<ISearchPageProps> = ({
 
   return (
     <>
+      <NextSeo
+        title="Search"
+        description={`Search in more than ${comicCount} comics and ${issueCount} issues. In other words, world's biggest comic database.`}
+      />
       <Container>
         <h1 className="block mb-2 text-lg font-medium text-center text-white">
           Search Comix
@@ -71,7 +76,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
           and <span className="font-medium text-red-500">{issueCount}</span>{' '}
           issues
         </h2>
-        <div className="flex relative items-center mx-auto mt-16 w-1/3 h-full">
+        <div className="flex relative items-center my-8 mx-auto w-1/3 h-full">
           <input
             type={'text'}
             className="absolute top-0 left-0 p-2 pl-9 w-full placeholder:font-medium placeholder:text-neutral-700 text-neutral-300 focus:placeholder:text-neutral-500 bg-neutral-800 rounded-md focus:outline-none ring-2 ring-neutral-700 focus:ring-red-600 transition duration-100"
@@ -81,6 +86,20 @@ const SearchPage: NextPage<ISearchPageProps> = ({
           {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
           <i className="z-10 py-3 px-2 font-medium text-neutral-500 ri-search-line ri-lg" />
         </div>
+        {searchResults && (
+          <div>
+            {searchResults.comics.length > 0 && (
+              <div className="my-4">
+                <h2 className="mb-4 text-lg text-center">
+                  We found these comics about &apos;
+                  <span className="font-bold text-red-500">{searchTerm}</span>
+                  &apos;
+                </h2>
+                <BigComicList comics={searchResults.comics} />
+              </div>
+            )}
+          </div>
+        )}
       </Container>
     </>
   );
