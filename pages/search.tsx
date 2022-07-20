@@ -31,7 +31,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
     const fn = async () => {
       const [error, response] = await handle(
         fetch(
-          `api/search?term=${searchTerm}&fields=name slug coverImage createdAt totalViews issues&type=comics&count=20`
+          `/api/search?term=${searchTerm}&fields=name slug coverImage createdAt totalViews issues&type=comics&count=20`
         )
       );
 
