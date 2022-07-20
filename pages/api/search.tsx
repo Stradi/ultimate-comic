@@ -31,31 +31,6 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
     );
   }
 
-  if (!query.secret && process.env.NODE_ENV !== 'development') {
-    return Promise.reject(
-      new ApiError(
-        400,
-        'Insufficent query parameters.',
-        "To use this route you need to define 'secret' query parameter. The request you sent does not have a 'secret' parameter.",
-        "Include 'secret' query parameter while sending the request."
-      )
-    );
-  }
-
-  if (
-    query.secret !== process.env.REVALIDATION_SECRET &&
-    process.env.NODE_ENV !== 'development'
-  ) {
-    return Promise.reject(
-      new ApiError(
-        401,
-        'Invalid request.',
-        "The 'secret' provided does not valid.",
-        "Include a valid 'secret' query parameter while sending the request."
-      )
-    );
-  }
-
   if (!query.fields) {
     return Promise.reject(
       new ApiError(
