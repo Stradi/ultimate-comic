@@ -109,10 +109,7 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
         ],
         {},
         {
-          // TODO: Gives error in dev environment because
-          // some comics of issues doesn't exists on database.
-          // Should work fine (hopefully) in prod.
-          // createdAt: 'descending',
+          createdAt: 'descending',
         }
       ),
       true
