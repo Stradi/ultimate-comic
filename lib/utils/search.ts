@@ -25,7 +25,10 @@ const searchComics = async (
 
   if (error) return Promise.reject(error);
 
-  return Promise.resolve(results as ComicSearchResult);
+  return Promise.resolve({
+    comics: results,
+    tags: [],
+  } as SearchResult);
 };
 
 const searchTags = async (
@@ -42,7 +45,10 @@ const searchTags = async (
 
   if (error) return Promise.reject(error);
 
-  return Promise.resolve(results as TagSearchResult);
+  return Promise.resolve({
+    comics: [],
+    tags: results,
+  } as SearchResult);
 };
 
 const searchAll = async (
@@ -62,38 +68,10 @@ const searchAll = async (
   if (tagError) return Promise.reject(tagError);
 
   return {
-    comics,
-    tags,
+    comics: comics.comics,
+    tags: tags.tags,
   } as SearchResult;
 };
 
-const isComicSearchResult = (
-  obj: ComicSearchResult | TagSearchResult | SearchResult
-): obj is ComicSearchResult => {
-  return (obj as ComicSearchResult)[0].modelName === 'Comic';
-};
-
-const isTagSearchResult = (
-  obj: ComicSearchResult | TagSearchResult | SearchResult
-): obj is TagSearchResult => {
-  return (obj as TagSearchResult)[0].modelName === 'Tag';
-};
-
-const isSearchResult = (
-  obj: ComicSearchResult | TagSearchResult | SearchResult
-): obj is SearchResult => {
-  return (
-    (obj as SearchResult).comics !== undefined &&
-    (obj as SearchResult).tags !== undefined
-  );
-};
-
-export {
-  searchComics,
-  searchTags,
-  searchAll,
-  isComicSearchResult,
-  isTagSearchResult,
-  isSearchResult,
-};
+export { searchComics, searchTags, searchAll };
 export { type ComicSearchResult, type TagSearchResult, type SearchResult };
