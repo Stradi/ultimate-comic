@@ -4,15 +4,10 @@ import { apiHandler, parseQuery } from '~/lib/utils/api';
 import { ApiError } from '~/lib/utils/error';
 import { handle } from '~/lib/utils/promise';
 import {
-  ComicSearchResult,
-  isComicSearchResult,
-  isSearchResult,
-  isTagSearchResult,
   searchAll,
   searchComics,
   SearchResult,
   searchTags,
-  TagSearchResult,
 } from '~/lib/utils/search';
 
 const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -123,28 +118,13 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
       break;
   }
 
-  const [searchError, searchResult] = await handle<
-    ComicSearchResult | TagSearchResult | SearchResult
-  >(fn(query.term as string, count, skip, query.fields as string));
+  const [searchError, searchResult] = await handle<SearchResult>(
+    fn(query.term as string, count, skip, query.fields as string)
+  );
 
   if (searchError) return Promise.reject(searchError);
 
-  let responseJson = {
-    comics: [],
-    tags: [],
-  } as SearchResult;
-
-  if (isComicSearchResult(searchResult)) {
-    responseJson.comics = searchResult;
-  } else if (isTagSearchResult(searchResult)) {
-    responseJson.tags = searchResult;
-  } else if (isSearchResult(searchResult)) {
-    responseJson = searchResult;
-  }
-
-  console.log(responseJson);
-
-  return res.status(200).json(responseJson);
+  return res.status(200).json(searchResult);
 };
 
 const handler = apiHandler({
