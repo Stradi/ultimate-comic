@@ -22,6 +22,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult>();
   const [error, setError] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -29,11 +30,13 @@ const SearchPage: NextPage<ISearchPageProps> = ({
 
   useEffect(() => {
     const fn = async () => {
+      setIsLoading(true);
       const [error, response] = await handle(
         fetch(
           `/api/search?term=${searchTerm}&fields=name slug coverImage createdAt totalViews issues&type=comics&count=20`
         )
       );
+      setIsLoading(false);
 
       if (error) {
         setError(error);
@@ -86,6 +89,13 @@ const SearchPage: NextPage<ISearchPageProps> = ({
           {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
           <i className="z-10 py-3 px-2 font-medium text-neutral-500 ri-search-line ri-lg" />
         </div>
+        {isLoading && <div className="text-center">Loading...</div>}
+        {searchResults?.comics.length === 0 && (
+          <div className="text-center">
+            No search results found for &apos;
+            <span className="font-bold text-red-500">{searchTerm}</span>&apos;
+          </div>
+        )}
         {searchResults && (
           <div>
             {searchResults.comics.length > 0 && (
