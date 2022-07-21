@@ -1,10 +1,12 @@
 import type { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { BigComicList } from '~/components/BigComicList';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { LatestIssues } from '~/components/LatestIssues';
+import { SearchInput } from '~/components/SearchInput';
 import { Sidebar } from '~/components/Sidebar';
 import { getAllComics, getComicCount, getLatestIssues } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
@@ -22,8 +24,23 @@ const Home: NextPage<IHomePageProps> = ({
   popularComics,
   randomComics,
 }: IHomePageProps) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
   return (
     <Container>
+      <div>
+        <h1 className="-mb-4 text-xl font-medium text-center">
+          Search our extensive comic database
+        </h1>
+        <SearchInput
+          onChange={(e) => {
+            e.preventDefault();
+            setSearchTerm(e.target.value);
+          }}
+          displayButton={true}
+          buttonHref={`/search?q=${searchTerm}`}
+        />
+      </div>
       <div>
         <h2 className="mb-2 text-xl font-medium">Popular Publishers</h2>
         <div className="min-h-fit sm:flex sm:gap-x-2 sm:justify-center">
