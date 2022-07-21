@@ -7,8 +7,10 @@ import { handle } from '~/lib/utils/promise';
 
 import debounce from 'lodash.debounce';
 import { NextSeo } from 'next-seo';
+import { useRouter } from 'next/router';
 import { BigComicList } from '~/components/BigComicList';
 import { SearchInput } from '~/components/SearchInput';
+import { parseQuery } from '~/lib/utils/api';
 import { SearchResult } from '~/lib/utils/search';
 
 interface ISearchPageProps {
@@ -20,10 +22,17 @@ const SearchPage: NextPage<ISearchPageProps> = ({
   comicCount,
   issueCount,
 }: ISearchPageProps) => {
+  const router = useRouter();
+  const query = parseQuery(router.query, ['q']);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult>();
   const [error, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setSearchTerm((query.q as string) || '');
+  }, [query.q]);
 
   const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -80,7 +89,10 @@ const SearchPage: NextPage<ISearchPageProps> = ({
           and <span className="font-medium text-red-500">{issueCount}</span>{' '}
           issues
         </h2>
-        <SearchInput onChange={debouncedChangeHandler} />
+        <SearchInput
+          onChange={debouncedChangeHandler}
+          initialValue={(query.q as string) || ''}
+        />
         {isLoading && <div className="text-center">Loading...</div>}
         {searchResults?.comics.length === 0 && (
           <div className="text-center">
