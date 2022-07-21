@@ -56,6 +56,9 @@ const getIssueCount = async (): Promise<number> => {
   return query.exec();
 };
 
+// TODO: Update the queries, or split them, if count is '-1' or '>1000'.
+// Possible fix: Create an helper function just like we did in comic-scraper,
+// and run queries seperately.
 const getAllComics = async (
   count = 20,
   skip = 0,
