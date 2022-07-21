@@ -1,11 +1,12 @@
 import type { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { BigComicList } from '~/components/BigComicList';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { LatestIssues } from '~/components/LatestIssues';
 import { Sidebar } from '~/components/Sidebar';
-import { getAllComics, getLatestIssues } from '~/lib/database';
+import { getAllComics, getComicCount, getLatestIssues } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
 import { handle } from '~/lib/utils/promise';
@@ -13,11 +14,13 @@ import { handle } from '~/lib/utils/promise';
 interface IHomePageProps {
   newIssues: IIssueDocument[];
   popularComics: IComicDocument[];
+  randomComics: IComicDocument[];
 }
 
 const Home: NextPage<IHomePageProps> = ({
   newIssues,
   popularComics,
+  randomComics,
 }: IHomePageProps) => {
   return (
     <Container>
@@ -89,7 +92,11 @@ const Home: NextPage<IHomePageProps> = ({
           </div>
         </Sidebar>
       </div>
-      <div></div>
+      <div className="mt-4">
+        <h2 className="text-xl font-medium text-center">Can&apos;t decide?</h2>
+        <p className="text-center">Here are some random comics of the day</p>
+        <BigComicList comics={randomComics} />
+      </div>
     </Container>
   );
 };
@@ -142,10 +149,29 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
     throw popularComicsError;
   }
 
+  const [comicCountError, comicCount] = await handle(callDb(getComicCount()));
+  if (comicCountError) return Promise.reject(comicCountError);
+
+  //TODO: Find a real way to get random sample from comics collection.
+  const skipCount = Math.floor(Math.random() * comicCount);
+  const [randomComicsError, randomComics] = await handle(
+    callDb(
+      getAllComics(
+        10,
+        skipCount,
+        'name slug coverImage createdAt totalViews issues'
+      ),
+      true
+    )
+  );
+
+  if (randomComicsError) return Promise.reject(randomComicsError);
+
   return {
     props: {
       newIssues: filteredNewIssues,
       popularComics,
+      randomComics,
     },
   };
 };
