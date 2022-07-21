@@ -56,8 +56,8 @@ const Home: NextPage<IHomePageProps> = ({
           </Link>
         </div>
       </div>
-      <div className="md:flex md:justify-center">
-        <div className="w-full">
+      <div className="md:flex md:flex-row">
+        <div className="md:w-3/4">
           <h2 className="mb-2 text-xl font-medium">Latest Issues</h2>
           <LatestIssues issues={newIssues} />
         </div>
@@ -73,7 +73,7 @@ const Home: NextPage<IHomePageProps> = ({
                     {idx + 1}.
                   </p>
                   <div className="flex justify-between self-center w-full group-hover:text-white transition duration-100">
-                    <span>{comic.name}</span>
+                    <span className="line-clamp-2">{comic.name}</span>
                     <div>
                       {comic.totalViews || 0}
                       {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
