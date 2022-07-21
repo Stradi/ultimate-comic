@@ -27,7 +27,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
 
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult>();
-  const [error, setError] = useState({});
+  const [, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
