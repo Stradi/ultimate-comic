@@ -35,15 +35,11 @@ const BlogListPage: NextPage<IBlogListPageProps> = ({
 };
 
 export const getStaticProps: GetStaticProps<IBlogListPageProps> = async () => {
-  const [error, allPosts] = await handle(getAllPosts());
-  if (error) {
-    return { notFound: true };
-  }
+  const [, allPosts] = await handle(getAllPosts());
 
-  const posts = JSON.parse(JSON.stringify(allPosts));
   return {
     props: {
-      posts,
+      posts: allPosts ? JSON.parse(JSON.stringify(allPosts)) : [],
     },
   };
 };
