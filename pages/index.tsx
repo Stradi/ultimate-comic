@@ -120,6 +120,8 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
     throw newIssuesError;
   }
 
+  const filteredNewIssues = newIssues.filter((issue) => issue.comic?.slug);
+
   const [popularComicsError, popularComics] = await handle(
     callDb(
       getAllComics(
@@ -142,7 +144,7 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
 
   return {
     props: {
-      newIssues,
+      newIssues: filteredNewIssues,
       popularComics,
     },
   };
