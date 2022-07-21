@@ -36,6 +36,18 @@ const SearchPage: NextPage<ISearchPageProps> = ({
 
   const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+    router.push(
+      {
+        pathname: '/search',
+        query: {
+          q: event.target.value,
+        },
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    );
   };
 
   useEffect(() => {
