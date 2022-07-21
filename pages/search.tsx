@@ -8,6 +8,7 @@ import { handle } from '~/lib/utils/promise';
 import debounce from 'lodash.debounce';
 import { NextSeo } from 'next-seo';
 import { BigComicList } from '~/components/BigComicList';
+import { SearchInput } from '~/components/SearchInput';
 import { SearchResult } from '~/lib/utils/search';
 
 interface ISearchPageProps {
@@ -79,16 +80,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
           and <span className="font-medium text-red-500">{issueCount}</span>{' '}
           issues
         </h2>
-        <div className="flex relative items-center my-8 mx-auto w-1/3 h-full">
-          <input
-            type={'text'}
-            className="absolute top-0 left-0 p-2 pl-9 w-full placeholder:font-medium placeholder:text-neutral-700 text-neutral-300 focus:placeholder:text-neutral-500 bg-neutral-800 rounded-md focus:outline-none ring-2 ring-neutral-700 focus:ring-red-600 transition duration-100"
-            placeholder="Search..."
-            onChange={debouncedChangeHandler}
-          />
-          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="z-10 py-3 px-2 font-medium text-neutral-500 ri-search-line ri-lg" />
-        </div>
+        <SearchInput onChange={debouncedChangeHandler} />
         {isLoading && <div className="text-center">Loading...</div>}
         {searchResults?.comics.length === 0 && (
           <div className="text-center">
