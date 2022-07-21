@@ -76,6 +76,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
 
   const debouncedChangeHandler = useMemo(
     () => debounce(changeHandler, 500),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
