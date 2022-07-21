@@ -14,7 +14,7 @@ const Layout = ({ children }: ILayoutProps) => {
     ],
     right: [
       {
-        text: 'Search Comics',
+        text: 'Search',
         href: '/search',
       },
       {
