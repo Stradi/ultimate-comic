@@ -22,6 +22,8 @@ const SearchPage: NextPage<ISearchPageProps> = ({
   comicCount,
   issueCount,
 }: ISearchPageProps) => {
+  const COMICS_TO_SHOW = 10;
+
   const router = useRouter();
   const query = parseQuery(router.query, ['q']);
 
@@ -29,6 +31,8 @@ const SearchPage: NextPage<ISearchPageProps> = ({
   const [searchResults, setSearchResults] = useState<SearchResult>();
   const [, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+
+  const [searchCount, setSearchCount] = useState(COMICS_TO_SHOW);
 
   useEffect(() => {
     setSearchTerm((query.q as string) || '');
@@ -50,12 +54,20 @@ const SearchPage: NextPage<ISearchPageProps> = ({
     );
   };
 
+  const loadMore = () => {
+    setSearchCount(searchCount + COMICS_TO_SHOW);
+  };
+
+  useEffect(() => {
+    setSearchCount(COMICS_TO_SHOW);
+  }, [searchTerm]);
+
   useEffect(() => {
     const fn = async () => {
       setIsLoading(true);
       const [error, response] = await handle(
         fetch(
-          `/api/search?term=${searchTerm}&fields=name slug coverImage createdAt totalViews issues&type=comics&count=20`
+          `/api/search?term=${searchTerm}&fields=name slug coverImage createdAt totalViews issues&type=comics&count=${searchCount}`
         )
       );
       setIsLoading(false);
@@ -72,7 +84,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
     if (searchTerm !== '') {
       fn();
     }
-  }, [searchTerm]);
+  }, [searchTerm, searchCount]);
 
   const debouncedChangeHandler = useMemo(
     () => debounce(changeHandler, 500),
@@ -125,6 +137,16 @@ const SearchPage: NextPage<ISearchPageProps> = ({
                 <BigComicList comics={searchResults.comics} />
               </div>
             )}
+          </div>
+        )}
+        {searchResults?.comics.length === searchCount && (
+          <div className="flex justify-center">
+            <a
+              onClick={loadMore}
+              className="py-2 px-4 text-white bg-red-600 hover:bg-red-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors duration-100 hover:cursor-pointer"
+            >
+              Load More
+            </a>
           </div>
         )}
       </Container>
