@@ -1,5 +1,5 @@
 import { GetStaticProps, NextPage } from 'next';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { Container } from '~/components/Container';
 import { getComicCount, getIssueCount } from '~/lib/database';
 import { callDb } from '~/lib/utils/database';
@@ -58,9 +58,20 @@ const SearchPage: NextPage<ISearchPageProps> = ({
     setSearchCount(searchCount + COMICS_TO_SHOW);
   };
 
-  useEffect(() => {
-    setSearchCount(COMICS_TO_SHOW);
+  const isSearchTermValid = useCallback(() => {
+    if (searchTerm.length < 3) {
+      setError('You must enter more than 3 characters.');
+      return false;
+    }
+
+    return true;
   }, [searchTerm]);
+
+  useEffect(() => {
+    if (isSearchTermValid()) {
+      setSearchCount(COMICS_TO_SHOW);
+    }
+  }, [searchTerm, isSearchTermValid]);
 
   useEffect(() => {
     const fn = async () => {
@@ -81,10 +92,10 @@ const SearchPage: NextPage<ISearchPageProps> = ({
       setSearchResults(searchResults);
     };
 
-    if (searchTerm !== '') {
+    if (isSearchTermValid()) {
       fn();
     }
-  }, [searchTerm, searchCount]);
+  }, [searchTerm, searchCount, isSearchTermValid]);
 
   const debouncedChangeHandler = useMemo(
     () => debounce(changeHandler, 500),
