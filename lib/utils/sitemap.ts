@@ -2,7 +2,6 @@ import { access } from 'fs/promises';
 import path from 'path';
 import { SEO } from '../../configs/seo';
 import { getAllComics, getAllTags } from '../database';
-import { IIssueDocument } from '../database/models';
 import { getAllPosts, getAllStaticPages } from './blog';
 import { callDb } from './database';
 import {
@@ -97,15 +96,7 @@ const generateSitemapIfNotExists = async (filename: string) => {
 
 const generateSitemaps = async () => {
   const [comicError, comics] = await handle(
-    callDb(
-      getAllComics(-1, 0, 'slug issues -_id', [
-        {
-          fieldName: 'issues',
-          fields: 'slug -_id',
-        },
-      ]),
-      true
-    )
+    callDb(getAllComics(-1, 0, 'slug -_id'), true)
   );
   if (comicError) {
     return Promise.reject(comicError);
@@ -117,16 +108,10 @@ const generateSitemaps = async () => {
   }
 
   const [blogPagesError, blogPages] = await handle(callDb(getAllPosts()));
-  if (blogPagesError) {
-    return Promise.reject(blogPagesError);
-  }
 
   const [staticPagesError, staticPages] = await handle(
     callDb(getAllStaticPages())
   );
-  if (staticPagesError) {
-    return Promise.reject(staticPagesError);
-  }
 
   const urlList = [...otherPages];
 
@@ -134,24 +119,24 @@ const generateSitemaps = async () => {
     ...comics
       .map((comic) => {
         const comicSlug = `${SEO.URL}/comic/${comic.slug}`;
-
-        const issues = comic.issues as IIssueDocument[];
-        const issueSlugs = issues.map(
-          (issue) => `${SEO.URL}/comic/${comic.slug}/${issue.slug}`
-        );
-
-        return [comicSlug, issueSlugs].flat();
+        return [comicSlug].flat();
       })
       .flat()
   );
 
   urlList.push(...tags.map((tag) => `${SEO.URL}/tag/${tag.slug}`));
-  urlList.push(
-    ...staticPages.map((staticPage) => `${SEO.URL}/${staticPage.slug}`)
-  );
-  urlList.push(
-    ...blogPages.map((blogPage) => `${SEO.URL}/blog/${blogPage.slug}`)
-  );
+
+  if (!blogPagesError) {
+    urlList.push(
+      ...blogPages.map((blogPage) => `${SEO.URL}/blog/${blogPage.slug}`)
+    );
+  }
+
+  if (!staticPagesError) {
+    urlList.push(
+      ...staticPages.map((staticPage) => `${SEO.URL}/${staticPage.slug}`)
+    );
+  }
 
   const generatedSitemaps = [];
   const chunkSize = 45000;
