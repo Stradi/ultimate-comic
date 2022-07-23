@@ -53,10 +53,8 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
         } for free. Currently ${comic.name} has ${
           issues.length
         } issues and latest issue is ${
-          issues[issues.length - 1].name
-        } is published at ${toHumanReadable(
-          issues[issues.length - 1].createdAt
-        )}.`}
+          issues[0].name
+        } is published at ${toHumanReadable(issues[0].createdAt)}.`}
         openGraph={{
           images: [
             {

@@ -27,7 +27,7 @@ const TagPage: NextPage<ITagPageProps> = ({ tag, pageNo }: ITagPageProps) => {
     <>
       <NextSeo
         title={`${tag.name}`}
-        description={`Read the latest and most popular comics about ${tag.name} online for free.`}
+        description={`Read the latest and most popular comics about ${tag.name} online for free. Our extensive database includes thousands of comics about ${tag.name}.`}
       />
       <Container>
         <h1 className="block p-2 mb-2 text-lg font-medium text-center bg-neutral-900 rounded-md">

@@ -4,12 +4,13 @@ const URL =
     ? 'localhost:3000'
     : 'www.ultimatecomic.com';
 const HEAD = {
-  TITLE: `Read Online Comics for Free`,
+  TITLE: `Read Online Comics, for Free`,
   TITLE_TEMPLATE: `%s | ${WEBSITE_NAME}`,
   META: {
     KEYWORDS: [
       'read online comics',
       'read free comics',
+      'read high quality comics',
       'free comics',
       'comic books',
       'comic viewer',
@@ -19,7 +20,7 @@ const HEAD = {
       'ultimate comic',
     ],
     DESCRIPTION:
-      'Read online comics for free. Biggest comics database for Marvel, DC Comics, Dark Horse Comics and more. Read Marvel, DC Comics, Dark Horse Comics for free.',
+      'Read comics online in high quality. Thousands of comics awaiting you. Biggest comic database for Marvel, DC Comics, Dark Horse Comics, Valiant Comics and more.',
   },
   SOCIAL: {
     TWITTER: {
