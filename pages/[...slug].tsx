@@ -12,6 +12,7 @@ import {
   getStaticPageBySlug,
   moveImagesToPublicFolder,
 } from '~/lib/utils/blog';
+import { toHumanReadable } from '~/lib/utils/date';
 import { handle } from '~/lib/utils/promise';
 
 interface ICatchAllIndexPageProps {
@@ -27,6 +28,13 @@ const CatchAllIndexPage: NextPage<ICatchAllIndexPageProps> = ({
       <h1 className="text-3xl font-black text-center text-white">
         {post.title}
       </h1>
+      <br></br>
+      <div className="text-center">
+        <p>
+          <span className="font-medium">Last updated</span>:{' '}
+          {toHumanReadable(post.updatedAt)}
+        </p>
+      </div>
       <br></br>
       <div
         className="mx-auto prose-li:marker:font-bold prose-a:text-inherit prose-li:marker:text-red-600 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-a:transition prose-a:duration-100 prose prose-invert"
