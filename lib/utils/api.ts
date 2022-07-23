@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ApiError, BaseError } from './error';
 
 type HandlerObject = {
   [key: string]: (req: NextApiRequest, res: NextApiResponse) => Promise<void>;
@@ -25,18 +24,6 @@ const errorHandler = (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  if (!(err instanceof ApiError)) {
-    // log internal errors here
-    return res.status(500).json({
-      error: new BaseError(
-        'internal',
-        'An error occured in our side.',
-        "An error occured in our side that we couldn't catch.",
-        'Wait'
-      ),
-    });
-  }
-
   return res.status(500).json({ error: err });
 };
 
