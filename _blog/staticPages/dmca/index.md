@@ -44,5 +44,3 @@ An updated version of this Policy will be effective immediately upon the posting
 If you would like to notify us of the infringing material or activity, we encourage you to contact us using the details below:
 
 [legal@ultimatecomic.com](mailto:legal@ultimatecomic.com)
-
-This document was last updated on July 23, 2022
