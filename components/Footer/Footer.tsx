@@ -19,17 +19,11 @@ const Footer = () => {
           <a className="text-neutral-400 hover:text-red-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-600">
             Privacy Policy
           </a>
-        </Link>
-        ,{' '}
+        </Link>{' '}
+        and{' '}
         <Link href="/dmca">
           <a className="text-neutral-400 hover:text-red-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-600">
             DMCA
-          </a>
-        </Link>
-        ,{' '}
-        <Link href="/contact">
-          <a className="text-neutral-400 hover:text-red-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-red-600">
-            Contact Us
           </a>
         </Link>
         .
