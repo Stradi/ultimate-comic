@@ -1,8 +1,8 @@
 ---
 title: Privacy Policy
 slug: privacy-policy
-publishedAt: '23.07.2022'
-updatedAt: '23.07.2022'
+publishedAt: '2022-07-23'
+updatedAt: '2022-07-23'
 ---
 
 At UltimateComic, accessible from [https://www.ultimatecomic.com](https://www.ultimatecomic.com), one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by UltimateComic and how we use it.
