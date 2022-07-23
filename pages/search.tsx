@@ -5,6 +5,7 @@ import { getComicCount, getIssueCount } from '~/lib/database';
 import { callDb } from '~/lib/utils/database';
 import { handle } from '~/lib/utils/promise';
 
+import { SEO } from 'configs/seo';
 import debounce from 'lodash.debounce';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
@@ -117,7 +118,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
       />
       <Container>
         <h1 className="block mb-2 text-lg font-medium text-center text-white">
-          Search Comix
+          Search {SEO.WEBSITE_NAME}
         </h1>
         <h2 className="block text-center text-neutral-300">
           Search in more than{' '}

@@ -1,6 +1,8 @@
 import { Footer } from '../Footer';
 import { INavbarProps, Navbar } from '../Navbar';
 
+import { SEO } from '../../configs/seo';
+
 interface ILayoutProps {
   children?: React.ReactNode;
 }
@@ -8,7 +10,7 @@ const Layout = ({ children }: ILayoutProps) => {
   const navbarItems: INavbarProps = {
     left: [
       {
-        text: 'Comix',
+        text: SEO.WEBSITE_NAME,
         href: '/',
       },
     ],
