@@ -1,5 +1,4 @@
-import { default as NextImg } from 'next/image';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Modal } from '../Modal';
 
 interface IReaderProps {
@@ -15,9 +14,10 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
   const [pageNumber, setPageNumber] = useState(0);
   const [inEnd, setInEnd] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [zoom, setZoom] = useState('sm:w-2/3');
+  const [zoom, setZoom] = useState('sm:w-3/6');
 
   const pageSelectRef = useRef<HTMLSelectElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyboardNavigation);
@@ -44,7 +44,7 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
         } else if (key === 'ArrowRight' || key === 'd' || key === 'D') {
           goToPage(pageNumber + 1);
         } else if (key === 'z' || key === 'Z') {
-          setZoom(zoom === 'sm:w-1/3' ? 'sm:w-2/3' : 'sm:w-1/3');
+          setZoom(zoom === 'md:w-3/6' ? 'md:w-4/6' : 'md:w-3/6');
         }
       } else {
         pageSelectRef.current?.blur();
@@ -73,6 +73,16 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
       setInEnd(false);
     }
     setPageNumber(page);
+  };
+
+  const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    const imageWidth = imageRef.current?.offsetWidth || 0;
+
+    if (e.clientX < imageWidth / 2) {
+      goToPage(pageNumber - 1);
+    } else {
+      goToPage(pageNumber + 1);
+    }
   };
 
   return (
@@ -114,16 +124,16 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
           </select>
           of <span className="font-medium">{images.length}</span>
         </div>
-        <NextImg
-          className="rounded-md"
-          src={images[pageNumber]}
-          layout="responsive"
-          width={1}
-          height={1.53}
-          alt={`Page #${pageNumber}`}
-          onClick={() => goToPage(pageNumber + 1)}
-          unoptimized={true}
-        />
+        <div className="mx-auto w-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images[pageNumber]}
+            alt={`Page #${pageNumber}`}
+            className="rounded-md"
+            onClick={handleImageClick}
+            ref={imageRef}
+          />
+        </div>
       </div>
     </>
   );
