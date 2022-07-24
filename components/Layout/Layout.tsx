@@ -1,20 +1,12 @@
 import { Footer } from '../Footer';
 import { INavbarProps, Navbar } from '../Navbar';
 
-import { SEO } from '../../configs/seo';
-
 interface ILayoutProps {
   children?: React.ReactNode;
 }
 const Layout = ({ children }: ILayoutProps) => {
   const navbarItems: INavbarProps = {
-    left: [
-      {
-        text: SEO.WEBSITE_NAME,
-        href: '/',
-      },
-    ],
-    right: [
+    items: [
       {
         text: 'Search',
         href: '/search',
@@ -39,7 +31,7 @@ const Layout = ({ children }: ILayoutProps) => {
   };
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar left={navbarItems.left} right={navbarItems.right} />
+      <Navbar items={navbarItems.items} />
       <br></br>
       <main className="flex-1">{children}</main>
       <br></br>
