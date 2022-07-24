@@ -104,7 +104,7 @@ const Home: NextPage<IHomePageProps> = ({
               </Link>
             ))}
           </div>
-          <div className="float-right mt-2">
+          <div className="flex justify-end mt-2">
             <Button type="minimal" href="/popular-comics" text="See All" />
           </div>
         </Sidebar>
