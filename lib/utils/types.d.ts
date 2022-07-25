@@ -17,3 +17,15 @@ type StaticPage = {
   publishedAt: Date;
   updatedAt: Date;
 };
+
+type GuidePage = {
+  title: string;
+  slug: string;
+  content: string;
+  coverImage: string;
+  seo: {
+    description: string;
+  };
+  publishedAt: Date;
+  updatedAt: Date;
+};
