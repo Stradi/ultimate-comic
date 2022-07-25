@@ -82,6 +82,12 @@ const getAllComics = async (
     })
   );
 
+  query.hint({
+    $type: {
+      totalViews: 'number',
+    },
+  });
+
   return await query.exec();
 };
 
@@ -169,6 +175,12 @@ const getAllIssues = async (
       select: fieldToPopulate.fields,
     })
   );
+
+  query.hint({
+    $type: {
+      viewCount: 'number',
+    },
+  });
 
   return await query.exec();
 };
@@ -265,6 +277,12 @@ const getLatestIssues = async (
     });
   });
 
+  query.hint({
+    $type: {
+      viewCount: 'number',
+    },
+  });
+
   return await query.exec();
 };
 
@@ -291,6 +309,10 @@ const getAllTags = async (
       select: fieldToPopulate.fields,
     })
   );
+
+  query.hint({
+    $type: {},
+  });
 
   return await query.exec();
 };
