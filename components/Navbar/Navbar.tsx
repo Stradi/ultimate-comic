@@ -1,6 +1,7 @@
 import { SEO } from 'configs/seo';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Container } from '../Container';
 import { INavbarItemProps, NavbarItem } from './NavbarItem';
@@ -10,18 +11,31 @@ interface INavbarProps {
 }
 
 const Navbar = ({ items }: INavbarProps) => {
+  const router = useRouter();
+
   const rightSideDOM = items.map((item) => (
     <NavbarItem text={item.text} href={item.href} key={item.text} />
   ));
 
   const [navbarOpen, setNavbarOpen] = useState(false);
 
+  const handleBrandClick = (e: React.MouseEvent) => {
+    if (e.type === 'contextmenu') {
+      e.preventDefault();
+      router.push('/design');
+    }
+  };
+
   return (
     <nav className="py-2.5 px-2 bg-neutral-900 rounded sm:px-4">
       <Container>
         <div className="flex flex-wrap justify-between items-center mx-auto">
           <Link href="/">
-            <a className="group flex relative gap-2 items-center py-2 px-4 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+            <a
+              onClick={handleBrandClick}
+              onContextMenu={handleBrandClick}
+              className="group flex relative gap-2 items-center py-2 px-4 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100"
+            >
               <Image
                 src="/brand/logo_dark_2x.png"
                 className="h-6 group-hover:brightness-125 transition duration-100 sm:h-9"
