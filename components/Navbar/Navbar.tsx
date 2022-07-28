@@ -1,4 +1,5 @@
 import { SEO } from 'configs/seo';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Container } from '../Container';
@@ -20,9 +21,15 @@ const Navbar = ({ items }: INavbarProps) => {
       <Container>
         <div className="flex flex-wrap justify-between items-center mx-auto">
           <Link href="/">
-            <a className="flex items-center py-2 px-4 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
-              {/* <img src="/logo.svg" className="mr-3 h-6 sm:h-9" alt="Flowbite Logo" /> */}
-              <span className="self-center font-semibold whitespace-nowrap">
+            <a className="group flex relative gap-2 items-center py-2 px-4 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+              <Image
+                src="/brand/logo_dark_2x.png"
+                className="h-6 group-hover:brightness-125 transition duration-100 sm:h-9"
+                alt="UltimateComic Logo"
+                width={51.2}
+                height={40.25}
+              />
+              <span className="relative self-center font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition duration-100 -translate-x-1/3 group-hover:translate-x-0">
                 {SEO.WEBSITE_NAME}
               </span>
             </a>
