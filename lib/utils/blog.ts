@@ -192,7 +192,11 @@ const moveImagesToPublicFolder = (
   type: 'blog' | 'staticpage' | 'guide'
 ) => {
   const directory = path.join(
-    type === 'blog' ? POSTS_DIRECTORY : STATIC_PAGES_DIRECTORY,
+    type === 'blog'
+      ? POSTS_DIRECTORY
+      : type === 'staticpage'
+      ? STATIC_PAGES_DIRECTORY
+      : GUIDE_PAGES_DIRECTORY,
     slug,
     'images'
   );
