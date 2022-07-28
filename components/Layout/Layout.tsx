@@ -27,6 +27,10 @@ const Layout = ({ children }: ILayoutProps) => {
         text: 'Articles',
         href: '/blog',
       },
+      {
+        text: 'Guides',
+        href: '/guides',
+      },
     ],
   };
   return (
