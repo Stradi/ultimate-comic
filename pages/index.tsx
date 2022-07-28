@@ -190,6 +190,11 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
       popularComics,
       randomComics,
     },
+    // Currently Netlify doesn't support On-demand revalidation,
+    // so /api/revalidate route doesn't work. Instead we can use ISR.
+    // TODO: Remove this when @netlify/plugin-nextjs supports on-demand
+    // revalidation.
+    revalidate: 60,
   };
 };
 
