@@ -11,7 +11,7 @@ const SingleIssue = ({ issue }: ISingleIssueProps) => {
   const coverImage = (issue.images as string[])[0];
   const comic = issue.comic as IComicDocument;
   return (
-    <Link href={`/comic/${comic.slug}/${issue.slug}`}>
+    <Link href={`/comic/${comic.slug}/${issue.slug}`} prefetch={false}>
       <a className="group mb-2 flex rounded-md bg-neutral-900 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600 sm:mb-0">
         <div className="mr-2 w-1/2">
           <Image

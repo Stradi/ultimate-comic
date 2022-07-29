@@ -9,7 +9,7 @@ interface ISingleComicProps {
 
 const SingleComic = ({ comic }: ISingleComicProps) => {
   return (
-    <Link href={`/comic/${comic.slug}`}>
+    <Link href={`/comic/${comic.slug}`} prefetch={false}>
       <a className="group relative rounded-md transition duration-100 focus:outline-none focus:ring-2 focus:ring-red-600">
         <Image
           className="rounded-lg transition duration-100 group-hover:brightness-[0.2]"

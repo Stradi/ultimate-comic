@@ -12,7 +12,7 @@ interface ISingleIssueProps {
 //TODO: Refactor
 const MiniSingleIssue = ({ issue, href }: ISingleIssueProps) => {
   return (
-    <Link href={href}>
+    <Link href={href} prefetch={false}>
       <a className="truncate rounded-md bg-neutral-900 p-2 transition duration-100 hover:bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-600">
         {issue.name}
       </a>
@@ -24,7 +24,7 @@ const BigSingleIssue = ({ issue, href }: ISingleIssueProps) => {
   const images = issue.images as string[];
   const coverImage = images[0];
   return (
-    <Link href={href} passHref>
+    <Link href={href} passHref prefetch={false}>
       <a className="group relative rounded-md transition duration-100 focus:outline-none focus:ring-2 focus:ring-red-600">
         <Image
           className="rounded-lg transition duration-100 group-hover:brightness-[0.2]"

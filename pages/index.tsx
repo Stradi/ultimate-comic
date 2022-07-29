@@ -44,7 +44,7 @@ const Home: NextPage<IHomePageProps> = ({
       <div>
         <h2 className="mb-2 text-xl font-medium">Popular Publishers</h2>
         <div className="min-h-fit sm:flex sm:justify-center sm:gap-x-2">
-          <Link href="/tag/marvel">
+          <Link href="/tag/marvel" prefetch={false}>
             <a className="group relative block rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 sm:w-1/2">
               <Image
                 src="/images/logo_marvel.png"
@@ -59,7 +59,7 @@ const Home: NextPage<IHomePageProps> = ({
               </div>
             </a>
           </Link>
-          <Link href="/tag/dc-comics">
+          <Link href="/tag/dc-comics" prefetch={false}>
             <a className="group relative block rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 sm:w-1/2">
               <Image
                 src="/images/logo_dc_comics.png"
@@ -87,7 +87,11 @@ const Home: NextPage<IHomePageProps> = ({
           </h2>
           <div>
             {popularComics.map((comic, idx) => (
-              <Link href={`/comic/${comic.slug}`} key={comic.slug}>
+              <Link
+                href={`/comic/${comic.slug}`}
+                key={comic.slug}
+                prefetch={false}
+              >
                 <a className="group mb-2 flex rounded-md bg-neutral-900 p-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   <p className="mr-2 text-xl font-medium text-white group-hover:text-red-500">
                     {idx + 1}.

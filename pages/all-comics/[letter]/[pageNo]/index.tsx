@@ -35,6 +35,7 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
     <Link
       href={`/all-comics/${char === '#' ? '0' : char}`}
       key={char === '#' ? '0' : char}
+      prefetch={false}
     >
       <a className="m-0.5 inline-block rounded-md bg-neutral-800 px-2 transition duration-100 hover:bg-neutral-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-600">
         {char === '#' ? '#' : char.toUpperCase()}
@@ -83,13 +84,19 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
         <div className="flex justify-center gap-1">
           {pageNo !== 0 ? (
             <>
-              <Link href={`/all-comics/${letter}/${pageNo - 1}`}>
+              <Link
+                href={`/all-comics/${letter}/${pageNo - 1}`}
+                prefetch={false}
+              >
                 <a className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
                   <i className="ri-arrow-left-s-line ri-fw align-middle" />
                 </a>
               </Link>
-              <Link href={`/all-comics/${letter}/${pageNo - 1}`}>
+              <Link
+                href={`/all-comics/${letter}/${pageNo - 1}`}
+                prefetch={false}
+              >
                 <a className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {pageNo - 1}
                 </a>
@@ -108,12 +115,18 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
           <div className="rounded-md bg-neutral-800 py-1 px-3">{pageNo}</div>
           {comics.length == PAGES.ALL_COMICS.COMIC_PER_PAGE ? (
             <>
-              <Link href={`/all-comics/${letter}/${pageNo + 1}`}>
+              <Link
+                href={`/all-comics/${letter}/${pageNo + 1}`}
+                prefetch={false}
+              >
                 <a className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {pageNo + 1}
                 </a>
               </Link>
-              <Link href={`/all-comics/${letter}/${pageNo + 1}`}>
+              <Link
+                href={`/all-comics/${letter}/${pageNo + 1}`}
+                prefetch={false}
+              >
                 <a className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
                   <i className="ri-arrow-right-s-line ri-fw align-middle" />
