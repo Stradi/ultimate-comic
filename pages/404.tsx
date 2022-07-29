@@ -8,7 +8,7 @@ const NotFoundPage: NextPage = () => {
       <div className="text-center align-middle">
         <h1 className="text-9xl font-black text-white">404</h1>
         <p className="mb-8 text-7xl"> This page does not exists</p>
-        <div className="flex gap-2 justify-center text-2xl">
+        <div className="flex justify-center gap-2 text-2xl">
           <Button href="/" text="Home" type="default" />
           <Button href="/all-comics" text="All Comics" type="minimal" />
         </div>

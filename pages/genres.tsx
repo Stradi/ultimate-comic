@@ -19,7 +19,7 @@ const GenresPage: NextPage<IGenresPageProps> = ({ tags }: IGenresPageProps) => {
         description={`Most popular genres in comic history. Search in our extensive comic genres find your comics with ease. We have over ${tags.length} comic genres available.`}
       />
       <Container>
-        <h1 className="block mb-2 text-lg font-medium text-center text-white">
+        <h1 className="mb-2 block text-center text-lg font-medium text-white">
           Most Popular Genres
         </h1>
         <MiniTagList tags={tags} />

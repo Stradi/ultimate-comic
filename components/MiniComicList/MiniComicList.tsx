@@ -11,7 +11,7 @@ const MiniComicList = ({ comics, addViewCount }: IMiniComicListProps) => {
     <SingleComic comic={comic} addViewCount={addViewCount} key={comic.slug} />
   ));
   return (
-    <div className="sm:grid sm:grid-cols-2 sm:gap-2 sm:my-0 md:grid-cols-4">
+    <div className="sm:my-0 sm:grid sm:grid-cols-2 sm:gap-2 md:grid-cols-4">
       {comicsDOM}
     </div>
   );

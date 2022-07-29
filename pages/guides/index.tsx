@@ -19,7 +19,7 @@ const GuideListPage: NextPage<IGuideListPageProps> = ({
         title="Guides"
         description="Don't know where to start reading a comic. Check out these guides for specific characters and events."
       />
-      <h1 className="block mb-2 text-lg font-medium text-center text-white">
+      <h1 className="mb-2 block text-center text-lg font-medium text-white">
         All Guides
       </h1>
       {guides.length > 0 ? (

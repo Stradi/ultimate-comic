@@ -21,17 +21,17 @@ const PopularComicsPage: NextPage<IPopularComicsPageProps> = ({
         description="Most popular comics in our extensive comic database. See which comic have most views and read it for free. Marvel, DC Comics, Valiant Comics and more."
       />
       <Container>
-        <h1 className="block mb-2 text-lg font-medium text-center text-white">
+        <h1 className="mb-2 block text-center text-lg font-medium text-white">
           Most Popular 100 Comics
         </h1>
-        <p className="p-2 mb-2 text-sm bg-neutral-900 rounded-md">
+        <p className="mb-2 rounded-md bg-neutral-900 p-2 text-sm">
           <span className="font-medium text-red-600">Note:</span> Completed
           comics have checkmark (
           {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="text-green-500 align-middle ri-check-line ri-fw" />) on
+          <i className="ri-check-line ri-fw align-middle text-green-500" />) on
           left, ongoing comics have cross (
           {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="text-red-500 align-middle ri-close-line ri-fw" />
+          <i className="ri-close-line ri-fw align-middle text-red-500" />
           ). Hover a comic to see its total view count.
         </p>
         <MiniComicList comics={comics} addViewCount />

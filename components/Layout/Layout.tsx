@@ -34,7 +34,7 @@ const Layout = ({ children }: ILayoutProps) => {
     ],
   };
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <Navbar items={navbarItems.items} />
       <br></br>
       <main className="flex-1">{children}</main>

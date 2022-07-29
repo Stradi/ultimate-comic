@@ -82,14 +82,14 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
               priority
             />
           </div>
-          <div className="p-4 m-auto w-full bg-neutral-900 rounded-md sm:w-10/12 md:w-3/5 md:rounded-r-md md:rounded-l-none lg:w-2/3">
-            <h1 className="mb-2 text-2xl font-medium text-left text-white">
+          <div className="m-auto w-full rounded-md bg-neutral-900 p-4 sm:w-10/12 md:w-3/5 md:rounded-r-md md:rounded-l-none lg:w-2/3">
+            <h1 className="mb-2 text-left text-2xl font-medium text-white">
               {comic.name}
             </h1>
             <div className="my-4">{tagsDOM}</div>
             <p className="my-2 font-medium text-white">Summary:</p>
             <p className="text-sm">{comic.summary}</p>
-            <div className="grid grid-cols-3 my-2">
+            <div className="my-2 grid grid-cols-3">
               <div>
                 <span className="font-medium text-white">Authors:</span>
                 <br></br>
@@ -108,7 +108,7 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
                 <span className="text-sm">{releaseDate.getFullYear()}</span>
               </div>
             </div>
-            <div className="flex gap-2 mt-2">
+            <div className="mt-2 flex gap-2">
               <Button
                 href={`/comic/${comic.slug}/${issues[issues.length - 1].slug}`}
                 text="Read First Issue"

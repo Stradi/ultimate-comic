@@ -92,15 +92,15 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
         onClose={() => setIsConfirmationModalOpen(false)}
       >
         <span>Do you want to go to next issue?</span>
-        <div className="flex gap-2 justify-between mt-2">
+        <div className="mt-2 flex justify-between gap-2">
           <button
-            className="p-2 w-full bg-neutral-900 rounded-md focus:outline-none hover:ring-2 hover:ring-red-600 transition"
+            className="w-full rounded-md bg-neutral-900 p-2 transition hover:ring-2 hover:ring-red-600 focus:outline-none"
             onClick={() => setIsConfirmationModalOpen(false)}
           >
             No
           </button>
           <button
-            className="p-2 w-full bg-neutral-900 rounded-md focus:outline-none hover:ring-2 hover:ring-green-600 transition"
+            className="w-full rounded-md bg-neutral-900 p-2 transition hover:ring-2 hover:ring-green-600 focus:outline-none"
             onClick={() => onFinished && onFinished()}
           >
             Yes
@@ -112,7 +112,7 @@ const Reader = ({ images, cacheLength = 2, onFinished }: IReaderProps) => {
           Page
           <select
             ref={pageSelectRef}
-            className="p-1 mx-2 bg-neutral-800 rounded-md focus:outline-none ring-2 ring-neutral-700 focus:ring-red-600"
+            className="mx-2 rounded-md bg-neutral-800 p-1 ring-2 ring-neutral-700 focus:outline-none focus:ring-red-600"
             onChange={(e) => goToPage(Number.parseInt(e.currentTarget.value))}
             value={pageNumber}
           >

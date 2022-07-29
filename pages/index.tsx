@@ -29,7 +29,7 @@ const Home: NextPage<IHomePageProps> = ({
   return (
     <Container>
       <div>
-        <h1 className="-mb-4 text-xl font-medium text-center">
+        <h1 className="-mb-4 text-center text-xl font-medium">
           Search our extensive comic database
         </h1>
         <SearchInput
@@ -43,33 +43,33 @@ const Home: NextPage<IHomePageProps> = ({
       </div>
       <div>
         <h2 className="mb-2 text-xl font-medium">Popular Publishers</h2>
-        <div className="min-h-fit sm:flex sm:gap-x-2 sm:justify-center">
+        <div className="min-h-fit sm:flex sm:justify-center sm:gap-x-2">
           <Link href="/tag/marvel">
-            <a className="group block relative rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 sm:w-1/2">
+            <a className="group relative block rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 sm:w-1/2">
               <Image
                 src="/images/logo_marvel.png"
-                className="rounded-md group-hover:brightness-[0.2] transition duration-100"
+                className="rounded-md transition duration-100 group-hover:brightness-[0.2]"
                 layout="intrinsic"
                 width={640}
                 height={320}
                 alt="Logo of Marvel"
               />
-              <div className="absolute top-1/2 left-1/2 w-full text-lg font-medium text-center text-white opacity-0 group-hover:opacity-100 transition duration-100 -translate-x-1/2 -translate-y-1/2">
+              <div className="absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 text-center text-lg font-medium text-white opacity-0 transition duration-100 group-hover:opacity-100">
                 <p className="">Read Latest Marvel Comics</p>
               </div>
             </a>
           </Link>
           <Link href="/tag/dc-comics">
-            <a className="group block relative rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 sm:w-1/2">
+            <a className="group relative block rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 sm:w-1/2">
               <Image
                 src="/images/logo_dc_comics.png"
-                className="rounded-md group-hover:brightness-[0.2] transition duration-100"
+                className="rounded-md transition duration-100 group-hover:brightness-[0.2]"
                 layout="intrinsic"
                 width={640}
                 height={320}
                 alt="Logo of Marvel"
               />
-              <div className="absolute top-1/2 left-1/2 w-full text-lg font-medium text-center text-white opacity-0 group-hover:opacity-100 transition duration-100 -translate-x-1/2 -translate-y-1/2">
+              <div className="absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 text-center text-lg font-medium text-white opacity-0 transition duration-100 group-hover:opacity-100">
                 <p className="">Read Latest DC Comics</p>
               </div>
             </a>
@@ -82,35 +82,35 @@ const Home: NextPage<IHomePageProps> = ({
           <LatestIssues issues={newIssues} />
         </div>
         <Sidebar>
-          <h2 className="mb-2 text-xl font-medium whitespace-pre-wrap">
+          <h2 className="mb-2 whitespace-pre-wrap text-xl font-medium">
             Most Popular Comics
           </h2>
           <div>
             {popularComics.map((comic, idx) => (
               <Link href={`/comic/${comic.slug}`} key={comic.slug}>
-                <a className="group flex p-2 mb-2 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                <a className="group mb-2 flex rounded-md bg-neutral-900 p-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   <p className="mr-2 text-xl font-medium text-white group-hover:text-red-500">
                     {idx + 1}.
                   </p>
-                  <div className="flex justify-between self-center w-full group-hover:text-white transition duration-100">
+                  <div className="flex w-full justify-between self-center transition duration-100 group-hover:text-white">
                     <span className="line-clamp-2">{comic.name}</span>
                     <div>
                       {comic.totalViews || 0}
                       {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-                      <i className="ml-1 align-text-top ri-eye-line ri-fw" />
+                      <i className="ri-eye-line ri-fw ml-1 align-text-top" />
                     </div>
                   </div>
                 </a>
               </Link>
             ))}
           </div>
-          <div className="flex justify-end mt-2">
+          <div className="mt-2 flex justify-end">
             <Button type="minimal" href="/popular-comics" text="See All" />
           </div>
         </Sidebar>
       </div>
       <div className="mt-4">
-        <h2 className="text-xl font-medium text-center">Can&apos;t decide?</h2>
+        <h2 className="text-center text-xl font-medium">Can&apos;t decide?</h2>
         <p className="text-center">Here are some random comics of the day</p>
         <BigComicList comics={randomComics} />
       </div>

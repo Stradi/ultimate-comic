@@ -57,7 +57,7 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
   });
 
   const issueNavDOM = (
-    <div className="flex gap-4 justify-center my-2 mx-auto md:justify-end md:w-1/2">
+    <div className="my-2 mx-auto flex justify-center gap-4 md:w-1/2 md:justify-end">
       {prevIssue && (
         <Button
           type="minimal"
@@ -102,19 +102,19 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
         pageEnd={(issue.images as string[]).length}
       />
       <div>
-        <Container className="p-2 bg-neutral-900 rounded-md">
+        <Container className="rounded-md bg-neutral-900 p-2">
           <p className="text-sm">
             <span className="font-medium text-red-600">Tip:</span> You can
             navigate using A, D or{' '}
             {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-            <i className="align-middle ri-arrow-left-line" />,{' '}
+            <i className="ri-arrow-left-line align-middle" />,{' '}
             {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-            <i className="align-middle ri-arrow-right-line" /> arrow keys and
+            <i className="ri-arrow-right-line align-middle" /> arrow keys and
             zoom in and out using Z key.
           </p>
         </Container>
-        <div className="mx-auto mt-4 md:flex md:justify-between md:max-w-4xl">
-          <h1 className="self-center mx-auto font-medium text-center md:w-1/2 md:text-left">
+        <div className="mx-auto mt-4 md:flex md:max-w-4xl md:justify-between">
+          <h1 className="mx-auto self-center text-center font-medium md:w-1/2 md:text-left">
             Back to{' '}
             <Button
               href={`/comic/${comic.slug}`}
@@ -122,7 +122,7 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
               type="minimal"
             />
           </h1>
-          <h2 className="grow self-center mt-2 min-w-max text-lg font-medium text-center md:mt-0">
+          <h2 className="mt-2 min-w-max grow self-center text-center text-lg font-medium md:mt-0">
             {issue.name}
           </h2>
           {issueNavDOM}

@@ -18,7 +18,7 @@ const BlogListPage: NextPage<IBlogListPageProps> = ({
         title="Articles"
         description="Latest news and articles from comic world."
       />
-      <h1 className="block mb-2 text-lg font-medium text-center text-white">
+      <h1 className="mb-2 block text-center text-lg font-medium text-white">
         All Articles
       </h1>
       {posts.length > 0 ? (

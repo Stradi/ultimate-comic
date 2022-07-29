@@ -117,7 +117,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
         description={`Search in more than ${comicCount} comics and ${issueCount} issues. In other words, world's biggest comic database.`}
       />
       <Container>
-        <h1 className="block mb-2 text-lg font-medium text-center text-white">
+        <h1 className="mb-2 block text-center text-lg font-medium text-white">
           Search {SEO.WEBSITE_NAME}
         </h1>
         <h2 className="block text-center text-neutral-300">
@@ -141,7 +141,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
           <div>
             {searchResults.comics.length > 0 && (
               <div className="my-4">
-                <h2 className="mb-4 text-lg text-center">
+                <h2 className="mb-4 text-center text-lg">
                   We found these comics about &apos;
                   <span className="font-bold text-red-500">{searchTerm}</span>
                   &apos;
@@ -155,7 +155,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
           <div className="flex justify-center">
             <a
               onClick={loadMore}
-              className="py-2 px-4 text-white bg-red-600 hover:bg-red-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition-colors duration-100 hover:cursor-pointer"
+              className="rounded-md bg-red-600 py-2 px-4 text-white transition-colors duration-100 hover:cursor-pointer hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-600"
             >
               Load More
             </a>

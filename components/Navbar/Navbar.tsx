@@ -27,23 +27,23 @@ const Navbar = ({ items }: INavbarProps) => {
   };
 
   return (
-    <nav className="py-2.5 px-2 bg-neutral-900 rounded sm:px-4">
+    <nav className="rounded bg-neutral-900 py-2.5 px-2 sm:px-4">
       <Container>
-        <div className="flex flex-wrap justify-between items-center mx-auto">
+        <div className="mx-auto flex flex-wrap items-center justify-between">
           <Link href="/">
             <a
               onClick={handleBrandClick}
               onContextMenu={handleBrandClick}
-              className="group flex relative gap-2 items-center py-2 px-4 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100"
+              className="group relative flex items-center gap-2 rounded-md py-2 px-4 text-neutral-400 transition duration-100 hover:bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-600"
             >
               <Image
                 src="/brand/logo_dark_2x.png"
-                className="h-6 group-hover:brightness-125 transition duration-100 sm:h-9"
+                className="h-6 transition duration-100 group-hover:brightness-125 sm:h-9"
                 alt="UltimateComic Logo"
                 width={51.2}
                 height={40.25}
               />
-              <span className="relative self-center font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition duration-100 -translate-x-1/3 group-hover:translate-x-0">
+              <span className="relative -translate-x-1/3 self-center whitespace-nowrap font-semibold opacity-0 transition duration-100 group-hover:translate-x-0 group-hover:opacity-100">
                 {SEO.WEBSITE_NAME}
               </span>
             </a>
@@ -52,7 +52,7 @@ const Navbar = ({ items }: INavbarProps) => {
             <button
               data-collapse-toggle="navbar-search"
               type="button"
-              className="inline-flex items-center p-2 text-sm text-neutral-500 hover:text-neutral-400 hover:bg-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600 md:hidden"
+              className="inline-flex items-center rounded-lg p-2 text-sm text-neutral-500 hover:bg-neutral-800 hover:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-red-600 md:hidden"
               aria-controls="navbar-search"
               aria-expanded="true"
               onClick={() => {
@@ -61,7 +61,7 @@ const Navbar = ({ items }: INavbarProps) => {
             >
               <span className="sr-only">Open menu</span>
               <svg
-                className="w-6 h-6"
+                className="h-6 w-6"
                 aria-hidden="true"
                 fill="currentColor"
                 viewBox="0 0 20 20"
@@ -76,11 +76,11 @@ const Navbar = ({ items }: INavbarProps) => {
             </button>
           </div>
           <div
-            className={`justify-between items-center w-full md:flex md:order-1 md:w-auto ${
+            className={`w-full items-center justify-between md:order-1 md:flex md:w-auto ${
               navbarOpen ? '' : 'hidden'
             }`}
           >
-            <ul className="flex flex-col mt-4 md:flex-row md:mt-0 md:space-x-2 md:text-sm md:font-medium">
+            <ul className="mt-4 flex flex-col md:mt-0 md:flex-row md:space-x-2 md:text-sm md:font-medium">
               {rightSideDOM}
             </ul>
           </div>

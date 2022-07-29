@@ -74,12 +74,12 @@ const IssueList = ({ issues, slug }: IIssueListProps) => {
 
   return (
     <div>
-      <div className="flex justify-between my-2">
+      <div className="my-2 flex justify-between">
         <h2 className="self-center text-lg font-medium text-white">Issues</h2>
         <input
           type="text"
           placeholder="Search for issue"
-          className="p-2 placeholder:font-medium placeholder:text-neutral-700 text-neutral-300 bg-neutral-800 rounded-md focus:outline-none ring-2 ring-neutral-700 focus:ring-red-600 transition duration-100"
+          className="rounded-md bg-neutral-800 p-2 text-neutral-300 ring-2 ring-neutral-700 transition duration-100 placeholder:font-medium placeholder:text-neutral-700 focus:outline-none focus:ring-red-600"
           onChange={(e) => applyFilter(e)}
         />
       </div>
@@ -90,14 +90,14 @@ const IssueList = ({ issues, slug }: IIssueListProps) => {
           <button className="group relative" onClick={loadMoreIssues}>
             <Image
               unoptimized
-              className="rounded-md group-hover:brightness-[0.5] transition duration-100"
+              className="rounded-md transition duration-100 group-hover:brightness-[0.5]"
               src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNU/Q8AAU8BJijqIsEAAAAASUVORK5CYII="
               layout="responsive"
               width={1}
               height={1.3}
               alt="load more issues"
             />
-            <p className="absolute top-1/2 left-1/2 text-lg text-white transition duration-100 group-hover:scale-110 -translate-x-1/2 -translate-y-1/2">
+            <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg text-white transition duration-100 group-hover:scale-110">
               Load More
             </p>
           </button>

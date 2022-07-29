@@ -25,7 +25,7 @@ const CatchAllIndexPage: NextPage<ICatchAllIndexPageProps> = ({
   return (
     <Container>
       <NextSeo title={post.title} />
-      <h1 className="text-3xl font-black text-center text-white">
+      <h1 className="text-center text-3xl font-black text-white">
         {post.title}
       </h1>
       <br></br>
@@ -37,7 +37,7 @@ const CatchAllIndexPage: NextPage<ICatchAllIndexPageProps> = ({
       </div>
       <br></br>
       <div
-        className="mx-auto prose-li:marker:font-bold prose-a:text-inherit prose-li:marker:text-red-600 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-a:transition prose-a:duration-100 prose prose-invert"
+        className="prose prose-invert mx-auto prose-a:text-inherit prose-a:transition prose-a:duration-100 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-li:marker:font-bold prose-li:marker:text-red-600"
         dangerouslySetInnerHTML={{ __html: post.content }}
       ></div>
     </Container>

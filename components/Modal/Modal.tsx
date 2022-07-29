@@ -11,10 +11,10 @@ const Modal = ({ children, onClose, isOpen }: IModalProps) => {
   return ReactDOM.createPortal(
     <>
       <div
-        className="overflow-y-hidden fixed top-0 left-0 w-screen h-screen bg-black/90"
+        className="fixed top-0 left-0 h-screen w-screen overflow-y-hidden bg-black/90"
         onClick={onClose}
       />
-      <div className="overflow-y-hidden fixed top-1/2 left-1/2 p-4 text-white bg-neutral-800 rounded-md -translate-x-1/2 -translate-y-1/2">
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-y-hidden rounded-md bg-neutral-800 p-4 text-white">
         {children}
       </div>
     </>,

@@ -30,7 +30,7 @@ const TagPage: NextPage<ITagPageProps> = ({ tag, pageNo }: ITagPageProps) => {
         description={`Read the latest and most popular comics about ${tag.name} online for free. Our extensive database includes thousands of comics about ${tag.name}.`}
       />
       <Container>
-        <h1 className="block p-2 mb-2 text-lg font-medium text-center bg-neutral-900 rounded-md">
+        <h1 className="mb-2 block rounded-md bg-neutral-900 p-2 text-center text-lg font-medium">
           Comics about <span className="text-white">{tag.name}</span>
         </h1>
         {comics.length > 0 ? (
@@ -45,52 +45,52 @@ const TagPage: NextPage<ITagPageProps> = ({ tag, pageNo }: ITagPageProps) => {
             />{' '}
           </div>
         )}
-        <div className="flex gap-1 justify-center mt-2">
+        <div className="mt-2 flex justify-center gap-1">
           {pageNo !== 0 ? (
             <>
               <Link href={`/tag/${tag.slug}/${pageNo - 1}`}>
-                <a className="py-1 px-2 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                <a className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-                  <i className="align-middle ri-arrow-left-s-line ri-fw" />
+                  <i className="ri-arrow-left-s-line ri-fw align-middle" />
                 </a>
               </Link>
               <Link href={`/tag/${tag.slug}/${pageNo - 1}`}>
-                <a className="py-1 px-3 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                <a className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {pageNo - 1}
                 </a>
               </Link>
             </>
           ) : (
             <>
-              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
                 -
               </div>
-              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
                 -
               </div>
             </>
           )}
-          <div className="py-1 px-3 bg-neutral-800 rounded-md">{pageNo}</div>
+          <div className="rounded-md bg-neutral-800 py-1 px-3">{pageNo}</div>
           {comics.length == PAGES.TAG.COMIC_PER_PAGE ? (
             <>
               <Link href={`/tag/${tag.slug}/${pageNo + 1}`}>
-                <a className="py-1 px-3 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                <a className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {pageNo + 1}
                 </a>
               </Link>
               <Link href={`/tag/${tag.slug}/${pageNo + 1}`}>
-                <a className="py-1 px-2 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                <a className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-                  <i className="align-middle ri-arrow-right-s-line ri-fw" />
+                  <i className="ri-arrow-right-s-line ri-fw align-middle" />
                 </a>
               </Link>
             </>
           ) : (
             <>
-              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
                 -
               </div>
-              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
                 -
               </div>
             </>

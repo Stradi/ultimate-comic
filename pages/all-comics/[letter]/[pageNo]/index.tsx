@@ -36,14 +36,14 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
       href={`/all-comics/${char === '#' ? '0' : char}`}
       key={char === '#' ? '0' : char}
     >
-      <a className="inline-block px-2 m-0.5 hover:text-white bg-neutral-800 hover:bg-neutral-700 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+      <a className="m-0.5 inline-block rounded-md bg-neutral-800 px-2 transition duration-100 hover:bg-neutral-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-600">
         {char === '#' ? '#' : char.toUpperCase()}
       </a>
     </Link>
   ));
 
   const letterNavigationDOM = (
-    <div className="block p-2 my-2 text-center bg-neutral-900 rounded-md">
+    <div className="my-2 block rounded-md bg-neutral-900 p-2 text-center">
       {letterNavigationLinksDOM}
     </div>
   );
@@ -55,18 +55,18 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
         description="Full list of the largest comics database for Marvel, DC Comics, Dark Horse Comics, Image Comics, Valiant Comics, IDW Publishing Comics and more."
       />
       <Container>
-        <h1 className="block mb-2 text-lg font-medium text-center text-white">
+        <h1 className="mb-2 block text-center text-lg font-medium text-white">
           {readableLetter.toUpperCase()}
         </h1>
         {letterNavigationDOM}
-        <p className="p-2 mb-2 text-sm bg-neutral-900 rounded-md">
+        <p className="mb-2 rounded-md bg-neutral-900 p-2 text-sm">
           <span className="font-medium text-red-600">Note:</span> Completed
           comics have checkmark (
           {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="text-green-500 align-middle ri-check-line ri-fw" />) on
+          <i className="ri-check-line ri-fw align-middle text-green-500" />) on
           left, ongoing comics have cross (
           {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="text-red-500 align-middle ri-close-line ri-fw" />
+          <i className="ri-close-line ri-fw align-middle text-red-500" />
           ).
         </p>
         {comics.length > 0 ? (
@@ -80,52 +80,52 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
           </div>
         )}
         {comics.length > 0 && letterNavigationDOM}
-        <div className="flex gap-1 justify-center">
+        <div className="flex justify-center gap-1">
           {pageNo !== 0 ? (
             <>
               <Link href={`/all-comics/${letter}/${pageNo - 1}`}>
-                <a className="py-1 px-2 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                <a className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-                  <i className="align-middle ri-arrow-left-s-line ri-fw" />
+                  <i className="ri-arrow-left-s-line ri-fw align-middle" />
                 </a>
               </Link>
               <Link href={`/all-comics/${letter}/${pageNo - 1}`}>
-                <a className="py-1 px-3 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                <a className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {pageNo - 1}
                 </a>
               </Link>
             </>
           ) : (
             <>
-              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
                 -
               </div>
-              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
                 -
               </div>
             </>
           )}
-          <div className="py-1 px-3 bg-neutral-800 rounded-md">{pageNo}</div>
+          <div className="rounded-md bg-neutral-800 py-1 px-3">{pageNo}</div>
           {comics.length == PAGES.ALL_COMICS.COMIC_PER_PAGE ? (
             <>
               <Link href={`/all-comics/${letter}/${pageNo + 1}`}>
-                <a className="py-1 px-3 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                <a className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {pageNo + 1}
                 </a>
               </Link>
               <Link href={`/all-comics/${letter}/${pageNo + 1}`}>
-                <a className="py-1 px-2 bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+                <a className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
                   {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-                  <i className="align-middle ri-arrow-right-s-line ri-fw" />
+                  <i className="ri-arrow-right-s-line ri-fw align-middle" />
                 </a>
               </Link>
             </>
           ) : (
             <>
-              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
                 -
               </div>
-              <div className="py-1 px-3 bg-black/50 rounded-md hover:cursor-not-allowed">
+              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
                 -
               </div>
             </>

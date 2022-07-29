@@ -8,12 +8,12 @@ interface ISinglePostProps {
 const SinglePost = ({ post }: ISinglePostProps) => {
   return (
     <Link href={`/blog/${post.slug}`}>
-      <a className="group block py-2 px-3 mb-2 hover:text-white bg-neutral-900 hover:bg-neutral-800 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 transition duration-100">
+      <a className="group mb-2 block rounded-md bg-neutral-900 py-2 px-3 transition duration-100 hover:bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-600">
         <div className="flex justify-between">
           <p className="relative transition duration-100 group-hover:translate-x-4 group-focus:translate-x-4">
-            <span className="mr-2 -ml-4 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition duration-100">
+            <span className="mr-2 -ml-4 opacity-0 transition duration-100 group-hover:opacity-100 group-focus:opacity-100">
               {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-              <i className="text-green-500 align-middle ri-arrow-right-s-line ri-fw" />
+              <i className="ri-arrow-right-s-line ri-fw align-middle text-green-500" />
             </span>
             <span className="align-text-top">{post.title}</span>
           </p>
