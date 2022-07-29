@@ -55,7 +55,7 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
           ),
         };
       } else {
-        return { promise: res.unstable_revalidate(absPath), path: absPath };
+        return { promise: res.revalidate(absPath), path: absPath };
       }
     });
 
@@ -88,7 +88,7 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
   const result = await Promise.allSettled([
     absPath === '/sitemap'
       ? deleteAllFilesFromDirectory(resolve(process.cwd(), 'public', 'sitemap'))
-      : res.unstable_revalidate(absPath),
+      : res.revalidate(absPath),
   ]);
   if (result[0].status === 'fulfilled') {
     return res.status(200).json({
