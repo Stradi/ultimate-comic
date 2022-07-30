@@ -179,15 +179,16 @@ export const getStaticProps: GetStaticProps<
       getAllIssues(
         1,
         0,
-        'slug',
+        'slug comic',
         [],
         {
           _id: {
-            $gt: currentIssue._id,
+            $lt: currentIssue._id,
           },
+          comic: (currentIssue.comic as IComicDocument)._id,
         },
         {
-          _id: 'ascending',
+          _id: 'descending',
         }
       ),
       true
@@ -199,15 +200,16 @@ export const getStaticProps: GetStaticProps<
       getAllIssues(
         1,
         0,
-        'slug',
+        'slug comic',
         [],
         {
           _id: {
             $gt: currentIssue._id,
           },
+          comic: (currentIssue.comic as IComicDocument)._id,
         },
         {
-          _id: 'descending',
+          _id: 'ascending',
         }
       ),
       true
