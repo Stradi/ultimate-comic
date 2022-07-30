@@ -1,5 +1,4 @@
 import type { GetStaticProps, NextPage } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BigComicList } from '~/components/BigComicList';
@@ -41,41 +40,6 @@ const Home: NextPage<IHomePageProps> = ({
           buttonHref={`/search?q=${searchTerm}`}
         />
       </div>
-      <div>
-        <h2 className="mb-2 text-xl font-medium">Popular Publishers</h2>
-        <div className="min-h-fit sm:flex sm:justify-center sm:gap-x-2">
-          <Link href="/tag/marvel" prefetch={false}>
-            <a className="group relative block rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 sm:w-1/2">
-              <Image
-                src="/images/logo_marvel.png"
-                className="rounded-md transition duration-100 group-hover:brightness-[0.2]"
-                layout="intrinsic"
-                width={640}
-                height={320}
-                alt="Logo of Marvel"
-              />
-              <div className="absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 text-center text-lg font-medium text-white opacity-0 transition duration-100 group-hover:opacity-100">
-                <p className="">Read Latest Marvel Comics</p>
-              </div>
-            </a>
-          </Link>
-          <Link href="/tag/dc-comics" prefetch={false}>
-            <a className="group relative block rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 sm:w-1/2">
-              <Image
-                src="/images/logo_dc_comics.png"
-                className="rounded-md transition duration-100 group-hover:brightness-[0.2]"
-                layout="intrinsic"
-                width={640}
-                height={320}
-                alt="Logo of Marvel"
-              />
-              <div className="absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 text-center text-lg font-medium text-white opacity-0 transition duration-100 group-hover:opacity-100">
-                <p className="">Read Latest DC Comics</p>
-              </div>
-            </a>
-          </Link>
-        </div>
-      </div>
       <div className="md:flex md:flex-row">
         <div className="md:w-3/4">
           <h2 className="mb-2 text-xl font-medium">Latest Issues</h2>
@@ -115,7 +79,7 @@ const Home: NextPage<IHomePageProps> = ({
       </div>
       <div className="mt-4">
         <h2 className="text-center text-xl font-medium">Can&apos;t decide?</h2>
-        <p className="text-center">Here are some random comics of the day</p>
+        <p className="mb-2 text-center">Here are some random comics for you</p>
         <BigComicList comics={randomComics} />
       </div>
     </Container>
