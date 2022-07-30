@@ -2,7 +2,7 @@ import { SEO } from 'configs/seo';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container } from '../Container';
 import { INavbarItemProps, NavbarItem } from './NavbarItem';
 
@@ -18,6 +18,10 @@ const Navbar = ({ items }: INavbarProps) => {
   ));
 
   const [navbarOpen, setNavbarOpen] = useState(false);
+
+  useEffect(() => {
+    setNavbarOpen(false);
+  }, [router.pathname]);
 
   const handleBrandClick = (e: React.MouseEvent) => {
     if (e.type === 'contextmenu') {
