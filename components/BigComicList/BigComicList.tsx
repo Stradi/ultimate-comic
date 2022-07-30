@@ -11,7 +11,9 @@ const BigComicList = ({ comics }: IBigComicListProps) => {
   ));
 
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">{comicsDOM}</div>
+    <div className="grid grid-cols-2 gap-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5">
+      {comicsDOM}
+    </div>
   );
 };
 
