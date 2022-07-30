@@ -79,7 +79,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
       setIsLoading(true);
       const [error, response] = await handle(
         fetch(
-          `/api/search?term=${searchTerm}&fields=name slug coverImage createdAt totalViews issues&type=comics&count=${searchCount}`
+          `/api/search?term=${searchTerm}&fields=name slug coverImage releaseDate totalViews issues&type=comics&count=${searchCount}`
         )
       );
       setIsLoading(false);

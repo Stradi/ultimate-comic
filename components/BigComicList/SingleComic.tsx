@@ -23,7 +23,9 @@ const SingleComic = ({ comic }: ISingleComicProps) => {
           <p className="absolute top-0 transition duration-100 group-hover:translate-y-16">
             <span className="font-medium">Released at:</span>
             <br></br>
-            <span className="text-sm">{toHumanReadable(comic.createdAt)}</span>
+            <span className="text-sm">
+              {toHumanReadable(comic.releaseDate as Date)}
+            </span>
             <br></br>
             <span className="font-medium">Views:</span>
             <br></br>
