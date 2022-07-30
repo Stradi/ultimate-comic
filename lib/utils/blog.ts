@@ -2,12 +2,9 @@ import path from 'path';
 
 import fs from 'fs-extra';
 import matter from 'gray-matter';
-import rehypeStringify from 'rehype-stringify';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
 import { remarkNextImage } from '../remark/remark-next-image';
 
-import { unified } from 'unified';
+import { serialize } from 'next-mdx-remote/serialize';
 
 import { BaseError } from './error';
 import { getAllFilesInDirectory, getFileContent } from './fs';
@@ -27,7 +24,7 @@ const getAllPosts = async () => {
   if (error) return Promise.reject(error);
 
   const mdContents = allPostsDirectory.flatMap((slug) =>
-    matter(fs.readFileSync(path.join(POSTS_DIRECTORY, slug, 'index.md')))
+    matter(fs.readFileSync(path.join(POSTS_DIRECTORY, slug, 'index.mdx')))
   );
 
   return mdContents.map((content) => ({
@@ -45,14 +42,14 @@ const getAllPosts = async () => {
 
 const getBlogPostBySlug = async (slug: string) => {
   const [error, fileContents] = await handle(
-    getFileContent(path.join(POSTS_DIRECTORY, slug, 'index.md'))
+    getFileContent(path.join(POSTS_DIRECTORY, slug, 'index.mdx'))
   );
   if (error) return Promise.reject(error);
 
   const mdContent = matter(fileContents);
 
-  const [conversionError, htmlContent] = await handle(
-    convertMarkdownToHtml(mdContent.content, 'blog', mdContent.data.slug)
+  const [conversionError, mdx] = await handle(
+    convertMdxToHtml(mdContent.content, 'blog', mdContent.data.slug)
   );
   if (conversionError) return Promise.reject(conversionError);
 
@@ -60,7 +57,7 @@ const getBlogPostBySlug = async (slug: string) => {
     title: mdContent.data.title,
     slug: mdContent.data.slug,
     coverImage: mdContent.data.coverImage || null,
-    content: htmlContent,
+    content: mdx,
     seo: {
       description: mdContent.data.seoDescription,
     },
@@ -76,7 +73,9 @@ const getAllStaticPages = async () => {
   if (error) return Promise.reject(error);
 
   const mdContents = allStaticPagesDirectory.flatMap((slug) =>
-    matter(fs.readFileSync(path.join(STATIC_PAGES_DIRECTORY, slug, 'index.md')))
+    matter(
+      fs.readFileSync(path.join(STATIC_PAGES_DIRECTORY, slug, 'index.mdx'))
+    )
   );
 
   return mdContents.map((content) => ({
@@ -90,21 +89,21 @@ const getAllStaticPages = async () => {
 
 const getStaticPageBySlug = async (slug: string) => {
   const [error, fileContents] = await handle(
-    getFileContent(path.join(STATIC_PAGES_DIRECTORY, slug, 'index.md'))
+    getFileContent(path.join(STATIC_PAGES_DIRECTORY, slug, 'index.mdx'))
   );
   if (error) return Promise.reject(error);
 
   const mdContent = matter(fileContents);
 
-  const [conversionError, htmlContent] = await handle(
-    convertMarkdownToHtml(mdContent.content, 'staticpage', mdContent.data.slug)
+  const [conversionError, mdx] = await handle(
+    convertMdxToHtml(mdContent.content, 'staticpage', mdContent.data.slug)
   );
   if (conversionError) return Promise.reject(conversionError);
 
   return {
     title: mdContent.data.title,
     slug: mdContent.data.slug,
-    content: htmlContent,
+    content: mdx,
     publishedAt: new Date(mdContent.data.publishedAt),
     updatedAt: new Date(mdContent.data.updatedAt),
   } as StaticPage;
@@ -117,7 +116,7 @@ const getAllGuides = async () => {
   if (error) return Promise.reject(error);
 
   const mdContents = guidePagesDirectory.flatMap((slug) =>
-    matter(fs.readFileSync(path.join(GUIDE_PAGES_DIRECTORY, slug, 'index.md')))
+    matter(fs.readFileSync(path.join(GUIDE_PAGES_DIRECTORY, slug, 'index.mdx')))
   );
 
   return mdContents.map((content) => ({
@@ -135,21 +134,21 @@ const getAllGuides = async () => {
 
 const getGuideBySlug = async (slug: string) => {
   const [error, fileContents] = await handle(
-    getFileContent(path.join(GUIDE_PAGES_DIRECTORY, slug, 'index.md'))
+    getFileContent(path.join(GUIDE_PAGES_DIRECTORY, slug, 'index.mdx'))
   );
   if (error) return Promise.reject(error);
 
   const mdContent = matter(fileContents);
 
-  const [conversionError, htmlContent] = await handle(
-    convertMarkdownToHtml(mdContent.content, 'guide', mdContent.data.slug)
+  const [conversionError, mdx] = await handle(
+    convertMdxToHtml(mdContent.content, 'guide', mdContent.data.slug)
   );
   if (conversionError) return Promise.reject(conversionError);
 
   return {
     title: mdContent.data.title,
     slug: mdContent.data.slug,
-    content: htmlContent,
+    content: mdx,
     coverImage: mdContent.data.coverImage,
     seo: {
       description: mdContent.data.seoDescription,
@@ -159,32 +158,39 @@ const getGuideBySlug = async (slug: string) => {
   } as GuidePage;
 };
 
-const convertMarkdownToHtml = async (
+const convertMdxToHtml = async (
   content: string,
   type: 'blog' | 'staticpage' | 'guide',
   slug: string
 ) => {
   const [error, html] = await handle(
-    unified()
-      .use(remarkParse)
-      .use(remarkNextImage, { publicPath: `/images/${type}/${slug}` })
-      .use(remarkRehype)
-      .use(rehypeStringify)
-      .process(content)
+    serialize(content, {
+      mdxOptions: {
+        remarkPlugins: [
+          [
+            remarkNextImage,
+            {
+              publicPath: `/images/${type}/${slug}`,
+            },
+          ],
+        ],
+      },
+      parseFrontmatter: false,
+    })
   );
 
   if (error) {
     return Promise.reject(
       new BaseError(
-        'Remark',
-        'Error converting Markdown content to HTML.',
+        'MDX',
+        'Error converting MDX content to HTML',
         error.message,
         'Wait'
       )
     );
   }
 
-  return String(html);
+  return html;
 };
 
 const moveImagesToPublicFolder = (
@@ -223,6 +229,6 @@ export {
   getAllStaticPages,
   getGuideBySlug,
   getAllGuides,
-  convertMarkdownToHtml,
+  convertMdxToHtml,
   moveImagesToPublicFolder,
 };
