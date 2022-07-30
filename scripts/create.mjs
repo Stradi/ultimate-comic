@@ -139,12 +139,12 @@ const createBlogPost = async (name, slug, folderPath) => {
   const date = new Date().toISOString();
 
   await outputFile(
-    path.join(folder, 'index.md'),
+    path.join(folder, 'index.mdx'),
     format(BLOGPOST_CONTENT, name, slug, date, date)
   );
 
   console.log('Blog post created successfully.');
-  console.log(`Check ${path.join(folder, 'index.md')}.`);
+  console.log(`Check ${path.join(folder, 'index.mdx')}.`);
 };
 
 const createStaticPage = async (name, slug, folderPath) => {
@@ -154,12 +154,12 @@ const createStaticPage = async (name, slug, folderPath) => {
   const date = new Date().toISOString();
 
   await outputFile(
-    path.join(folder, 'index.md'),
+    path.join(folder, 'index.mdx'),
     format(STATICPAGE_CONTENT, name, slug, date, date)
   );
 
   console.log('Static page created successfully.');
-  console.log(`Check ${path.join(folder, 'index.md')}.`);
+  console.log(`Check ${path.join(folder, 'index.mdx')}.`);
 };
 
 const createGuide = async (name, slug, folderPath) => {
@@ -169,16 +169,16 @@ const createGuide = async (name, slug, folderPath) => {
   const date = new Date().toISOString();
 
   await outputFile(
-    path.join(folder, 'index.md'),
+    path.join(folder, 'index.mdx'),
     format(GUIDE_CONTENT, name, slug, date, date)
   );
 
   console.log('Guide created successfully.');
-  console.log(`Check ${path.join(folder, 'index.md')}.`);
+  console.log(`Check ${path.join(folder, 'index.mdx')}.`);
 };
 
 const prepareDirectory = async (dir) => {
   await ensureDir(dir);
   await emptyDir(dir);
-  await ensureFile(path.join(dir, 'index.md'));
+  await ensureFile(path.join(dir, 'index.mdx'));
 };
