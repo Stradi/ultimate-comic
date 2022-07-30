@@ -144,7 +144,7 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
       getAllComics(
         10,
         skipCount,
-        'name slug coverImage createdAt totalViews issues'
+        'name slug coverImage releaseDate totalViews issues'
       ),
       true
     )
