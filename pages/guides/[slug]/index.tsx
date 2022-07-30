@@ -4,6 +4,7 @@ import {
   GetStaticPropsContext,
   NextPage,
 } from 'next';
+import { MDXRemote } from 'next-mdx-remote';
 import { NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from '~/components/Container';
@@ -26,12 +27,9 @@ const GuidePage: NextPage<IGuidePageProps> = ({ guide }: IGuidePageProps) => {
         {guide.title}
       </h1>
       <br></br>
-      <div
-        className="prose prose-invert mx-auto prose-a:text-inherit prose-a:transition prose-a:duration-100 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-li:marker:font-bold prose-li:marker:text-red-600"
-        dangerouslySetInnerHTML={{
-          __html: guide.content,
-        }}
-      ></div>
+      <div className="prose prose-invert mx-auto prose-a:text-inherit prose-a:transition prose-a:duration-100 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-li:marker:font-bold prose-li:marker:text-red-600">
+        <MDXRemote {...guide.content} />
+      </div>
     </Container>
   );
 };

@@ -1,7 +1,7 @@
 type BlogPost = {
   title: string;
   slug: string;
-  content: string;
+  content: MDXRemoteSerializeResult;
   coverImage?: string;
   seo: {
     description: string;
@@ -13,7 +13,7 @@ type BlogPost = {
 type StaticPage = {
   title: string;
   slug: string;
-  content: string;
+  content: MDXRemoteSerializeResult;
   publishedAt: Date;
   updatedAt: Date;
 };
@@ -21,7 +21,7 @@ type StaticPage = {
 type GuidePage = {
   title: string;
   slug: string;
-  content: string;
+  content: MDXRemoteSerializeResult;
   coverImage: string;
   seo: {
     description: string;
