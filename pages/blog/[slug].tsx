@@ -16,6 +16,8 @@ import {
 } from '~/lib/utils/blog';
 import { handle } from '~/lib/utils/promise';
 
+import MDXComponents from '~/components/MDXComponents';
+
 interface IBlogSlugPageProps {
   post: BlogPost;
 }
@@ -41,7 +43,7 @@ const BlogSlugPage: NextPage<IBlogSlugPageProps> = ({
       </h1>
       <br></br>
       <div className="prose prose-invert mx-auto prose-a:text-inherit prose-a:transition prose-a:duration-100 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-li:marker:font-bold prose-li:marker:text-red-600">
-        <MDXRemote {...post.content} />
+        <MDXRemote {...post.content} components={MDXComponents} />
       </div>
     </Container>
   );
