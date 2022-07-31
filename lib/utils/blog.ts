@@ -6,6 +6,8 @@ import { remarkNextImage } from '../remark/remark-next-image';
 
 import { serialize } from 'next-mdx-remote/serialize';
 
+import rehypeSlug from 'rehype-slug';
+import remarkToc from 'remark-toc';
 import { BaseError } from './error';
 import { getAllFilesInDirectory, getFileContent } from './fs';
 import { handle } from './promise';
@@ -185,7 +187,9 @@ const convertMdxToHtml = async (
               publicPath: `/images/${type}/${slug}`,
             },
           ],
+          remarkToc,
         ],
+        rehypePlugins: [rehypeSlug],
       },
       parseFrontmatter: false,
     })
