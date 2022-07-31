@@ -88,7 +88,7 @@ const Home: NextPage<IHomePageProps> = ({
       </div>
       <div className="mt-4">
         <h2 className="text-center text-xl font-medium">
-          Still can&apos;t descide?
+          Still can&apos;t decide?
         </h2>
         <p className="mb-2 text-center">Then check out some of our guides</p>
         <GuideList guides={guides} />
