@@ -13,13 +13,14 @@ const SingleIssue = ({ issue }: ISingleIssueProps) => {
   return (
     <Link href={`/comic/${comic.slug}/${issue.slug}`} prefetch={false}>
       <a className="group mb-2 flex rounded-md bg-neutral-900 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600 sm:mb-0">
-        <div className="mr-2 w-1/2">
+        <div className="relative mr-2 w-1/2">
           <Image
             className="rounded-l-md"
             src={coverImage}
             layout="responsive"
             width={1}
             height={1.3}
+            sizes={'(max-width: 640px) 50vw, 20vw'}
             alt={issue.name}
             objectFit="fill"
           />

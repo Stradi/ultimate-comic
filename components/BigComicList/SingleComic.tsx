@@ -17,6 +17,7 @@ const SingleComic = ({ comic }: ISingleComicProps) => {
           layout="responsive"
           width={1}
           height={1.3}
+          sizes={'(max-width: 640px) 30vw, 20vw'}
           alt={comic.name}
         />
         <div className="px-4 text-white opacity-0 transition duration-100 group-hover:opacity-100">

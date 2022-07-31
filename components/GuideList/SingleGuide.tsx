@@ -14,6 +14,7 @@ const SingleGuide = ({ guide }: ISingleGuideProps) => {
           layout="responsive"
           width={1}
           height={1.5}
+          sizes={'(max-width: 640px) 50vw, 30vw'}
           alt="Cover"
           className="rounded-lg transition duration-100 group-hover:brightness-[0.2]"
         />

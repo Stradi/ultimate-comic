@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { BigComicList } from '~/components/BigComicList';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
+import { GuideList } from '~/components/GuideList';
 import { LatestIssues } from '~/components/LatestIssues';
 import { SearchInput } from '~/components/SearchInput';
 import { Sidebar } from '~/components/Sidebar';
 import { getAllComics, getComicCount, getLatestIssues } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
+import { getAllGuides } from '~/lib/utils/blog';
 import { callDb } from '~/lib/utils/database';
 import { handle } from '~/lib/utils/promise';
 
@@ -16,12 +18,14 @@ interface IHomePageProps {
   newIssues: IIssueDocument[];
   popularComics: IComicDocument[];
   randomComics: IComicDocument[];
+  guides: GuidePage[];
 }
 
 const Home: NextPage<IHomePageProps> = ({
   newIssues,
   popularComics,
   randomComics,
+  guides,
 }: IHomePageProps) => {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -81,6 +85,13 @@ const Home: NextPage<IHomePageProps> = ({
         <h2 className="text-center text-xl font-medium">Can&apos;t decide?</h2>
         <p className="mb-2 text-center">Here are some random comics for you</p>
         <BigComicList comics={randomComics} />
+      </div>
+      <div className="mt-4">
+        <h2 className="text-center text-xl font-medium">
+          Still can&apos;t descide?
+        </h2>
+        <p className="mb-2 text-center">Then check out some of our guides</p>
+        <GuideList guides={guides} />
       </div>
     </Container>
   );
@@ -152,11 +163,15 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
 
   if (randomComicsError) return Promise.reject(randomComicsError);
 
+  const [guidesError, guides] = await handle(getAllGuides());
+  if (guidesError) return Promise.reject(guidesError);
+
   return {
     props: {
       newIssues: filteredNewIssues,
       popularComics,
       randomComics,
+      guides: guides ? JSON.parse(JSON.stringify(guides.slice(0, 3))) : [],
     },
     // Currently Netlify doesn't support On-demand revalidation,
     // so /api/revalidate route doesn't work. Instead we can use ISR.

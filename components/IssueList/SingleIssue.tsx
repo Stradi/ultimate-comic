@@ -32,6 +32,7 @@ const BigSingleIssue = ({ issue, href }: ISingleIssueProps) => {
           layout="responsive"
           width={1}
           height={1.3}
+          sizes={'(max-width: 640px) 50vw, 25vw'}
           alt={issue.name}
         />
         <div className="px-4 text-white opacity-0 transition duration-100 group-hover:opacity-100">
