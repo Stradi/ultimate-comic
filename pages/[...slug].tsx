@@ -8,11 +8,7 @@ import { MDXRemote } from 'next-mdx-remote';
 import { NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from '~/components/Container';
-import {
-  getAllStaticPages,
-  getStaticPageBySlug,
-  moveImagesToPublicFolder,
-} from '~/lib/utils/blog';
+import { getAllStaticPages, getStaticPageBySlug } from '~/lib/utils/blog';
 import { toHumanReadable } from '~/lib/utils/date';
 import { handle } from '~/lib/utils/promise';
 
@@ -78,8 +74,6 @@ export const getStaticProps: GetStaticProps<
       notFound: true,
     };
   }
-
-  moveImagesToPublicFolder(pageSlug, 'staticpage');
 
   return {
     props: {

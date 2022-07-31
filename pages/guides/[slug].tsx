@@ -8,11 +8,7 @@ import { MDXRemote } from 'next-mdx-remote';
 import { NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import { Container } from '~/components/Container';
-import {
-  getAllGuides,
-  getGuideBySlug,
-  moveImagesToPublicFolder,
-} from '~/lib/utils/blog';
+import { getAllGuides, getGuideBySlug } from '~/lib/utils/blog';
 import { handle } from '~/lib/utils/promise';
 
 import MDXComponents from '~/components/MDXComponents';
@@ -65,8 +61,6 @@ export const getStaticProps: GetStaticProps<
       notFound: true,
     };
   }
-
-  moveImagesToPublicFolder(slug, 'guide');
 
   return {
     props: {

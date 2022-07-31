@@ -27,6 +27,10 @@ const getAllPosts = async () => {
     matter(fs.readFileSync(path.join(POSTS_DIRECTORY, slug, 'index.mdx')))
   );
 
+  for (const slug of allPostsDirectory) {
+    moveImagesToPublicFolder(slug, 'blog');
+  }
+
   return mdContents.map((content) => ({
     title: content.data.title,
     slug: content.data.slug,
@@ -78,6 +82,10 @@ const getAllStaticPages = async () => {
     )
   );
 
+  for (const slug of allStaticPagesDirectory) {
+    moveImagesToPublicFolder(slug, 'staticpage');
+  }
+
   return mdContents.map((content) => ({
     title: content.data.title,
     slug: content.data.slug,
@@ -118,6 +126,10 @@ const getAllGuides = async () => {
   const mdContents = guidePagesDirectory.flatMap((slug) =>
     matter(fs.readFileSync(path.join(GUIDE_PAGES_DIRECTORY, slug, 'index.mdx')))
   );
+
+  for (const slug of guidePagesDirectory) {
+    moveImagesToPublicFolder(slug, 'guide');
+  }
 
   return mdContents.map((content) => ({
     title: content.data.title,
