@@ -37,3 +37,4 @@ yarn-error.log*
 /public/sitemap
 /public/images/blog
 /public/images/staticpage
+/public/images/guide
