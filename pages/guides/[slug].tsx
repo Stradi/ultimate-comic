@@ -20,7 +20,10 @@ interface IGuidePageProps {
 const GuidePage: NextPage<IGuidePageProps> = ({ guide }: IGuidePageProps) => {
   return (
     <Container>
-      <NextSeo title={guide.title} description={guide.seo.description} />
+      <NextSeo
+        title={`${guide.title} Guide`}
+        description={guide.seo.description}
+      />
       <h1 className="text-center text-3xl font-black text-white">
         {guide.title}
       </h1>
