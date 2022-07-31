@@ -163,8 +163,7 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
 
   if (randomComicsError) return Promise.reject(randomComicsError);
 
-  const [guidesError, guides] = await handle(getAllGuides());
-  if (guidesError) return Promise.reject(guidesError);
+  const [, guides] = await handle(getAllGuides());
 
   return {
     props: {
