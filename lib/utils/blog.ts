@@ -29,10 +29,6 @@ const getAllPosts = async () => {
     matter(fs.readFileSync(path.join(POSTS_DIRECTORY, slug, 'index.mdx')))
   );
 
-  for (const slug of allPostsDirectory) {
-    moveImagesToPublicFolder(slug, 'blog');
-  }
-
   return mdContents.map((content) => ({
     title: content.data.title,
     slug: content.data.slug,
@@ -51,6 +47,8 @@ const getBlogPostBySlug = async (slug: string) => {
     getFileContent(path.join(POSTS_DIRECTORY, slug, 'index.mdx'))
   );
   if (error) return Promise.reject(error);
+
+  moveImagesToPublicFolder(slug, 'blog');
 
   const mdContent = matter(fileContents);
 
@@ -84,10 +82,6 @@ const getAllStaticPages = async () => {
     )
   );
 
-  for (const slug of allStaticPagesDirectory) {
-    moveImagesToPublicFolder(slug, 'staticpage');
-  }
-
   return mdContents.map((content) => ({
     title: content.data.title,
     slug: content.data.slug,
@@ -102,6 +96,8 @@ const getStaticPageBySlug = async (slug: string) => {
     getFileContent(path.join(STATIC_PAGES_DIRECTORY, slug, 'index.mdx'))
   );
   if (error) return Promise.reject(error);
+
+  moveImagesToPublicFolder(slug, 'staticpage');
 
   const mdContent = matter(fileContents);
 
@@ -129,10 +125,6 @@ const getAllGuides = async () => {
     matter(fs.readFileSync(path.join(GUIDE_PAGES_DIRECTORY, slug, 'index.mdx')))
   );
 
-  for (const slug of guidePagesDirectory) {
-    moveImagesToPublicFolder(slug, 'guide');
-  }
-
   return mdContents.map((content) => ({
     title: content.data.title,
     slug: content.data.slug,
@@ -151,6 +143,8 @@ const getGuideBySlug = async (slug: string) => {
     getFileContent(path.join(GUIDE_PAGES_DIRECTORY, slug, 'index.mdx'))
   );
   if (error) return Promise.reject(error);
+
+  moveImagesToPublicFolder(slug, 'guide');
 
   const mdContent = matter(fileContents);
 
