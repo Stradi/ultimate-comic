@@ -134,7 +134,12 @@ export const getStaticProps: GetStaticProps<
       getTagBySlug(
         slug,
         'name slug comics',
-        'name slug isCompleted',
+        [
+          {
+            fieldName: 'comics',
+            fields: 'name slug isCompleted',
+          },
+        ],
         PAGES.TAG.COMIC_PER_PAGE,
         pageNo * PAGES.TAG.COMIC_PER_PAGE
       ),
