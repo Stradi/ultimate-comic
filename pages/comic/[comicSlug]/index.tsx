@@ -20,7 +20,6 @@ import {
 } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
 import { toHumanReadable } from '~/lib/utils/date';
-import { handle } from '~/lib/utils/promise';
 
 interface IComicSlugPageProps {
   comic: IComicDocument;
@@ -162,26 +161,18 @@ export const getStaticProps: GetStaticProps<
   IStaticPathsQuery
 > = async (context: GetStaticPropsContext<IStaticPathsQuery>) => {
   const slug = (context.params as IStaticPathsQuery).comicSlug;
-  const [error, comic] = await handle(
-    callDb(
-      getComicBySlug(
-        slug,
-        'name slug isCompleted releaseDate coverImage summary authors tags issues',
-        [
-          { fieldName: 'authors', fields: 'name' },
-          { fieldName: 'tags', fields: 'name slug' },
-          { fieldName: 'issues', fields: 'name slug createdAt images.0' },
-        ]
-      ),
-      true
-    )
+  const comic = await callDb(
+    getComicBySlug(
+      slug,
+      'name slug isCompleted releaseDate coverImage summary authors tags issues',
+      [
+        { fieldName: 'authors', fields: 'name' },
+        { fieldName: 'tags', fields: 'name slug' },
+        { fieldName: 'issues', fields: 'name slug createdAt images.0' },
+      ]
+    ),
+    true
   );
-
-  if (error) {
-    return {
-      notFound: true,
-    };
-  }
 
   return {
     props: {
