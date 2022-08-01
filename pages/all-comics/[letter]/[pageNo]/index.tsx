@@ -14,6 +14,7 @@ import { MiniComicList } from '~/components/MiniComicList';
 import { getAllComics } from '~/lib/database';
 import { IComicDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
+import { handle } from '~/lib/utils/promise';
 
 interface IComicWithLetterPageProps {
   comics: IComicDocument[];
@@ -186,16 +187,26 @@ export const getStaticProps: GetStaticProps<
     name: new RegExp(regexStr, 'i'),
   };
 
-  const comics = await callDb(
-    getAllComics(
-      PAGES.ALL_COMICS.COMIC_PER_PAGE,
-      pageNo * PAGES.ALL_COMICS.COMIC_PER_PAGE,
-      'name slug isCompleted',
-      [],
-      filter
-    ),
-    true
+  const [error, comics] = await handle(
+    callDb(
+      getAllComics(
+        PAGES.ALL_COMICS.COMIC_PER_PAGE,
+        pageNo * PAGES.ALL_COMICS.COMIC_PER_PAGE,
+        'name slug isCompleted',
+        [],
+        filter
+      ),
+      true
+    )
   );
+
+  if (error) {
+    return {
+      notFound: true,
+      revalidate: 120,
+    };
+  }
+
   return {
     props: {
       comics,

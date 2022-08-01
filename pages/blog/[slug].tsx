@@ -67,7 +67,14 @@ export const getStaticProps: GetStaticProps<
   IStaticPathsQuery
 > = async (context: GetStaticPropsContext<IStaticPathsQuery>) => {
   const slug = (context.params as IStaticPathsQuery).slug;
-  const post = await getBlogPostBySlug(slug);
+  const [error, post] = await handle(getBlogPostBySlug(slug));
+
+  if (error) {
+    return {
+      notFound: true,
+      revalidate: 120,
+    };
+  }
 
   return {
     props: {
