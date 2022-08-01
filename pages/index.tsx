@@ -12,7 +12,6 @@ import { getAllComics, getComicCount, getLatestIssues } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { getAllGuides } from '~/lib/utils/blog';
 import { callDb } from '~/lib/utils/database';
-import { handle } from '~/lib/utils/promise';
 
 interface IHomePageProps {
   newIssues: IIssueDocument[];
@@ -98,72 +97,55 @@ const Home: NextPage<IHomePageProps> = ({
 };
 
 export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
-  const [newIssuesError, newIssues] = await handle(
-    callDb(
-      getLatestIssues(
-        18,
-        0,
-        'name slug images.0 comic createdAt',
-        [
-          {
-            fieldName: 'comic',
-            fields: 'name slug',
-          },
-        ],
-        {},
+  const newIssues = await callDb(
+    getLatestIssues(
+      18,
+      0,
+      'name slug images.0 comic createdAt',
+      [
         {
-          createdAt: 'descending',
-        }
-      ),
-      true
-    )
+          fieldName: 'comic',
+          fields: 'name slug',
+        },
+      ],
+      {},
+      {
+        createdAt: 'descending',
+      }
+    ),
+    true
   );
-
-  if (newIssuesError) {
-    throw newIssuesError;
-  }
 
   const filteredNewIssues = newIssues.filter((issue) => issue.comic?.slug);
 
-  const [popularComicsError, popularComics] = await handle(
-    callDb(
-      getAllComics(
-        10,
-        0,
-        'name slug coverImage totalViews',
-        [],
-        {},
-        {
-          totalViews: 'descending',
-        }
-      ),
-      true
-    )
+  const popularComics = await callDb(
+    getAllComics(
+      10,
+      0,
+      'name slug coverImage totalViews',
+      [],
+      {},
+      {
+        totalViews: 'descending',
+      }
+    ),
+    true
   );
 
-  if (popularComicsError) {
-    throw popularComicsError;
-  }
-
-  const [comicCountError, comicCount] = await handle(callDb(getComicCount()));
-  if (comicCountError) return Promise.reject(comicCountError);
+  const comicCount = await callDb(getComicCount());
 
   //TODO: Find a real way to get random sample from comics collection.
   const skipCount = Math.floor(Math.random() * comicCount);
-  const [randomComicsError, randomComics] = await handle(
-    callDb(
-      getAllComics(
-        10,
-        skipCount,
-        'name slug coverImage releaseDate totalViews issues'
-      ),
-      true
-    )
+  const randomComics = await callDb(
+    getAllComics(
+      10,
+      skipCount,
+      'name slug coverImage releaseDate totalViews issues'
+    ),
+    true
   );
 
-  if (randomComicsError) return Promise.reject(randomComicsError);
-
-  const [, guides] = await handle(getAllGuides());
+  const guides = await getAllGuides();
 
   return {
     props: {

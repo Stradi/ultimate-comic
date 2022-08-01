@@ -5,7 +5,6 @@ import { MiniTagList } from '~/components/MiniTagList';
 import { getAllTags } from '~/lib/database';
 import { ITagDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
-import { handle } from '~/lib/utils/promise';
 
 interface IGenresPageProps {
   tags: ITagDocument[];
@@ -29,12 +28,7 @@ const GenresPage: NextPage<IGenresPageProps> = ({ tags }: IGenresPageProps) => {
 };
 
 export const getStaticProps: GetStaticProps<IGenresPageProps> = async () => {
-  const [error, tags] = await handle(
-    callDb(getAllTags(-1, 0, 'slug name'), true)
-  );
-  if (error) {
-    throw error;
-  }
+  const tags = await callDb(getAllTags(-1, 0, 'slug name'), true);
 
   return {
     props: {

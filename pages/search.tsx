@@ -167,21 +167,8 @@ const SearchPage: NextPage<ISearchPageProps> = ({
 };
 
 export const getStaticProps: GetStaticProps<ISearchPageProps> = async () => {
-  const [comicCountError, comicCount] = await handle(callDb(getComicCount()));
-
-  if (comicCountError) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const [issueCountError, issueCount] = await handle(callDb(getIssueCount()));
-
-  if (issueCountError) {
-    return {
-      notFound: true,
-    };
-  }
+  const comicCount = await callDb(getComicCount());
+  const issueCount = await callDb(getIssueCount());
 
   return {
     props: {

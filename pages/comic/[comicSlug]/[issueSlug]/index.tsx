@@ -16,7 +16,6 @@ import { getAllIssues, getIssueBySlug } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
 import { toHumanReadable } from '~/lib/utils/date';
-import { handle } from '~/lib/utils/promise';
 
 interface IIssueSlugPageProps {
   issue: IIssueDocument;
@@ -156,64 +155,52 @@ export const getStaticProps: GetStaticProps<
   const comicSlug = slugs.comicSlug;
   const issueSlug = slugs.issueSlug;
 
-  const [currentIssueError, currentIssue] = await handle(
-    callDb(
-      getIssueBySlug(comicSlug, issueSlug, 'name images comic createdAt', [
-        {
-          fieldName: 'comic',
-          fields: 'name slug',
-        },
-      ]),
-      true
-    )
+  const currentIssue = await callDb(
+    getIssueBySlug(comicSlug, issueSlug, 'name images comic createdAt', [
+      {
+        fieldName: 'comic',
+        fields: 'name slug',
+      },
+    ]),
+    true
   );
 
-  if (currentIssueError) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const [, nextIssue] = await handle(
-    callDb(
-      getAllIssues(
-        1,
-        0,
-        'slug comic',
-        [],
-        {
-          _id: {
-            $lt: currentIssue._id,
-          },
-          comic: (currentIssue.comic as IComicDocument)._id,
+  const nextIssue = await callDb(
+    getAllIssues(
+      1,
+      0,
+      'slug comic',
+      [],
+      {
+        _id: {
+          $lt: currentIssue._id,
         },
-        {
-          _id: 'descending',
-        }
-      ),
-      true
-    )
+        comic: (currentIssue.comic as IComicDocument)._id,
+      },
+      {
+        _id: 'descending',
+      }
+    ),
+    true
   );
 
-  const [, previousIssue] = await handle(
-    callDb(
-      getAllIssues(
-        1,
-        0,
-        'slug comic',
-        [],
-        {
-          _id: {
-            $gt: currentIssue._id,
-          },
-          comic: (currentIssue.comic as IComicDocument)._id,
+  const previousIssue = await callDb(
+    getAllIssues(
+      1,
+      0,
+      'slug comic',
+      [],
+      {
+        _id: {
+          $gt: currentIssue._id,
         },
-        {
-          _id: 'ascending',
-        }
-      ),
-      true
-    )
+        comic: (currentIssue.comic as IComicDocument)._id,
+      },
+      {
+        _id: 'ascending',
+      }
+    ),
+    true
   );
 
   return {
