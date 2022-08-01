@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { getPopulatableFields } from '../utils/database';
+import { getPopulatableFields, selectFromFields } from '../utils/database';
 import { ApiError, DatabaseError } from '../utils/error';
 import { handle } from '../utils/promise';
 import {
@@ -56,9 +56,6 @@ const getIssueCount = async (): Promise<number> => {
   return query.exec();
 };
 
-// TODO: Update the queries, or split them, if count is '-1' or '>1000'.
-// Possible fix: Create an helper function just like we did in comic-scraper,
-// and run queries seperately.
 const getAllComics = async (
   count = 20,
   skip = 0,
@@ -67,7 +64,9 @@ const getAllComics = async (
   filter = {},
   sort: SortOption<IComicDocument> = {}
 ): Promise<IComicDocument[]> => {
-  const query = ComicModel.find(filter, fields);
+  const query = ComicModel.find(filter);
+  query.select(selectFromFields(fields));
+
   if (count !== -1) {
     query.limit(count);
   }
@@ -78,15 +77,9 @@ const getAllComics = async (
   populatableFields.forEach((fieldToPopulate) =>
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: fieldToPopulate.fields,
+      select: selectFromFields(fieldToPopulate.fields),
     })
   );
-
-  query.hint({
-    $type: {
-      totalViews: 'number',
-    },
-  });
 
   return await query.exec();
 };
@@ -96,13 +89,14 @@ const getComicById = async (
   fields = 'name slug isCompleted releaseDate coverImage summary',
   populate: PopulationOption[] = []
 ): Promise<IComicDocument> => {
-  const query = ComicModel.findById(id, fields);
+  const query = ComicModel.findById(id);
+  query.select(selectFromFields(fields));
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) =>
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: fieldToPopulate.fields,
+      select: selectFromFields(fieldToPopulate.fields),
     })
   );
 
@@ -127,13 +121,14 @@ const getComicBySlug = async (
   fields = 'name slug isCompleted releaseDate coverImage summary',
   populate: PopulationOption[] = []
 ): Promise<IComicDocument> => {
-  const query = ComicModel.find({ slug }, fields);
+  const query = ComicModel.find({ slug });
+  query.select(selectFromFields(fields));
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) => {
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: fieldToPopulate.fields,
+      select: selectFromFields(fieldToPopulate.fields),
     });
   });
 
@@ -161,7 +156,8 @@ const getAllIssues = async (
   filter = {},
   sort: SortOption<IIssueDocument> = {}
 ): Promise<IIssueDocument[]> => {
-  const query = IssueModel.find(filter, fields);
+  const query = IssueModel.find(filter);
+  query.select(selectFromFields(fields));
   if (count !== -1) {
     query.limit(count);
   }
@@ -172,15 +168,9 @@ const getAllIssues = async (
   populatableFields.forEach((fieldToPopulate) =>
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: fieldToPopulate.fields,
+      select: selectFromFields(fieldToPopulate.fields),
     })
   );
-
-  query.hint({
-    $type: {
-      viewCount: 'number',
-    },
-  });
 
   return await query.exec();
 };
@@ -190,13 +180,14 @@ const getIssueById = async (
   fields = 'name slug createdAt',
   populate: PopulationOption[] = []
 ): Promise<IIssueDocument> => {
-  const query = IssueModel.findOne({ _id: id }, fields);
+  const query = IssueModel.findOne({ _id: id });
+  query.select(selectFromFields(fields));
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) => {
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: fieldToPopulate.fields,
+      select: selectFromFields(fieldToPopulate.fields),
     });
   });
 
@@ -226,16 +217,14 @@ const getIssueBySlug = async (
   );
   if (error) return Promise.reject(error);
 
-  const query = IssueModel.findOne(
-    { slug: issueSlug, comic: data._id },
-    fields
-  );
+  const query = IssueModel.findOne({ slug: issueSlug, comic: data._id });
+  query.select(selectFromFields(fields));
 
   const populatableFields = getPopulatableFields(fields, populate);
   populatableFields.forEach((fieldToPopulate) => {
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: fieldToPopulate.fields,
+      select: selectFromFields(fieldToPopulate.fields),
     });
   });
 
@@ -262,7 +251,9 @@ const getLatestIssues = async (
   filter = {},
   sort: SortOption<IIssueDocument> = {}
 ): Promise<IIssueDocument[]> => {
-  const query = IssueModel.find(filter, fields);
+  const query = IssueModel.find(filter);
+  query.select(selectFromFields(fields));
+
   if (count !== -1) {
     query.limit(count);
   }
@@ -273,14 +264,8 @@ const getLatestIssues = async (
   populatableFields.forEach((fieldToPopulate) => {
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: fieldToPopulate.fields,
+      select: selectFromFields(fieldToPopulate.fields),
     });
-  });
-
-  query.hint({
-    $type: {
-      viewCount: 'number',
-    },
   });
 
   return await query.exec();
@@ -294,7 +279,9 @@ const getAllTags = async (
   filter = {},
   sort: SortOption<ITagDocument> = {}
 ): Promise<ITagDocument[]> => {
-  const query = TagModel.find(filter, fields);
+  const query = TagModel.find(filter);
+  query.select(selectFromFields(fields));
+
   if (count !== -1) {
     query.limit(count);
   }
@@ -306,13 +293,9 @@ const getAllTags = async (
   populatableFields.forEach((fieldToPopulate) =>
     query.populate({
       path: fieldToPopulate.fieldName,
-      select: fieldToPopulate.fields,
+      select: selectFromFields(fieldToPopulate.fields),
     })
   );
-
-  query.hint({
-    $type: {},
-  });
 
   return await query.exec();
 };
@@ -320,12 +303,30 @@ const getAllTags = async (
 const getTagBySlug = async (
   slug: string,
   fields = 'name slug comics createdAt updatedAt',
-  comicFields = '',
+  populate: PopulationOption[] = [],
   count = 20,
   skip = 0
 ): Promise<ITagDocument> => {
-  const tag = await TagModel.findOne({ slug }, fields);
-  if (!tag) {
+  const query = TagModel.findOne({ slug });
+  query.select(fields);
+
+  const populatableFields = getPopulatableFields(fields, populate);
+  populatableFields.forEach((fieldToPopulate) => {
+    query.populate({
+      path: fieldToPopulate.fieldName,
+      select: selectFromFields(fieldToPopulate.fields),
+      options: {
+        limit: count,
+        skip,
+      },
+    });
+  });
+
+  const result = await query.exec();
+
+  if (result) {
+    return Promise.resolve(result);
+  } else {
     return Promise.reject(
       new ApiError(
         404,
@@ -335,23 +336,6 @@ const getTagBySlug = async (
       )
     );
   }
-
-  const comicsQuery = ComicModel.find(
-    {
-      tags: {
-        $in: tag._id,
-      },
-    },
-    comicFields
-  );
-
-  comicsQuery.limit(count);
-  comicsQuery.skip(skip);
-
-  const comics = await comicsQuery.exec();
-  tag.comics = comics;
-
-  return Promise.resolve(tag);
 };
 
 export {

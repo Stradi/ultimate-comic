@@ -25,6 +25,26 @@ const getPopulatableFields = (
   return available;
 };
 
+const selectFromFields = (fields: string): object => {
+  type ReturnType = { [key: string]: number | object };
+  const selectObject: ReturnType = {};
+  fields.split(' ').forEach((field) => {
+    if (field.indexOf('.') === -1) {
+      selectObject[field] = 1;
+    } else {
+      const splittedField = field.split('.');
+      const fieldName = splittedField[0];
+      const arrIdx = Number.parseInt(splittedField[1]);
+
+      selectObject[fieldName] = {
+        $arrayElemAt: [`$${fieldName}`, arrIdx],
+      };
+    }
+  });
+
+  return selectObject;
+};
+
 const callDb = async <T>(
   promise: Promise<T>,
   serialize = false
@@ -37,4 +57,4 @@ const callDb = async <T>(
   else return data as T;
 };
 
-export { isValidObjectID, getPopulatableFields, callDb };
+export { isValidObjectID, getPopulatableFields, selectFromFields, callDb };
