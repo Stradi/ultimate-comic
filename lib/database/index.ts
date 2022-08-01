@@ -116,6 +116,22 @@ const getComicById = async (
   }
 };
 
+const getSampleComics = async (
+  count = 10,
+  fields = 'name slug isCompleted releaseDate coverImage summary'
+) => {
+  return await ComicModel.aggregate([
+    {
+      $sample: {
+        size: count,
+      },
+    },
+    {
+      $project: selectFromFields(fields),
+    },
+  ]);
+};
+
 const getComicBySlug = async (
   slug: string,
   fields = 'name slug isCompleted releaseDate coverImage summary',
@@ -346,6 +362,7 @@ export {
   getAllComics,
   getComicById,
   getComicBySlug,
+  getSampleComics,
   getAllIssues,
   getIssueById,
   getIssueBySlug,

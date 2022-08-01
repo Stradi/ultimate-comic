@@ -8,7 +8,7 @@ import { GuideList } from '~/components/GuideList';
 import { LatestIssues } from '~/components/LatestIssues';
 import { SearchInput } from '~/components/SearchInput';
 import { Sidebar } from '~/components/Sidebar';
-import { getAllComics, getComicCount, getLatestIssues } from '~/lib/database';
+import { getAllComics, getLatestIssues, getSampleComics } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { getAllGuides } from '~/lib/utils/blog';
 import { callDb } from '~/lib/utils/database';
@@ -132,16 +132,8 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
     true
   );
 
-  const comicCount = await callDb(getComicCount());
-
-  //TODO: Find a real way to get random sample from comics collection.
-  const skipCount = Math.floor(Math.random() * comicCount);
   const randomComics = await callDb(
-    getAllComics(
-      10,
-      skipCount,
-      'name slug coverImage releaseDate totalViews issues'
-    ),
+    getSampleComics(10, 'name slug coverImage releaseDate totalViews issues'),
     true
   );
 
