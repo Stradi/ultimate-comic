@@ -1,16 +1,16 @@
 class BaseError {
-  readonly type: string;
+  readonly name: string;
   readonly message: string;
   readonly explanation: string;
   readonly action: string;
 
   constructor(
-    type: string,
+    name: string,
     message: string,
     explanation: string,
     action: string
   ) {
-    this.type = type;
+    this.name = name;
     this.message = message;
     this.explanation = explanation;
     this.action = action;
