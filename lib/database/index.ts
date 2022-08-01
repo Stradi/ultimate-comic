@@ -213,7 +213,7 @@ const getIssueBySlug = async (
   populate: PopulationOption[] = []
 ): Promise<IIssueDocument> => {
   const [error, data] = await handle<IComicDocument>(
-    getComicBySlug(comicSlug, '')
+    getComicBySlug(comicSlug, '_id')
   );
   if (error) return Promise.reject(error);
 
