@@ -38,3 +38,7 @@ yarn-error.log*
 /public/images/blog
 /public/images/staticpage
 /public/images/guide
+
+# Sentry
+.sentryclirc
+sentry.properties
