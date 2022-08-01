@@ -14,6 +14,7 @@ import { MiniComicList } from '~/components/MiniComicList';
 import { getAllTags, getTagBySlug } from '~/lib/database';
 import { IComicDocument, ITagDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
+import { handle } from '~/lib/utils/promise';
 
 interface ITagPageProps {
   tag: ITagDocument;
@@ -128,16 +129,25 @@ export const getStaticProps: GetStaticProps<
   const slug = params.slug;
   const pageNo = Number.parseInt(params.pageNo);
 
-  const tag = await callDb(
-    getTagBySlug(
-      slug,
-      'name slug comics',
-      'name slug isCompleted',
-      PAGES.TAG.COMIC_PER_PAGE,
-      pageNo * PAGES.TAG.COMIC_PER_PAGE
-    ),
-    true
+  const [error, tag] = await handle(
+    callDb(
+      getTagBySlug(
+        slug,
+        'name slug comics',
+        'name slug isCompleted',
+        PAGES.TAG.COMIC_PER_PAGE,
+        pageNo * PAGES.TAG.COMIC_PER_PAGE
+      ),
+      true
+    )
   );
+
+  if (error) {
+    return {
+      notFound: true,
+      revalidate: 120,
+    };
+  }
 
   return {
     props: {

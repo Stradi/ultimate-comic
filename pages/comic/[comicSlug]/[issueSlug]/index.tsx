@@ -16,6 +16,7 @@ import { getAllIssues, getIssueBySlug } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
 import { toHumanReadable } from '~/lib/utils/date';
+import { handle } from '~/lib/utils/promise';
 
 interface IIssueSlugPageProps {
   issue: IIssueDocument;
@@ -155,15 +156,24 @@ export const getStaticProps: GetStaticProps<
   const comicSlug = slugs.comicSlug;
   const issueSlug = slugs.issueSlug;
 
-  const currentIssue = await callDb(
-    getIssueBySlug(comicSlug, issueSlug, 'name images comic createdAt', [
-      {
-        fieldName: 'comic',
-        fields: 'name slug',
-      },
-    ]),
-    true
+  const [error, currentIssue] = await handle(
+    callDb(
+      getIssueBySlug(comicSlug, issueSlug, 'name images comic createdAt', [
+        {
+          fieldName: 'comic',
+          fields: 'name slug',
+        },
+      ]),
+      true
+    )
   );
+
+  if (error) {
+    return {
+      notFound: true,
+      revalidate: 120,
+    };
+  }
 
   const nextIssue = await callDb(
     getAllIssues(
