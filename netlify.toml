@@ -1,0 +1,2 @@
+[functions]
+  included_files = ["_blog/**/index.mdx", "_blog/**/images/cover_image.webp"]
