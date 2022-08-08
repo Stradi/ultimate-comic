@@ -58,7 +58,9 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
         openGraph={{
           images: [
             {
-              url: comic.coverImage as string,
+              url:
+                comic.coverImage ||
+                'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNU/Q8AAU8BJijqIsEAAAAASUVORK5CYII=',
               alt: `Cover image of ${comic.name} comic.`,
             },
           ],
@@ -73,7 +75,10 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
         <div className="md:flex">
           <div className="mx-auto w-10/12 sm:w-3/5 md:w-2/5 lg:w-1/3">
             <Image
-              src={comic.coverImage as string}
+              src={
+                comic.coverImage ||
+                'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNU/Q8AAU8BJijqIsEAAAAASUVORK5CYII='
+              }
               layout="responsive"
               width={1}
               height={1.35}
@@ -142,7 +147,7 @@ export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
         'slug',
         [],
         {},
-        { totalViews: 'descending' }
+        { viewCount: 'descending' }
       )
     )
   ).map((comic) => comic.slug);

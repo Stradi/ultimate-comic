@@ -40,7 +40,7 @@ const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
     getIssueById(issueId, 'comic viewCount', [
       {
         fieldName: 'comic',
-        fields: 'totalViews',
+        fields: 'viewCount',
       },
     ])
   );
@@ -54,10 +54,10 @@ const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const comic = issueData.comic as IComicDocument;
 
-  if (isNaN(comic.totalViews)) {
-    comic.totalViews = 1;
+  if (isNaN(comic.viewCount)) {
+    comic.viewCount = 1;
   } else {
-    comic.totalViews++;
+    comic.viewCount++;
   }
 
   const [issueSaveError] = await handle<IIssueDocument>(issueData.save());

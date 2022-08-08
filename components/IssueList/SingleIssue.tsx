@@ -22,7 +22,12 @@ const MiniSingleIssue = ({ issue, href }: ISingleIssueProps) => {
 
 const BigSingleIssue = ({ issue, href }: ISingleIssueProps) => {
   const images = issue.images as string[];
-  const coverImage = images[0];
+  let coverImage =
+    'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNU/Q8AAU8BJijqIsEAAAAASUVORK5CYII=';
+  if (images) {
+    coverImage = images[0];
+  }
+
   return (
     <Link href={href} passHref prefetch={false}>
       <a className="group relative rounded-md transition duration-100 focus:outline-none focus:ring-2 focus:ring-red-600">

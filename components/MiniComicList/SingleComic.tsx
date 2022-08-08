@@ -25,7 +25,7 @@ const SingleComic = ({ comic, addViewCount }: ISingleComic) => {
             <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm">
               Total Views:{' '}
               <span className="font-medium text-red-600">
-                {comic.totalViews || 0}
+                {comic.viewCount || 0}
               </span>
             </span>
           </div>

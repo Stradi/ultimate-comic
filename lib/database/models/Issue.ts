@@ -5,11 +5,12 @@ import { IComicDocument } from './Comic';
 interface IIssueDocument extends mongoose.Document {
   name: string;
   slug: string;
-  comic?: IComicDocument;
+  comic: IComicDocument;
+  viewCount: number;
   images?: string[];
+
   createdAt: Date;
   updatedAt: Date;
-  viewCount: number;
 }
 
 const IssueSchema = new mongoose.Schema<IIssueDocument>(
@@ -26,8 +27,16 @@ const IssueSchema = new mongoose.Schema<IIssueDocument>(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Comic',
     },
-    images: [String],
-    viewCount: Number,
+    viewCount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    images: {
+      type: [String],
+      required: false,
+      default: [],
+    },
   },
   {
     timestamps: true,

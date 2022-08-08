@@ -66,7 +66,7 @@ const Home: NextPage<IHomePageProps> = ({
                   <div className="flex w-full justify-between self-center transition duration-100 group-hover:text-white">
                     <span className="line-clamp-2">{comic.name}</span>
                     <div>
-                      {comic.totalViews || 0}
+                      {comic.viewCount || 0}
                       {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
                       <i className="ri-eye-line ri-fw ml-1 align-text-top" />
                     </div>
@@ -108,7 +108,11 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
           fields: 'name slug',
         },
       ],
-      {},
+      {
+        'images.0': {
+          $exists: true,
+        },
+      },
       {
         createdAt: 'descending',
       }
@@ -122,18 +126,22 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
     getAllComics(
       10,
       0,
-      'name slug coverImage totalViews',
+      'name slug coverImage viewCount',
       [],
-      {},
       {
-        totalViews: 'descending',
+        coverImage: {
+          $exists: true,
+        },
+      },
+      {
+        viewCount: 'descending',
       }
     ),
     true
   );
 
   const randomComics = await callDb(
-    getSampleComics(10, 'name slug coverImage releaseDate totalViews issues'),
+    getSampleComics(10, 'name slug coverImage releaseDate viewCount issues'),
     true
   );
 

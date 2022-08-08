@@ -6,16 +6,14 @@ import { ITagDocument } from './Tag';
 interface IComicDocument extends mongoose.Document {
   name: string;
   slug: string;
+  viewCount: number;
   isCompleted: boolean;
-  releaseDate?: Date;
+  releaseDate: Date;
   coverImage?: string;
   summary?: string;
-  totalViews: number;
-  issues?: IIssueDocument[];
   authors?: IAuthorDocument[];
   tags?: ITagDocument[];
-  createdAt: Date;
-  updatedAt: Date;
+  issues?: IIssueDocument[];
 }
 
 const ComicSchema = new mongoose.Schema<IComicDocument>(
@@ -35,10 +33,26 @@ const ComicSchema = new mongoose.Schema<IComicDocument>(
       required: true,
       default: false,
     },
-    releaseDate: Date,
-    coverImage: String,
-    summary: String,
-    totalViews: Number,
+    viewCount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    releaseDate: {
+      type: Date,
+      required: true,
+      default: new Date(Date.now()),
+    },
+    coverImage: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    summary: {
+      type: String,
+      required: false,
+      default: null,
+    },
     issues: [
       {
         type: mongoose.Types.ObjectId,

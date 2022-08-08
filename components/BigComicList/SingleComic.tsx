@@ -13,7 +13,10 @@ const SingleComic = ({ comic }: ISingleComicProps) => {
       <a className="group relative rounded-md transition duration-100 focus:outline-none focus:ring-2 focus:ring-red-600">
         <Image
           className="rounded-lg transition duration-100 group-hover:brightness-[0.2]"
-          src={comic.coverImage as string}
+          src={
+            comic.coverImage ||
+            'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNU/Q8AAU8BJijqIsEAAAAASUVORK5CYII='
+          }
           layout="responsive"
           width={1}
           height={1.3}
@@ -30,7 +33,7 @@ const SingleComic = ({ comic }: ISingleComicProps) => {
             <br></br>
             <span className="font-medium">Views:</span>
             <br></br>
-            <span className="text-sm">{comic.totalViews} views</span>
+            <span className="text-sm">{comic.viewCount} views</span>
             <br></br>
             <span className="font-medium">Issue Count:</span>
             <br></br>

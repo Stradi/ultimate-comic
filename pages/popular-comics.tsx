@@ -46,10 +46,10 @@ export const getStaticProps: GetStaticProps<
     getAllComics(
       100,
       0,
-      'name slug isCompleted totalViews',
+      'name slug isCompleted viewCount',
       [],
       {},
-      { totalViews: 'descending' }
+      { viewCount: 'descending' }
     ),
     true
   );
