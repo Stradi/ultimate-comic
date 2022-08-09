@@ -26,7 +26,7 @@ const MyCarousel = ({ items }: MyCarouselProps) => {
 
     return (
       <div className={imageClasses} key="">
-        <div className="z-50 flex h-full flex-col bg-gradient-to-t from-black to-transparent px-4 text-left text-white sm:px-16">
+        <div className="z-50 flex h-full flex-col bg-gradient-to-t from-[#0d0d0d] to-transparent px-4 text-left text-white sm:px-16">
           <div className="mt-auto flex flex-col gap-2 pb-8 sm:pb-16">
             <p className="text-3xl font-bold sm:text-6xl">{comicItem.name}</p>
             <p className="text-lg sm:text-xl">
@@ -62,8 +62,6 @@ const MyCarousel = ({ items }: MyCarouselProps) => {
     <div className="select-none">
       <Carousel
         showThumbs={false}
-        // centerMode={true}
-        // centerSlidePercentage={95}
         emulateTouch={true}
         showStatus={false}
         infiniteLoop={true}
