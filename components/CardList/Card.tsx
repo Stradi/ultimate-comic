@@ -20,8 +20,6 @@ const Card = ({ image, href, mainText, subText }: ICardProps) => {
             <Image
               src={image}
               layout="fill"
-              width={100}
-              height={130}
               sizes={'(max-width: 640px) 50vw, 20vw'}
               className="rounded-md"
               alt={mainText}

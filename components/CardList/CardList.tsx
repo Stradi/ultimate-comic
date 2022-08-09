@@ -12,7 +12,7 @@ const CardList = ({ issues, comics }: ICardListProps) => {
     itemsDOM = issues.map((item) => {
       return (
         <Card
-          key={item.name}
+          key={`${item.comic.name}, ${item.name}`}
           image={(item.images as string[])[0]}
           href={`/comic/${item.comic.slug}/${item.slug}`}
           mainText={item.comic.name}
