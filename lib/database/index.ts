@@ -122,12 +122,22 @@ const getSampleComics = async (
 ) => {
   return await ComicModel.aggregate([
     {
-      $sample: {
-        size: count,
+      $project: {
+        ...selectFromFields(fields),
+        coverImageNotNull: {
+          $ne: ['$coverImage', null],
+        },
       },
     },
     {
-      $project: selectFromFields(fields),
+      $match: {
+        coverImageNotNull: true,
+      },
+    },
+    {
+      $sample: {
+        size: count,
+      },
     },
   ]);
 };
