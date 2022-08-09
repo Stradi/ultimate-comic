@@ -1,5 +1,4 @@
 import type { GetStaticProps, NextPage } from 'next';
-import { useState } from 'react';
 import { CardList } from '~/components/CardList';
 import { Container } from '~/components/Container';
 import { MyCarousel } from '~/components/MyCarousel';
@@ -7,6 +6,10 @@ import { Section } from '~/components/Section';
 import { getAllComics, getLatestIssues, getSampleComics } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { getAllGuides } from '~/lib/utils/blog';
+import {
+  convertComicToCarouselProp,
+  convertGuideToCarouselProp,
+} from '~/lib/utils/carousel';
 import { callDb } from '~/lib/utils/database';
 
 interface IHomePageProps {
@@ -22,11 +25,13 @@ const Home: NextPage<IHomePageProps> = ({
   randomComics,
   guides,
 }: IHomePageProps) => {
-  const [searchTerm, setSearchTerm] = useState('');
-
   return (
     <Container>
-      <MyCarousel items={popularComics} />
+      <MyCarousel
+        items={[
+          ...popularComics.map((comic) => convertComicToCarouselProp(comic)),
+        ]}
+      />
       <Section
         title="Latest Issues"
         subtitle="Issues fresh out of oven"
@@ -42,6 +47,23 @@ const Home: NextPage<IHomePageProps> = ({
         seeAllButtonHref="/popular-comics"
       >
         <CardList comics={popularComics} />
+      </Section>
+      <Section
+        title="Can't Decide?"
+        subtitle="Here are some random comics for you"
+        showSeeAllButton={false}
+      >
+        <CardList comics={randomComics} />
+      </Section>
+      <Section
+        title="Still Can't Decide?"
+        subtitle="We got you. We also prepared some detailed guides for you"
+        showSeeAllButton={true}
+        seeAllButtonHref="/guides"
+      >
+        <MyCarousel
+          items={[...guides.map((guide) => convertGuideToCarouselProp(guide))]}
+        />
       </Section>
     </Container>
   );
@@ -100,7 +122,7 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
   );
 
   const randomComics = await callDb(
-    getSampleComics(10, 'name slug coverImage releaseDate viewCount issues'),
+    getSampleComics(5, 'name slug coverImage releaseDate viewCount issues'),
     true
   );
 

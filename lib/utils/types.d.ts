@@ -26,6 +26,7 @@ type GuidePage = {
   seo: {
     description: string;
   };
+  excerpt: string;
   publishedAt: Date;
   updatedAt: Date;
 };
