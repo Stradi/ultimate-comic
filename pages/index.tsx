@@ -1,7 +1,9 @@
 import type { GetStaticProps, NextPage } from 'next';
 import { useState } from 'react';
+import { CardList } from '~/components/CardList';
 import { Container } from '~/components/Container';
 import { MyCarousel } from '~/components/MyCarousel';
+import { Section } from '~/components/Section';
 import { getAllComics, getLatestIssues, getSampleComics } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { getAllGuides } from '~/lib/utils/blog';
@@ -25,6 +27,22 @@ const Home: NextPage<IHomePageProps> = ({
   return (
     <Container>
       <MyCarousel items={popularComics} />
+      <Section
+        title="Latest Issues"
+        subtitle="Issues fresh out of oven"
+        showSeeAllButton={true}
+        seeAllButtonHref="/latest-issues"
+      >
+        <CardList issues={newIssues} />
+      </Section>
+      <Section
+        title="Popular Comics"
+        subtitle="Most read comics in UltimateComic"
+        showSeeAllButton={true}
+        seeAllButtonHref="/popular-comics"
+      >
+        <CardList comics={popularComics} />
+      </Section>
     </Container>
   );
 };
@@ -32,7 +50,7 @@ const Home: NextPage<IHomePageProps> = ({
 export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
   const newIssues = await callDb(
     getLatestIssues(
-      18,
+      10,
       0,
       'name slug images.0 comic createdAt',
       [
@@ -57,7 +75,7 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
 
   const popularComics = await callDb(
     getAllComics(
-      10,
+      5,
       0,
       'name slug coverImage summary viewCount issues tags',
       [
