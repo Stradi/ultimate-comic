@@ -18,7 +18,10 @@ const Card = ({ image, href, mainText, subText }: ICardProps) => {
         <div className="flex aspect-[1/1.3] w-full flex-col xs:w-auto">
           <div className="relative h-full w-full">
             <Image
-              src={image}
+              src={
+                image ||
+                'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNU/Q8AAU8BJijqIsEAAAAASUVORK5CYII='
+              }
               layout="fill"
               sizes={'(max-width: 640px) 50vw, 20vw'}
               className="rounded-md"
