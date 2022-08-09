@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import 'remixicon/fonts/remixicon.css';
 import { Layout } from '~/components/Layout';
 import { WebSiteJsonLd } from '~/components/SEO/WebSiteJsonLd';
