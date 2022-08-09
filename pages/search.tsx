@@ -9,10 +9,10 @@ import { SEO } from 'configs/seo';
 import debounce from 'lodash.debounce';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
-import { BigComicList } from '~/components/BigComicList';
 import { SearchInput } from '~/components/SearchInput';
 import { parseQuery } from '~/lib/utils/api';
 import { SearchResult } from '~/lib/utils/search';
+import { CardList } from '~/components/CardList';
 
 interface ISearchPageProps {
   comicCount: number;
@@ -146,7 +146,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
                   <span className="font-bold text-red-500">{searchTerm}</span>
                   &apos;
                 </h2>
-                <BigComicList comics={searchResults.comics} />
+                <CardList comics={searchResults.comics} />
               </div>
             )}
           </div>
