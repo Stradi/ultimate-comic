@@ -146,7 +146,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
                   <span className="font-bold text-red-500">{searchTerm}</span>
                   &apos;
                 </h2>
-                <CardList comics={searchResults.comics} />
+                <CardList comics={searchResults.comics} responsive={false} />
               </div>
             )}
           </div>
