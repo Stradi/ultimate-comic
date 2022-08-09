@@ -10,7 +10,7 @@ interface ICardProps {
 
 const Card = ({ image, href, mainText, subText }: ICardProps) => {
   return (
-    <Link href={href}>
+    <Link href={href} prefetch={false}>
       <a
         className="flex w-8/12 shrink-0 rounded-md p-1 xs:block xs:w-full xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600"
         title={`${mainText}, ${subText}`}
