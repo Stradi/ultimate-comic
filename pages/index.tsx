@@ -1,13 +1,7 @@
 import type { GetStaticProps, NextPage } from 'next';
-import Link from 'next/link';
 import { useState } from 'react';
-import { BigComicList } from '~/components/BigComicList';
-import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
-import { GuideList } from '~/components/GuideList';
-import { LatestIssues } from '~/components/LatestIssues';
-import { SearchInput } from '~/components/SearchInput';
-import { Sidebar } from '~/components/Sidebar';
+import { MyCarousel } from '~/components/MyCarousel';
 import { getAllComics, getLatestIssues, getSampleComics } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { getAllGuides } from '~/lib/utils/blog';
@@ -30,68 +24,7 @@ const Home: NextPage<IHomePageProps> = ({
 
   return (
     <Container>
-      <div>
-        <h1 className="-mb-4 text-center text-xl font-medium">
-          Search our extensive comic database
-        </h1>
-        <SearchInput
-          onChange={(e) => {
-            e.preventDefault();
-            setSearchTerm(e.target.value);
-          }}
-          displayButton={true}
-          buttonHref={`/search?q=${searchTerm}`}
-        />
-      </div>
-      <div className="md:flex md:flex-row">
-        <div className="mx-2 md:w-3/4">
-          <h2 className="mb-2 text-xl font-medium">Latest Issues</h2>
-          <LatestIssues issues={newIssues} />
-        </div>
-        <Sidebar>
-          <h2 className="mb-2 whitespace-pre-wrap text-xl font-medium">
-            Most Popular Comics
-          </h2>
-          <div>
-            {popularComics.map((comic, idx) => (
-              <Link
-                href={`/comic/${comic.slug}`}
-                key={comic.slug}
-                prefetch={false}
-              >
-                <a className="group mb-2 flex rounded-md bg-neutral-900 p-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
-                  <p className="mr-2 text-xl font-medium text-white group-hover:text-red-500">
-                    {idx + 1}.
-                  </p>
-                  <div className="flex w-full justify-between self-center transition duration-100 group-hover:text-white">
-                    <span className="line-clamp-2">{comic.name}</span>
-                    <div>
-                      {comic.viewCount || 0}
-                      {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-                      <i className="ri-eye-line ri-fw ml-1 align-text-top" />
-                    </div>
-                  </div>
-                </a>
-              </Link>
-            ))}
-          </div>
-          <div className="mt-2 flex justify-end">
-            <Button type="minimal" href="/popular-comics" text="See All" />
-          </div>
-        </Sidebar>
-      </div>
-      <div className="mt-4">
-        <h2 className="text-center text-xl font-medium">Can&apos;t decide?</h2>
-        <p className="mb-2 text-center">Here are some random comics for you</p>
-        <BigComicList comics={randomComics} />
-      </div>
-      <div className="mt-4">
-        <h2 className="text-center text-xl font-medium">
-          Still can&apos;t decide?
-        </h2>
-        <p className="mb-2 text-center">Then check out some of our guides</p>
-        <GuideList guides={guides} />
-      </div>
+      <MyCarousel items={popularComics} />
     </Container>
   );
 };
@@ -126,11 +59,19 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
     getAllComics(
       10,
       0,
-      'name slug coverImage viewCount',
-      [],
+      'name slug coverImage summary viewCount issues tags',
+      [
+        {
+          fieldName: 'tags',
+          fields: 'name slug',
+        },
+      ],
       {
         coverImage: {
-          $exists: true,
+          $ne: null,
+        },
+        summary: {
+          $ne: 'N/a',
         },
       },
       {
