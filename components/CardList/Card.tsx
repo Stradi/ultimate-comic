@@ -6,16 +6,31 @@ interface ICardProps {
   href: string;
   mainText: string;
   subText: string;
+  responsive?: boolean;
 }
 
-const Card = ({ image, href, mainText, subText }: ICardProps) => {
+const Card = ({
+  image,
+  href,
+  mainText,
+  subText,
+  responsive = true,
+}: ICardProps) => {
+  const aClassesResponsive =
+    'flex w-8/12 shrink-0 rounded-md p-1 xs:block xs:w-full xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600';
+  const aClasses =
+    'rounded-md p-1 xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600';
+
+  const divClassesResponsive = 'flex aspect-[1/1.3] w-full flex-col xs:w-auto';
+  const divClasses = 'aspect-[1/1.3]';
+
   return (
     <Link href={href} prefetch={false}>
       <a
-        className="flex w-8/12 shrink-0 rounded-md p-1 xs:block xs:w-full xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600"
+        className={responsive ? aClassesResponsive : aClasses}
         title={`${mainText}, ${subText}`}
       >
-        <div className="flex aspect-[1/1.3] w-full flex-col xs:w-auto">
+        <div className={responsive ? divClassesResponsive : divClasses}>
           <div className="relative h-full w-full">
             <Image
               src={
