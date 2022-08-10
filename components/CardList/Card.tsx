@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import cx from 'classnames';
+
 interface ICardProps {
   image: string;
   href: string;
@@ -16,21 +18,21 @@ const Card = ({
   subtitle,
   responsive = true,
 }: ICardProps) => {
-  const aClassesResponsive =
-    'flex w-8/12 shrink-0 rounded-md p-1 xs:block xs:w-full xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600';
-  const aClasses =
-    'rounded-md p-1 xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600';
+  const anchorClasses = cx({
+    'rounded-md p-1 xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600':
+      true,
+    'flex w-8/12 shrink-0 xs:block xs:w-full': responsive,
+  });
 
-  const divClassesResponsive = 'flex aspect-[1/1.3] w-full flex-col xs:w-auto';
-  const divClasses = 'aspect-[1/1.3]';
+  const divClasses = cx({
+    'aspect-[1/1.3]': true,
+    'flex w-full flex-col xs:w-auto': responsive,
+  });
 
   return (
     <Link href={href} prefetch={false}>
-      <a
-        className={responsive ? aClassesResponsive : aClasses}
-        title={`${title}, ${subtitle}`}
-      >
-        <div className={responsive ? divClassesResponsive : divClasses}>
+      <a className={anchorClasses} title={`${title}, ${subtitle}`}>
+        <div className={divClasses}>
           <div className="relative h-full w-full">
             <Image
               src={

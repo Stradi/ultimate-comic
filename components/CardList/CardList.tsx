@@ -1,4 +1,5 @@
 import { Card } from './Card';
+import cx from 'classnames';
 
 interface ICardItem {
   image: string;
@@ -28,14 +29,13 @@ const CardList = ({ items, responsive = true }: ICardListProps) => {
     );
   });
 
-  const responsiveClasses =
-    'flex flex-nowrap overflow-x-auto xs:grid xs:grid-cols-2 xs:gap-2 xs:overflow-x-visible sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5';
-  const classes =
-    'grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5';
-
-  return (
-    <div className={responsive ? responsiveClasses : classes}>{itemsDOM}</div>
-  );
+  const classes = cx({
+    'sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5': true,
+    'flex flex-nowrap overflow-x-auto xs:grid xs:grid-cols-2 xs:gap-2 xs:overflow-x-visible':
+      responsive,
+    'grid grid-cols-2 gap-2': !responsive,
+  });
+  return <div className={classes}>{itemsDOM}</div>;
 };
 
 export { CardList, type ICardItem };
