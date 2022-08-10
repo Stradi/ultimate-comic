@@ -9,8 +9,9 @@ import {
 import { NextSeo } from 'next-seo';
 import Link from 'next/link';
 import { ParsedUrlQuery } from 'querystring';
+import { CardList } from '~/components/CardList';
+import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
-import { MiniComicList } from '~/components/MiniComicList';
 import { getAllComics } from '~/lib/database';
 import { IComicDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
@@ -60,18 +61,11 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
           {readableLetter.toUpperCase()}
         </h1>
         {letterNavigationDOM}
-        <p className="mb-2 rounded-md bg-neutral-900 p-2 text-sm">
-          <span className="font-medium text-red-600">Note:</span> Completed
-          comics have checkmark (
-          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="ri-check-line ri-fw align-middle text-green-500" />) on
-          left, ongoing comics have cross (
-          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="ri-close-line ri-fw align-middle text-red-500" />
-          ).
-        </p>
         {comics.length > 0 ? (
-          <MiniComicList comics={comics} />
+          <CardList
+            items={comics.map((comic) => comicToCardListProp(comic, true))}
+            responsive={false}
+          />
         ) : (
           <div className="mb-2 text-center">
             <p className="text-xl font-medium">No comics found</p>
@@ -192,7 +186,7 @@ export const getStaticProps: GetStaticProps<
       getAllComics(
         PAGES.ALL_COMICS.COMIC_PER_PAGE,
         pageNo * PAGES.ALL_COMICS.COMIC_PER_PAGE,
-        'name slug isCompleted',
+        'name slug issues',
         [],
         filter
       ),

@@ -1,4 +1,8 @@
-import { IComicDocument, IIssueDocument } from '~/lib/database/models';
+import {
+  IComicDocument,
+  IIssueDocument,
+  ITagDocument,
+} from '~/lib/database/models';
 import { ICardItem } from './CardList';
 
 const issueToCardListProp = (
@@ -27,4 +31,14 @@ const comicToCardListProp = (
   };
 };
 
-export { issueToCardListProp, comicToCardListProp };
+const tagToCardListProps = (tag: ITagDocument): ICardItem => {
+  return {
+    href: `/tag/${tag.slug}`,
+    title: tag.name,
+    subtitle: '',
+    image: '',
+    mini: true,
+  };
+};
+
+export { issueToCardListProp, comicToCardListProp, tagToCardListProps };

@@ -9,8 +9,9 @@ import { NextSeo } from 'next-seo';
 import Link from 'next/link';
 import { ParsedUrlQuery } from 'querystring';
 import { Button } from '~/components/Button';
+import { CardList } from '~/components/CardList';
+import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
-import { MiniComicList } from '~/components/MiniComicList';
 import { getAllTags, getTagBySlug } from '~/lib/database';
 import { IComicDocument, ITagDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
@@ -34,7 +35,10 @@ const TagPage: NextPage<ITagPageProps> = ({ tag, pageNo }: ITagPageProps) => {
           Comics about <span className="text-white">{tag.name}</span>
         </h1>
         {comics.length > 0 ? (
-          <MiniComicList comics={comics} />
+          <CardList
+            items={comics.map((comic) => comicToCardListProp(comic, false))}
+            responsive={false}
+          />
         ) : (
           <div className="text-center">
             <p className="mb-4 text-xl font-medium">No comics found</p>
@@ -137,7 +141,7 @@ export const getStaticProps: GetStaticProps<
         [
           {
             fieldName: 'comics',
-            fields: 'name slug isCompleted',
+            fields: 'name slug issues coverImage',
           },
         ],
         PAGES.TAG.COMIC_PER_PAGE,

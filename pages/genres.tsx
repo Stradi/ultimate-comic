@@ -1,7 +1,8 @@
 import { GetStaticProps, NextPage } from 'next';
 import { NextSeo } from 'next-seo';
+import { CardList } from '~/components/CardList';
+import { tagToCardListProps } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
-import { MiniTagList } from '~/components/MiniTagList';
 import { getAllTags } from '~/lib/database';
 import { ITagDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
@@ -21,7 +22,10 @@ const GenresPage: NextPage<IGenresPageProps> = ({ tags }: IGenresPageProps) => {
         <h1 className="mb-2 block text-center text-lg font-medium text-white">
           Most Popular Genres
         </h1>
-        <MiniTagList tags={tags} />
+        <CardList
+          items={tags.map((tag) => tagToCardListProps(tag))}
+          responsive={false}
+        />
       </Container>
     </>
   );
