@@ -1,9 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { ICarouselItem } from '~/components/MyCarousel/MyCarousel';
-import { IComicDocument, ITagDocument } from '../database/models';
+import { IComicDocument, ITagDocument } from '~/lib/database/models';
 
-const convertComicToCarouselProp = (comic: IComicDocument): ICarouselItem => {
+const comicToMyCarouselProp = (comic: IComicDocument): ICarouselItem => {
   const metaDOM = React.createElement('div', null, [
     `${(comic.issues as []).length} Issues`,
     ' · ',
@@ -26,7 +26,7 @@ const convertComicToCarouselProp = (comic: IComicDocument): ICarouselItem => {
   };
 };
 
-const convertGuideToCarouselProp = (guide: GuidePage): ICarouselItem => {
+const guideToMyCarouselProp = (guide: GuidePage): ICarouselItem => {
   return {
     image: guide.coverImage,
     title: guide.title,
@@ -36,4 +36,4 @@ const convertGuideToCarouselProp = (guide: GuidePage): ICarouselItem => {
   };
 };
 
-export { convertComicToCarouselProp, convertGuideToCarouselProp };
+export { comicToMyCarouselProp, guideToMyCarouselProp };

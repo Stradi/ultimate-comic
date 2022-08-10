@@ -13,6 +13,7 @@ import { SearchInput } from '~/components/SearchInput';
 import { parseQuery } from '~/lib/utils/api';
 import { SearchResult } from '~/lib/utils/search';
 import { CardList } from '~/components/CardList';
+import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 
 interface ISearchPageProps {
   comicCount: number;
@@ -146,7 +147,12 @@ const SearchPage: NextPage<ISearchPageProps> = ({
                   <span className="font-bold text-red-500">{searchTerm}</span>
                   &apos;
                 </h2>
-                <CardList comics={searchResults.comics} responsive={false} />
+                <CardList
+                  items={searchResults.comics.map((comic) =>
+                    comicToCardListProp(comic)
+                  )}
+                  responsive={false}
+                />
               </div>
             )}
           </div>
