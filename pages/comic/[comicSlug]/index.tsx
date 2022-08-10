@@ -11,6 +11,7 @@ import { ParsedUrlQuery } from 'querystring';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { IssueList } from '~/components/IssueList';
+import { Section } from '~/components/Section';
 import { ComicSeriesJsonLd } from '~/components/SEO/ComicSeriesJsonLd';
 import { getAllComics, getComicBySlug } from '~/lib/database';
 import {
@@ -48,13 +49,7 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
     <>
       <NextSeo
         title={comic.name}
-        description={`Read the latest issue of ${
-          comic.name
-        } for free. Currently ${comic.name} has ${
-          issues.length
-        } issues and latest issue is ${
-          issues[0].name
-        } is published at ${toHumanReadable(issues[0].createdAt)}.`}
+        description={comic.summary as string}
         openGraph={{
           images: [
             {
@@ -128,7 +123,9 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
             </div>
           </div>
         </div>
-        <IssueList issues={issues} slug={comic.slug} />
+        <Section title="Issues" showSeeAllButton={false} subtitle="">
+          <IssueList issues={issues} slug={comic.slug} />
+        </Section>
       </Container>
     </>
   );
@@ -175,7 +172,7 @@ export const getStaticProps: GetStaticProps<
         [
           { fieldName: 'authors', fields: 'name' },
           { fieldName: 'tags', fields: 'name slug' },
-          { fieldName: 'issues', fields: 'name slug createdAt images.0' },
+          { fieldName: 'issues', fields: 'name slug images.0' },
         ]
       ),
       true

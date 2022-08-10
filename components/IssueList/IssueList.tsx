@@ -1,16 +1,15 @@
-import Image from 'next/image';
 import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
 import { IIssueDocument } from '../../lib/database/models';
-import { SingleIssue } from './SingleIssue';
+import { CardList } from '../CardList';
+import { issueToCardListProp } from '../CardList/CardList.helper';
 
 interface IIssueListProps {
   issues: IIssueDocument[];
   slug: string;
 }
 
-//TODO: Refactor if you can
 const IssueList = ({ issues, slug }: IIssueListProps) => {
-  const SLICE_COUNT = 7;
+  const SLICE_COUNT = 9;
   const [searchTerm, setSearchTerm] = useState('');
   const [issuesDOM, setIssuesDOM] = useState<ReactElement[]>([]);
   const [showAll, setShowAll] = useState(false);
@@ -21,42 +20,45 @@ const IssueList = ({ issues, slug }: IIssueListProps) => {
         issue.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
     );
 
+    const finalDOM = [];
+
+    const bigIssues = filteredIssues.slice(0, SLICE_COUNT + 1);
+    const bigIssuesDOM = (
+      <CardList
+        items={bigIssues.map((issue) =>
+          issueToCardListProp(
+            issue,
+            false,
+            false,
+            `/comic/${slug}/${issue.slug}`
+          )
+        )}
+        responsive={false}
+      />
+    );
+
+    finalDOM.push(bigIssuesDOM);
+
     if (showAll) {
-      const bigIssues = filteredIssues
-        .slice(0, SLICE_COUNT + 1)
-        .map((issue) => (
-          <SingleIssue
-            issue={issue}
-            key={issue._id}
-            href={`${slug}/${issue.slug}`}
-            isBig={true}
-          />
-        ));
-
-      const smallIssues = filteredIssues
-        .slice(SLICE_COUNT + 1)
-        .map((issue) => (
-          <SingleIssue
-            issue={issue}
-            key={issue._id}
-            href={`${slug}/${issue.slug}`}
-            isBig={false}
-          />
-        ));
-
-      return [...bigIssues, ...smallIssues];
-    } else {
-      return filteredIssues
-        .slice(0, SLICE_COUNT)
-        .map((issue) => (
-          <SingleIssue
-            issue={issue}
-            key={issue._id}
-            href={`${slug}/${issue.slug}`}
-            isBig={true}
-          />
-        ));
+      const smallIssues = filteredIssues.slice(0, SLICE_COUNT + 1);
+      const smallIssuesDOM = (
+        <CardList
+          items={smallIssues.map((issue) =>
+            issueToCardListProp(
+              issue,
+              true,
+              false,
+              `/comic/${slug}/${issue.slug}`
+            )
+          )}
+          responsive={false}
+        />
+      );
+      finalDOM.push(<div className="pb-2"></div>);
+      finalDOM.push(smallIssuesDOM);
     }
+
+    return finalDOM;
   };
 
   useEffect(() => {
@@ -83,24 +85,17 @@ const IssueList = ({ issues, slug }: IIssueListProps) => {
           onChange={(e) => applyFilter(e)}
         />
       </div>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div className="">
         {issuesDOM}
-        {/* Render load more button if user didn't click it yet. */}
         {!showAll && issues.length > SLICE_COUNT && (
-          <button className="group relative" onClick={loadMoreIssues}>
-            <Image
-              unoptimized
-              className="rounded-md transition duration-100 group-hover:brightness-[0.5]"
-              src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNU/Q8AAU8BJijqIsEAAAAASUVORK5CYII="
-              layout="responsive"
-              width={1}
-              height={1.3}
-              alt="load more issues"
-            />
-            <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-lg text-white transition duration-100 group-hover:scale-110">
-              Load More
-            </p>
-          </button>
+          <div className="mt-2 text-center">
+            <button
+              onClick={loadMoreIssues}
+              className="rounded-md bg-red-600 px-4 py-2 text-white transition-colors duration-100 hover:bg-red-700"
+            >
+              Load All Issues
+            </button>
+          </div>
         )}
       </div>
     </div>
