@@ -186,8 +186,13 @@ export const getStaticProps: GetStaticProps<
       getAllComics(
         PAGES.ALL_COMICS.COMIC_PER_PAGE,
         pageNo * PAGES.ALL_COMICS.COMIC_PER_PAGE,
-        'name slug issues',
-        [],
+        'name slug issues tags',
+        [
+          {
+            fieldName: 'tags',
+            fields: 'name',
+          },
+        ],
         filter
       ),
       true

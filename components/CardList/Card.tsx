@@ -43,10 +43,12 @@ const MiniCard = ({ href, title, subtitle }: IMiniCardProps) => {
         className="group rounded-md bg-neutral-900 p-2 xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600"
         title={`${title}, ${subtitle}`}
       >
-        <p className="text-lg transition-colors duration-100 line-clamp-1 group-hover:text-white">
+        <p className="text-base transition-colors duration-100 line-clamp-1 group-hover:text-white xs:text-lg">
           {title}
         </p>
-        <p>{subtitle}</p>
+        <p className="truncate text-sm text-neutral-400 group-hover:text-neutral-200">
+          {subtitle}
+        </p>
       </a>
     </Link>
   );
