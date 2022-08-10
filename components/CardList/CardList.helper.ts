@@ -7,13 +7,15 @@ import { ICardItem } from './CardList';
 
 const issueToCardListProp = (
   issue: IIssueDocument,
-  mini = false
+  mini = false,
+  showSubtitle = true,
+  customURL = ''
 ): ICardItem => {
   return {
-    image: (issue.images as string[])[0],
-    href: `/comic/${issue.comic.slug}/${issue.slug}`,
-    title: issue.comic.name,
-    subtitle: issue.name,
+    image: (issue.images as string[]) ? (issue.images as string[])[0] : '',
+    href: customURL || `/comic/${issue.comic.slug}/${issue.slug}`,
+    title: showSubtitle ? issue.comic.name : issue.name,
+    subtitle: showSubtitle ? issue.name : '',
     mini,
   };
 };
