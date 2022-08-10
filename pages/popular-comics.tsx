@@ -1,7 +1,8 @@
 import { GetStaticProps, NextPage } from 'next';
 import { NextSeo } from 'next-seo';
+import { CardList } from '~/components/CardList';
+import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
-import { MiniComicList } from '~/components/MiniComicList';
 import { getAllComics } from '~/lib/database';
 import { IComicDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
@@ -23,17 +24,10 @@ const PopularComicsPage: NextPage<IPopularComicsPageProps> = ({
         <h1 className="mb-2 block text-center text-lg font-medium text-white">
           Most Popular 100 Comics
         </h1>
-        <p className="mb-2 rounded-md bg-neutral-900 p-2 text-sm">
-          <span className="font-medium text-red-600">Note:</span> Completed
-          comics have checkmark (
-          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="ri-check-line ri-fw align-middle text-green-500" />) on
-          left, ongoing comics have cross (
-          {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-          <i className="ri-close-line ri-fw align-middle text-red-500" />
-          ). Hover a comic to see its total view count.
-        </p>
-        <MiniComicList comics={comics} addViewCount />
+        <CardList
+          items={comics.map((comic) => comicToCardListProp(comic))}
+          responsive={false}
+        />
       </Container>
     </>
   );
@@ -46,9 +40,13 @@ export const getStaticProps: GetStaticProps<
     getAllComics(
       100,
       0,
-      'name slug isCompleted viewCount',
+      'name slug coverImage viewCount',
       [],
-      {},
+      {
+        coverImage: {
+          $ne: null,
+        },
+      },
       { viewCount: 'descending' }
     ),
     true
