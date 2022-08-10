@@ -32,7 +32,7 @@ const GenresPage: NextPage<IGenresPageProps> = ({ tags }: IGenresPageProps) => {
 };
 
 export const getStaticProps: GetStaticProps<IGenresPageProps> = async () => {
-  const tags = await callDb(getAllTags(-1, 0, 'slug name'), true);
+  const tags = await callDb(getAllTags(-1, 0, 'slug name comics'), true);
 
   return {
     props: {

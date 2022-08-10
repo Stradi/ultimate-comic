@@ -22,11 +22,21 @@ const comicToCardListProp = (
   comic: IComicDocument,
   mini = false
 ): ICardItem => {
+  let subtitle = '';
+  if (mini) {
+    const subtitleTags = (comic.tags as ITagDocument[])
+      .map((tag) => tag.name)
+      .join(', ');
+    subtitle = `${(comic.issues as []).length} Issues, ${subtitleTags}`;
+  } else {
+    subtitle = `${(comic.issues as []).length} Issues`;
+  }
+
   return {
     image: comic.coverImage as string,
     href: `/comic/${comic.slug}`,
     title: comic.name,
-    subtitle: `${(comic.issues as []).length} Issues`,
+    subtitle,
     mini,
   };
 };
@@ -35,7 +45,7 @@ const tagToCardListProps = (tag: ITagDocument): ICardItem => {
   return {
     href: `/tag/${tag.slug}`,
     title: tag.name,
-    subtitle: '',
+    subtitle: `${(tag.comics as IComicDocument[]).length} Comics`,
     image: '',
     mini: true,
   };
