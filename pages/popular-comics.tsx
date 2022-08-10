@@ -40,7 +40,7 @@ export const getStaticProps: GetStaticProps<
     getAllComics(
       100,
       0,
-      'name slug coverImage viewCount',
+      'name slug coverImage viewCount issues',
       [],
       {
         coverImage: {
