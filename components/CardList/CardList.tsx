@@ -6,7 +6,7 @@ interface ICardItem {
   href: string;
   title: string;
   subtitle: string;
-  // mini?: boolean;
+  mini?: boolean;
 }
 
 interface ICardListProps {
@@ -25,6 +25,7 @@ const CardList = ({ items, responsive = true }: ICardListProps) => {
         title={item.title}
         subtitle={item.subtitle}
         responsive={responsive}
+        mini={item.mini}
       />
     );
   });

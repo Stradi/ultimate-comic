@@ -9,6 +9,7 @@ interface ICardProps {
   title: string;
   subtitle: string;
   responsive?: boolean;
+  mini?: boolean;
 }
 
 const Card = ({
@@ -17,7 +18,51 @@ const Card = ({
   title,
   subtitle,
   responsive = true,
+  mini = false,
 }: ICardProps) => {
+  if (mini) {
+    return <MiniCard href={href} title={title} subtitle={subtitle} />;
+  } else {
+    return (
+      <BigCard
+        image={image}
+        href={href}
+        title={title}
+        subtitle={subtitle}
+        responsive={responsive}
+      />
+    );
+  }
+};
+
+type IMiniCardProps = Pick<ICardProps, 'href' | 'title' | 'subtitle'>;
+const MiniCard = ({ href, title, subtitle }: IMiniCardProps) => {
+  return (
+    <Link href={href} prefetch={false}>
+      <a
+        className="group rounded-md bg-neutral-900 p-2 xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600"
+        title={`${title}, ${subtitle}`}
+      >
+        <p className="text-lg transition-colors duration-100 line-clamp-1 group-hover:text-white">
+          {title}
+        </p>
+        <p>{subtitle}</p>
+      </a>
+    </Link>
+  );
+};
+
+type IBigCardProps = Pick<
+  ICardProps,
+  'image' | 'href' | 'title' | 'subtitle' | 'responsive'
+>;
+const BigCard = ({
+  image,
+  href,
+  title,
+  subtitle,
+  responsive = true,
+}: IBigCardProps) => {
   const anchorClasses = cx({
     'rounded-md p-1 xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600':
       true,
