@@ -1,15 +1,19 @@
 import type { GetStaticProps, NextPage } from 'next';
 import { CardList } from '~/components/CardList';
+import {
+  comicToCardListProp,
+  issueToCardListProp,
+} from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
 import { MyCarousel } from '~/components/MyCarousel';
+import {
+  comicToMyCarouselProp,
+  guideToMyCarouselProp,
+} from '~/components/MyCarousel/MyCarousel.helper';
 import { Section } from '~/components/Section';
 import { getAllComics, getLatestIssues, getSampleComics } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { getAllGuides } from '~/lib/utils/blog';
-import {
-  convertComicToCarouselProp,
-  convertGuideToCarouselProp,
-} from '~/lib/utils/carousel';
 import { callDb } from '~/lib/utils/database';
 
 interface IHomePageProps {
@@ -28,9 +32,7 @@ const Home: NextPage<IHomePageProps> = ({
   return (
     <Container>
       <MyCarousel
-        items={[
-          ...popularComics.map((comic) => convertComicToCarouselProp(comic)),
-        ]}
+        items={[...popularComics.map((comic) => comicToMyCarouselProp(comic))]}
       />
       <Section
         title="Latest Issues"
@@ -38,7 +40,9 @@ const Home: NextPage<IHomePageProps> = ({
         showSeeAllButton={true}
         seeAllButtonHref="/latest-issues"
       >
-        <CardList issues={newIssues} />
+        <CardList
+          items={newIssues.map((issue) => issueToCardListProp(issue))}
+        />
       </Section>
       <Section
         title="Popular Comics"
@@ -46,14 +50,18 @@ const Home: NextPage<IHomePageProps> = ({
         showSeeAllButton={true}
         seeAllButtonHref="/popular-comics"
       >
-        <CardList comics={popularComics} />
+        <CardList
+          items={popularComics.map((comic) => comicToCardListProp(comic))}
+        />
       </Section>
       <Section
         title="Can't Decide?"
         subtitle="Here are some random comics for you"
         showSeeAllButton={false}
       >
-        <CardList comics={randomComics} />
+        <CardList
+          items={randomComics.map((comic) => comicToCardListProp(comic))}
+        />
       </Section>
       <Section
         title="Still Can't Decide?"
@@ -62,7 +70,7 @@ const Home: NextPage<IHomePageProps> = ({
         seeAllButtonHref="/guides"
       >
         <MyCarousel
-          items={[...guides.map((guide) => convertGuideToCarouselProp(guide))]}
+          items={[...guides.map((guide) => guideToMyCarouselProp(guide))]}
         />
       </Section>
     </Container>

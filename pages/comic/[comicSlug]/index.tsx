@@ -71,7 +71,7 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
         description={comic.summary as string}
         startDate={releaseDate.getFullYear()}
       />
-      <Container className="px-2">
+      <Container>
         <div className="md:flex">
           <div className="mx-auto w-10/12 sm:w-3/5 md:w-2/5 lg:w-1/3">
             <Image

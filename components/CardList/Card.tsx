@@ -4,16 +4,16 @@ import Link from 'next/link';
 interface ICardProps {
   image: string;
   href: string;
-  mainText: string;
-  subText: string;
+  title: string;
+  subtitle: string;
   responsive?: boolean;
 }
 
 const Card = ({
   image,
   href,
-  mainText,
-  subText,
+  title,
+  subtitle,
   responsive = true,
 }: ICardProps) => {
   const aClassesResponsive =
@@ -28,7 +28,7 @@ const Card = ({
     <Link href={href} prefetch={false}>
       <a
         className={responsive ? aClassesResponsive : aClasses}
-        title={`${mainText}, ${subText}`}
+        title={`${title}, ${subtitle}`}
       >
         <div className={responsive ? divClassesResponsive : divClasses}>
           <div className="relative h-full w-full">
@@ -40,16 +40,16 @@ const Card = ({
               layout="fill"
               sizes={'(max-width: 640px) 50vw, 20vw'}
               className="rounded-md"
-              alt={mainText}
+              alt={title}
             />
           </div>
           <p
             className="text-lg font-medium text-white line-clamp-1"
-            title={mainText}
+            title={title}
           >
-            {mainText}
+            {title}
           </p>
-          <p>{subText}</p>
+          <p>{subtitle}</p>
         </div>
       </a>
     </Link>
