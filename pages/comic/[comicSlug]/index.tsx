@@ -20,7 +20,6 @@ import {
   ITagDocument,
 } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
-import { toHumanReadable } from '~/lib/utils/date';
 import { handle } from '~/lib/utils/promise';
 
 interface IComicSlugPageProps {
