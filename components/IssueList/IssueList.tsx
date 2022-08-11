@@ -40,7 +40,7 @@ const IssueList = ({ issues, slug }: IIssueListProps) => {
     finalDOM.push(bigIssuesDOM);
 
     if (showAll) {
-      const smallIssues = filteredIssues.slice(0, SLICE_COUNT + 1);
+      const smallIssues = filteredIssues.slice(SLICE_COUNT + 1);
       const smallIssuesDOM = (
         <CardList
           items={smallIssues.map((issue) =>
