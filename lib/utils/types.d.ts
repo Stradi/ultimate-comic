@@ -29,4 +29,5 @@ type GuidePage = {
   excerpt: string;
   publishedAt: Date;
   updatedAt: Date;
+  relatedComics: string[];
 };
