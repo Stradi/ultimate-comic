@@ -12,9 +12,14 @@ interface ICardItem {
 interface ICardListProps {
   items: ICardItem[];
   responsive?: boolean;
+  singleColumn?: boolean;
 }
 
-const CardList = ({ items, responsive = true }: ICardListProps) => {
+const CardList = ({
+  items,
+  responsive = true,
+  singleColumn = false,
+}: ICardListProps) => {
   let itemsDOM = null;
   itemsDOM = items.map((item) => {
     return (
@@ -31,10 +36,11 @@ const CardList = ({ items, responsive = true }: ICardListProps) => {
   });
 
   const classes = cx({
-    'sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5': true,
+    'flex flex-col gap-2 px-1': true,
+    'sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5': !singleColumn,
     'flex flex-nowrap overflow-x-auto xs:grid xs:grid-cols-2 xs:gap-2 xs:overflow-x-visible':
-      responsive,
-    'grid grid-cols-2 gap-2': !responsive,
+      responsive && !singleColumn,
+    'grid grid-cols-2 gap-2': !responsive && !singleColumn,
   });
   return <div className={classes}>{itemsDOM}</div>;
 };
