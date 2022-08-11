@@ -6,6 +6,18 @@ body {
   @apply bg-[#0d0d0d] text-stone-300;
 }
 
+::-webkit-scrollbar {
+  @apply rounded-full w-3;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-neutral-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-500 p-2 rounded-full hover:bg-neutral-400 transition duration-100;
+}
+
 #nprogress .bar {
   @apply bg-red-600 h-1 !important;
 }
