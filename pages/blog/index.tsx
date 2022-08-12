@@ -17,7 +17,7 @@ const BlogListPage: NextPage<IBlogListPageProps> = ({
     <Container>
       <NextSeo
         title="Articles"
-        description="Latest news and articles from comic world."
+        description="Catch up with comic world. Read latest news from comic world."
       />
       <h1 className="mb-2 block text-center text-lg font-medium text-white">
         All Articles

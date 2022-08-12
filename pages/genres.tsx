@@ -16,7 +16,7 @@ const GenresPage: NextPage<IGenresPageProps> = ({ tags }: IGenresPageProps) => {
     <>
       <NextSeo
         title="Genres"
-        description={`Most popular genres in comic history. Search in our extensive comic genres find your comics with ease. We have over ${tags.length} comic genres available.`}
+        description={`All genres available in UltimateComic website. With more than ${tags.length} genres you can easily find any comic you want.`}
       />
       <Container>
         <h1 className="mb-2 block text-center text-lg font-medium text-white">
