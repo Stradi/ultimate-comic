@@ -29,57 +29,59 @@ const GuidePage: NextPage<IGuidePageProps> = ({
   relatedComics,
 }: IGuidePageProps) => {
   return (
-    <div className="flex">
-      <Container>
-        <NextSeo
-          title={`${guide.title} Guide`}
-          description={guide.seo.description}
-        />
-        <h1 className="text-center text-5xl font-bold text-white">
-          {guide.title} Guide
-        </h1>
-        <br></br>
-        <div className="flex flex-col text-center text-sm">
-          <p>
-            <span className="text-neutral-400">By </span>
-            <span className="font-medium text-neutral-100">
-              UltimateComic staff
-            </span>
-          </p>
-          <p>
-            Published at{' '}
-            <span className="font-medium text-neutral-100">
-              {toHumanReadable(guide.publishedAt)}
-            </span>
-            , last updated at{' '}
-            <span className="font-medium text-neutral-100">
-              {toHumanReadable(guide.updatedAt)}
-            </span>
-          </p>
-        </div>
-        <br></br>
-        <div className="prose-lg prose prose-invert mx-auto prose-h1:mb-2 prose-a:text-inherit prose-a:transition prose-a:duration-100 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-li:marker:font-bold prose-li:marker:text-red-600">
-          <p>{guide.excerpt}</p>
-          <MDXRemote {...guide.content} components={MDXComponents} />
-        </div>
-      </Container>
-      <aside className="sticky inset-y-0 mx-4 hidden h-full rounded-lg bg-neutral-900 p-4 sm:block">
-        <div>
-          <h2 className="mb-4 text-2xl font-medium text-white">
-            Related Comics
-          </h2>
-          <div className="h-screen overflow-y-auto py-0.5">
-            <CardList
-              items={relatedComics.map((relatedComic) =>
-                comicToCardListProp(relatedComic)
-              )}
-              responsive={false}
-              singleColumn={true}
-            />
+    <Container>
+      <div className="flex justify-between">
+        <div className="mx-auto w-full sm:w-2/3">
+          <NextSeo
+            title={`${guide.title} Guide`}
+            description={guide.seo.description}
+          />
+          <h1 className="text-center text-5xl font-bold text-white">
+            {guide.title} Guide
+          </h1>
+          <br></br>
+          <div className="flex flex-col text-center text-sm">
+            <p>
+              <span className="text-neutral-400">By </span>
+              <span className="font-medium text-neutral-100">
+                UltimateComic staff
+              </span>
+            </p>
+            <p>
+              Published at{' '}
+              <span className="font-medium text-neutral-100">
+                {toHumanReadable(guide.publishedAt)}
+              </span>
+              , last updated at{' '}
+              <span className="font-medium text-neutral-100">
+                {toHumanReadable(guide.updatedAt)}
+              </span>
+            </p>
+          </div>
+          <br></br>
+          <div className="prose-lg prose prose-invert mx-auto max-w-full prose-h1:mb-2 prose-a:text-inherit prose-a:transition prose-a:duration-100 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-li:marker:font-bold prose-li:marker:text-red-600">
+            <p>{guide.excerpt}</p>
+            <MDXRemote {...guide.content} components={MDXComponents} />
           </div>
         </div>
-      </aside>
-    </div>
+        <aside className="sticky inset-y-0 hidden h-full w-1/4 rounded-lg sm:block">
+          <div>
+            <h2 className="pl-2 text-2xl font-medium text-white">
+              Related Comics
+            </h2>
+            <div className="h-screen overflow-y-auto px-2 pt-2">
+              <CardList
+                items={relatedComics.map((relatedComic) =>
+                  comicToCardListProp(relatedComic, true)
+                )}
+                responsive={false}
+                singleColumn={true}
+              />
+            </div>
+          </div>
+        </aside>
+      </div>
+    </Container>
   );
 };
 
@@ -117,7 +119,14 @@ export const getStaticProps: GetStaticProps<
   const relatedComics = [];
   for (const relatedComic of guide.relatedComics) {
     const [error, comic] = await callDb(
-      handle(getComicBySlug(relatedComic, 'name slug coverImage issues')),
+      handle(
+        getComicBySlug(relatedComic, 'name slug tags issues', [
+          {
+            fieldName: 'tags',
+            fields: 'name',
+          },
+        ])
+      ),
       true
     );
 
