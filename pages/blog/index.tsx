@@ -1,7 +1,8 @@
 import { GetStaticProps, NextPage } from 'next';
 import { NextSeo } from 'next-seo';
+import { CardList } from '~/components/CardList';
+import { postToCardListProps } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
-import { PostList } from '~/components/PostList';
 import { getAllPosts } from '~/lib/utils/blog';
 import { handle } from '~/lib/utils/promise';
 
@@ -23,7 +24,7 @@ const BlogListPage: NextPage<IBlogListPageProps> = ({
       </h1>
       {posts.length > 0 ? (
         <div>
-          <PostList posts={posts} />
+          <CardList items={posts.map((post) => postToCardListProps(post))} />
         </div>
       ) : (
         <div className="text-center">
