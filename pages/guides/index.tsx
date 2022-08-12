@@ -1,7 +1,8 @@
 import { GetStaticProps, NextPage } from 'next';
 import { NextSeo } from 'next-seo';
+import { CardList } from '~/components/CardList';
+import { guideToCardListProps } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
-import { GuideList } from '~/components/GuideList';
 import { getAllGuides } from '~/lib/utils/blog';
 import { handle } from '~/lib/utils/promise';
 
@@ -24,7 +25,10 @@ const GuideListPage: NextPage<IGuideListPageProps> = ({
       </h1>
       {guides.length > 0 ? (
         <div>
-          <GuideList guides={guides} />
+          <CardList
+            items={guides.map((guide) => guideToCardListProps(guide))}
+            responsive={false}
+          />
         </div>
       ) : (
         <div className="text-center">
