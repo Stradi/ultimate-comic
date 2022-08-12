@@ -34,7 +34,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
   const [, setError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const [searchCount, setSearchCount] = useState(COMICS_TO_SHOW);
+  const [skipCount, setSkipCount] = useState(0);
 
   useEffect(() => {
     setSearchTerm((query.q as string) || '');
@@ -57,7 +57,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
   };
 
   const loadMore = () => {
-    setSearchCount(searchCount + COMICS_TO_SHOW);
+    setSkipCount(skipCount + COMICS_TO_SHOW);
   };
 
   const isSearchTermValid = useCallback(() => {
@@ -70,17 +70,19 @@ const SearchPage: NextPage<ISearchPageProps> = ({
   }, [searchTerm]);
 
   useEffect(() => {
-    if (isSearchTermValid()) {
-      setSearchCount(COMICS_TO_SHOW);
-    }
-  }, [searchTerm, isSearchTermValid]);
+    setSkipCount(0);
+    setSearchResults({
+      comics: [],
+      tags: [],
+    });
+  }, [searchTerm]);
 
   useEffect(() => {
     const fn = async () => {
       setIsLoading(true);
       const [error, response] = await handle(
         fetch(
-          `/api/search?term=${searchTerm}&fields=name slug coverImage releaseDate totalViews issues&type=comics&count=${searchCount}`
+          `/api/search?term=${searchTerm}&fields=name slug coverImage issues&type=comics&count=${COMICS_TO_SHOW}&skip=${skipCount}`
         )
       );
       setIsLoading(false);
@@ -90,14 +92,22 @@ const SearchPage: NextPage<ISearchPageProps> = ({
         return;
       }
 
-      const searchResults = (await response.json()) as SearchResult;
-      setSearchResults(searchResults);
+      const newResults = (await response.json()) as SearchResult;
+      if (searchResults) {
+        setSearchResults({
+          comics: [...searchResults.comics, ...newResults.comics],
+          tags: [...searchResults.tags, ...newResults.tags],
+        });
+      } else {
+        setSearchResults(newResults);
+      }
     };
 
     if (isSearchTermValid()) {
       fn();
     }
-  }, [searchTerm, searchCount, isSearchTermValid]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm, skipCount, isSearchTermValid]);
 
   const debouncedChangeHandler = useMemo(
     () => debounce(changeHandler, 500),
@@ -132,7 +142,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
           initialValue={(query.q as string) || ''}
         />
         {isLoading && <div className="text-center">Loading...</div>}
-        {searchResults?.comics.length === 0 && (
+        {searchResults?.comics.length === 0 && searchTerm !== '' && (
           <div className="text-center">
             No search results found for &apos;
             <span className="font-bold text-red-500">{searchTerm}</span>&apos;
@@ -157,7 +167,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
             )}
           </div>
         )}
-        {searchResults?.comics.length === searchCount && (
+        {searchResults?.comics.length === COMICS_TO_SHOW + skipCount && (
           <div className="flex justify-center">
             <a
               onClick={loadMore}
