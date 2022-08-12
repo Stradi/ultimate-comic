@@ -127,7 +127,18 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
           </h2>
           {issueNavDOM}
         </div>
-        <Reader images={issue.images as string[]} onFinished={goNextIssue} />
+        {(issue.images as string[]).length > 0 ? (
+          <Reader images={issue.images as string[]} onFinished={goNextIssue} />
+        ) : (
+          <div className="mt-32 text-center sm:mt-44">
+            <p className="text-4xl font-medium text-white">
+              Looks like this issue doesn&apos;t exists.
+            </p>
+            <p className="text-xl">
+              We will try to add this issue fast as possible.
+            </p>
+          </div>
+        )}
       </div>
     </>
   );
