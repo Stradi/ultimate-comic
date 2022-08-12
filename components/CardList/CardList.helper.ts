@@ -53,4 +53,18 @@ const tagToCardListProps = (tag: ITagDocument): ICardItem => {
   };
 };
 
-export { issueToCardListProp, comicToCardListProp, tagToCardListProps };
+const guideToCardListProps = (guide: GuidePage): ICardItem => {
+  return {
+    image: guide.coverImage,
+    href: `/guides/${guide.slug}`,
+    title: guide.title,
+    subtitle: '',
+  };
+};
+
+export {
+  issueToCardListProp,
+  comicToCardListProp,
+  tagToCardListProps,
+  guideToCardListProps,
+};
