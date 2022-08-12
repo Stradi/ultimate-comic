@@ -18,7 +18,7 @@ const GuideListPage: NextPage<IGuideListPageProps> = ({
     <Container>
       <NextSeo
         title="Guides"
-        description="Don't know where to start reading a comic. Check out these guides for specific characters and events."
+        description="Don't know where to start reading a comic. Check out these extensive guides we prepared for different characters and events."
       />
       <h1 className="mb-2 block text-center text-lg font-medium text-white">
         All Guides

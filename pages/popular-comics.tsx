@@ -18,7 +18,7 @@ const PopularComicsPage: NextPage<IPopularComicsPageProps> = ({
     <>
       <NextSeo
         title="Popular Comics"
-        description="Most popular comics in our extensive comic database. See which comic have most views and read it for free. Marvel, DC Comics, Valiant Comics and more."
+        description="Most popular comics in our extensive comic database. See which comic have most views and read it for free. Read Marvel, DC Comics, Valiant Comics and more."
       />
       <Container>
         <h1 className="mb-2 block text-center text-lg font-medium text-white">
