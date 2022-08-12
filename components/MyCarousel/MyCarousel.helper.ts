@@ -10,7 +10,7 @@ const comicToMyCarouselProp = (comic: IComicDocument): ICarouselItem => {
     ...(comic.tags as ITagDocument[]).map((tag) => {
       return React.createElement(
         Link,
-        { href: `/tag/${tag.slug}` },
+        { href: `/tag/${tag.slug}`, key: `${comic.name}, ${tag.name}` },
         `${tag.name} `
       );
     }),
@@ -22,7 +22,7 @@ const comicToMyCarouselProp = (comic: IComicDocument): ICarouselItem => {
     subtitle: comic.summary as string,
     buttonText: 'Read Now',
     href: `/comic/${comic.slug}`,
-    meta: React.createElement('div', null, [metaDOM]),
+    meta: metaDOM,
   };
 };
 
