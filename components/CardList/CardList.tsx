@@ -36,7 +36,7 @@ const CardList = ({
   });
 
   const classes = cx({
-    'flex flex-col gap-2 px-1': true,
+    'flex flex-col gap-2 px-1': singleColumn,
     'sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5': !singleColumn,
     'flex flex-nowrap overflow-x-auto xs:grid xs:grid-cols-2 xs:gap-2 xs:overflow-x-visible':
       responsive && !singleColumn,
