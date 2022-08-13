@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { resolve } from 'path';
 import { apiHandler, parseQuery } from '~/lib/utils/api';
 import { ApiError } from '~/lib/utils/error';
-import { deleteAllFilesFromDirectory } from '~/lib/utils/fs';
 
 //TODO: Refactor!
 const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -47,16 +45,7 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
         absPath = `/${path}`;
       }
 
-      //TODO: Append a url to sitemap instead of regenerating?
-      if (absPath === '/sitemap') {
-        return {
-          promise: deleteAllFilesFromDirectory(
-            resolve(process.cwd(), 'public', 'sitemap')
-          ),
-        };
-      } else {
-        return { promise: res.revalidate(absPath), path: absPath };
-      }
+      return { promise: res.revalidate(absPath), path: absPath };
     });
 
     const values = await Promise.allSettled(promises.map((p) => p.promise)); // array of results
@@ -85,11 +74,7 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
     absPath = `/${query.path}`;
   }
 
-  const result = await Promise.allSettled([
-    absPath === '/sitemap'
-      ? deleteAllFilesFromDirectory(resolve(process.cwd(), 'public', 'sitemap'))
-      : res.revalidate(absPath),
-  ]);
+  const result = await Promise.allSettled([res.revalidate(absPath)]);
   if (result[0].status === 'fulfilled') {
     return res.status(200).json({
       data: {
