@@ -12,7 +12,8 @@
     "lint": "next lint",
     "prettier": "prettier --write .",
     "prepare": "husky install",
-    "create": "node scripts/create.mjs"
+    "create": "node scripts/create.mjs",
+    "finalize-guide": "node scripts/finalize-guide.mjs"
   },
   "dependencies": {
     "classnames": "^2.3.1",
