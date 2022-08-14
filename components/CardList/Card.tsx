@@ -72,7 +72,7 @@ const BigCard = ({
   });
 
   const divClasses = cx({
-    'aspect-[1/1.3]': true,
+    'aspect-[0.65]': true,
     'flex w-full flex-col xs:w-auto': responsive,
   });
 
