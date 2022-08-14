@@ -18,7 +18,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     window.gtag('config', process.env.NEXT_PUBLIC_GA_ID, {
       page_path: url,
     });
-    console.log('Send GA event for url: ', url);
     NProgress.done();
   });
   Router.events.on('routeChangeError', () => NProgress.done());
