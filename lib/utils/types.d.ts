@@ -29,5 +29,19 @@ type GuidePage = {
   excerpt: string;
   publishedAt: Date;
   updatedAt: Date;
-  relatedComics: string[];
+  metadata: GuideMetadata;
+};
+
+type GuideMetadata = Partial<CharacterGuideMetadata>;
+
+type CharacterGuideMetadata = {
+  superName: string;
+  realName: string;
+  aliases: string[];
+  publisher: string;
+  creators: string[];
+  gender: string;
+  birthday: string;
+  died: string;
+  related: string[];
 };

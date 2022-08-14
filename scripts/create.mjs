@@ -29,6 +29,9 @@ coverImage: ''
 seoDescription: ''
 publishedAt: %s
 updatedAt: %s
+excerpt: ''
+metadata:
+  sample: 'sample'
 ---
 `;
 

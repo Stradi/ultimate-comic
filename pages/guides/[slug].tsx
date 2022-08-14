@@ -18,16 +18,40 @@ import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 import { callDb } from '~/lib/utils/database';
 import { getComicBySlug } from '~/lib/database';
 import { IComicDocument } from '~/lib/database/models';
+import { convertFromCamelCase } from '~/lib/utils/text';
 
 interface IGuidePageProps {
   guide: GuidePage;
-  relatedComics: IComicDocument[];
+  metadata: GuideMetadata;
+  related: IComicDocument[];
 }
 
 const GuidePage: NextPage<IGuidePageProps> = ({
   guide,
-  relatedComics,
+  metadata,
+  related,
 }: IGuidePageProps) => {
+  const metadataTableDOM = Object.keys(metadata).map((name) => {
+    if (name === 'related') {
+      return null;
+    }
+    const label = convertFromCamelCase(name);
+    const rawValue = metadata[name as keyof GuideMetadata];
+    let value = null;
+    if (Array.isArray(rawValue)) {
+      value = rawValue.map((v) => <p key={v}>{v}</p>);
+    } else {
+      value = rawValue;
+    }
+
+    return (
+      <tr key={label} className="border-b border-neutral-800">
+        <td className="font-medium text-neutral-100">{label}</td>
+        <td className="text-sm">{value}</td>
+      </tr>
+    );
+  });
+
   return (
     <Container>
       <div className="flex justify-between">
@@ -64,21 +88,33 @@ const GuidePage: NextPage<IGuidePageProps> = ({
             <MDXRemote {...guide.content} components={MDXComponents} />
           </div>
         </div>
-        <aside className="sticky inset-y-0 hidden h-full w-1/4 rounded-lg sm:block">
+        <aside className="sticky inset-y-0 hidden h-screen w-1/4 overflow-y-auto overflow-x-hidden rounded-lg sm:block">
           <div>
             <h2 className="pl-2 text-2xl font-medium text-white">
-              Related Comics
+              General Information
             </h2>
-            <div className="h-screen overflow-y-auto px-2 pt-2">
-              <CardList
-                items={relatedComics.map((relatedComic) =>
-                  comicToCardListProp(relatedComic, true)
-                )}
-                responsive={false}
-                singleColumn={true}
-              />
+            <div className="mr-2 rounded-md bg-neutral-900 px-2 pt-2">
+              <table className="w-full">
+                <tbody>{metadataTableDOM}</tbody>
+              </table>
             </div>
           </div>
+          {related.length > 0 && (
+            <div className="mt-4">
+              <h2 className="pl-2 text-2xl font-medium text-white">
+                Related Comics
+              </h2>
+              <div className="h-screen pt-2">
+                <CardList
+                  items={related.map((relatedComic) =>
+                    comicToCardListProp(relatedComic, true)
+                  )}
+                  responsive={false}
+                  singleColumn={true}
+                />
+              </div>
+            </div>
+          )}
         </aside>
       </div>
     </Container>
@@ -117,28 +153,31 @@ export const getStaticProps: GetStaticProps<
   }
 
   const relatedComics = [];
-  for (const relatedComic of guide.relatedComics) {
-    const [error, comic] = await callDb(
-      handle(
-        getComicBySlug(relatedComic, 'name slug tags issues', [
-          {
-            fieldName: 'tags',
-            fields: 'name',
-          },
-        ])
-      ),
-      true
-    );
+  if (guide.metadata.related) {
+    for (const relatedComic of guide.metadata.related) {
+      const [error, comic] = await callDb(
+        handle(
+          getComicBySlug(relatedComic, 'name slug tags issues', [
+            {
+              fieldName: 'tags',
+              fields: 'name',
+            },
+          ])
+        ),
+        true
+      );
 
-    if (!error && comic !== null) {
-      relatedComics.push(comic as IComicDocument);
+      if (!error && comic !== null) {
+        relatedComics.push(comic as IComicDocument);
+      }
     }
   }
 
   return {
     props: {
       guide: JSON.parse(JSON.stringify(guide)),
-      relatedComics,
+      metadata: (guide as GuidePage).metadata,
+      related: relatedComics,
     },
   };
 };

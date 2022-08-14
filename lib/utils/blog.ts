@@ -136,7 +136,7 @@ const getAllGuides = async () => {
     excerpt: content.data.excerpt,
     publishedAt: new Date(content.data.publishedAt),
     updatedAt: new Date(content.data.updatedAt),
-    relatedComics: content.data.relatedComics,
+    metadata: content.data.metadata,
   })) as GuidePage[];
 };
 
@@ -166,7 +166,7 @@ const getGuideBySlug = async (slug: string) => {
     excerpt: mdContent.data.excerpt,
     publishedAt: new Date(mdContent.data.publishedAt),
     updatedAt: new Date(mdContent.data.updatedAt),
-    relatedComics: mdContent.data.relatedComics,
+    metadata: mdContent.data.metadata,
   } as GuidePage;
 };
 
