@@ -4,24 +4,51 @@ interface IOptions {
   publicPath: string;
 }
 
-interface ImageNode {
+type NodePosition = {
+  start: {
+    line: number;
+    column: number;
+    offset: number;
+  };
+  end: {
+    line: number;
+    column: number;
+    offset: number;
+  };
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type NodeChildren = any[];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type MdxNodeData = any;
+
+type MdxImageNodeAttributes = [
+  {
+    type: string;
+    name: string;
+    value: string;
+  }
+];
+
+type MdxImageNode = {
+  type: string;
+  name: string;
+  attributes: MdxImageNodeAttributes;
+  children: NodeChildren;
+  position: NodePosition;
+  data: MdxNodeData;
+};
+
+type MdImageNode = {
   type: string;
   title: string;
   url: string;
   alt: string;
-  position: {
-    start: {
-      line: number;
-      column: number;
-      offset: number;
-    };
-    end: {
-      line: number;
-      column: number;
-      offset: number;
-    };
-  };
-}
+  position: NodePosition;
+};
+
+type ImageNode = MdxImageNode | MdImageNode;
 
 const remarkNextImage = ({ publicPath }: IOptions) => {
   if (!publicPath) {
@@ -31,10 +58,20 @@ const remarkNextImage = ({ publicPath }: IOptions) => {
   }
 
   const visitor = (node: ImageNode) => {
-    node.url = `${publicPath}/${node.url}`;
+    if (
+      node.type === 'mdxJsxFlowElement' &&
+      (node as MdxImageNode).name === 'img'
+    ) {
+      const n = node as MdxImageNode;
+      n.attributes[0].value = `${publicPath}/${n.attributes[0].value}`;
+    } else if (node.type === 'image') {
+      const n = node as MdImageNode;
+      n.url = `${publicPath}/${n.url}`;
+    }
   };
 
   const transform = (tree: Node) => {
+    visit(tree, 'mdxJsxFlowElement', visitor);
     visit(tree, 'image', visitor);
   };
 
