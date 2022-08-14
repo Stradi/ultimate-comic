@@ -19,7 +19,7 @@ interface IMyCarouselProps {
 const MyCarousel = ({ items }: IMyCarouselProps) => {
   let itemsDOM = null;
   const imageClasses = 'w-full md:h-[500px] h-[300px]';
-  itemsDOM = items.map((item) => {
+  itemsDOM = items.map((item, idx) => {
     return (
       <div className={imageClasses} key={item.title}>
         <div className="z-50 flex h-full flex-col bg-gradient-to-t from-[#0d0d0d] to-transparent px-4 text-left text-white sm:px-16">
@@ -41,7 +41,8 @@ const MyCarousel = ({ items }: IMyCarouselProps) => {
             objectFit="cover"
             objectPosition="top"
             alt={item.title}
-            priority={true}
+            priority={idx === 0 ? true : false}
+            sizes={'(max-width: 640px) 50vw, 33vw'}
           />
         </div>
       </div>
