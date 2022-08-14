@@ -42,6 +42,11 @@ const SearchPage: NextPage<ISearchPageProps> = ({
 
   const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
+    setSkipCount(0);
+    setSearchResults({
+      comics: [],
+      tags: [],
+    });
     router.push(
       {
         pathname: '/search',
@@ -67,14 +72,6 @@ const SearchPage: NextPage<ISearchPageProps> = ({
     }
 
     return true;
-  }, [searchTerm]);
-
-  useEffect(() => {
-    setSkipCount(0);
-    setSearchResults({
-      comics: [],
-      tags: [],
-    });
   }, [searchTerm]);
 
   useEffect(() => {
