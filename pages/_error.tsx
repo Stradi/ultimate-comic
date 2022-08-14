@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/nextjs';
 import { NextPageContext } from 'next';
 import NextErrorComponent from 'next/error';
 import { Button } from '~/components/Button';
@@ -25,7 +24,6 @@ const CustomErrorComponent = ({ statusCode }: ICustomErrorComponentProps) => {
 };
 
 CustomErrorComponent.getInitialProps = async (contextData: NextPageContext) => {
-  await Sentry.captureUnderscoreErrorException(contextData);
   return NextErrorComponent.getInitialProps(contextData);
 };
 

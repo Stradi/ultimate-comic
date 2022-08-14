@@ -15,7 +15,6 @@
     "create": "node scripts/create.mjs"
   },
   "dependencies": {
-    "@sentry/nextjs": "^7.8.0",
     "classnames": "^2.3.1",
     "fs-extra": "^10.1.0",
     "gray-matter": "^4.0.3",
