@@ -54,7 +54,7 @@ const GuidePage: NextPage<IGuidePageProps> = ({
 
   return (
     <Container>
-      <div className="flex justify-between">
+      <div className="sm:flex sm:justify-between">
         <div className="mx-auto w-full sm:w-2/3">
           <NextSeo
             title={`${guide.title} Guide`}
@@ -88,7 +88,7 @@ const GuidePage: NextPage<IGuidePageProps> = ({
             <MDXRemote {...guide.content} components={MDXComponents} />
           </div>
         </div>
-        <aside className="sticky inset-y-0 hidden h-screen w-1/4 overflow-y-auto overflow-x-hidden rounded-lg sm:block">
+        <aside className="inset-y-0 block h-screen w-full overflow-y-auto overflow-x-hidden rounded-lg sm:sticky sm:w-1/4">
           <div>
             <h2 className="pl-2 text-2xl font-medium text-white">
               General Information
