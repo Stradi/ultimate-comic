@@ -88,7 +88,7 @@ const GuidePage: NextPage<IGuidePageProps> = ({
             <MDXRemote {...guide.content} components={MDXComponents} />
           </div>
         </div>
-        <aside className="inset-y-0 block h-screen w-full overflow-y-auto overflow-x-hidden rounded-lg sm:sticky sm:w-1/4">
+        <aside className="inset-y-0 block h-full w-full rounded-lg sm:sticky sm:h-screen sm:w-1/4 sm:overflow-y-auto sm:overflow-x-hidden">
           <div>
             <h2 className="pl-2 text-2xl font-medium text-white">
               General Information
@@ -104,7 +104,7 @@ const GuidePage: NextPage<IGuidePageProps> = ({
               <h2 className="pl-2 text-2xl font-medium text-white">
                 Related Comics
               </h2>
-              <div className="h-screen pt-2">
+              <div className="pt-2 sm:h-screen">
                 <CardList
                   items={related.map((relatedComic) =>
                     comicToCardListProp(relatedComic, true)
