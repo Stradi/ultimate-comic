@@ -93,8 +93,13 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
       break;
   }
 
+  const escapedTerm = (query.term as string).replace(
+    /[.*+?^${}()|[\]\\]/g,
+    '\\$&'
+  );
+
   const [searchError, searchResult] = await handle<SearchResult>(
-    fn(query.term as string, count, skip, query.fields as string)
+    fn(escapedTerm, count, skip, query.fields as string)
   );
 
   if (searchError) return Promise.reject(searchError);
