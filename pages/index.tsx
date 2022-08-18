@@ -37,8 +37,8 @@ const Home: NextPage<IHomePageProps> = ({
       <Section
         title="Latest Issues"
         subtitle="Issues fresh out of oven"
-        showSeeAllButton={true}
-        seeAllButtonHref="/latest-issues"
+        showSeeAllButton={false}
+        // seeAllButtonHref="/latest-issues"
       >
         <CardList
           items={newIssues.map((issue) => issueToCardListProp(issue))}
