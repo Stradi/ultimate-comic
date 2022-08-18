@@ -21,8 +21,8 @@ const SearchInput = ({
 }: ISearchInputProps) => {
   return (
     <div className="w-full">
-      <div className="my-8 mx-auto flex h-full w-full justify-center">
-        <div className="relative flex w-full md:w-1/3">
+      <div className="flex h-full w-full">
+        <div className="relative flex w-full">
           <input
             type={'text'}
             className="absolute top-0 left-0 w-full rounded-md bg-neutral-800 p-2 pl-9 text-neutral-300 ring-2 ring-neutral-700 transition duration-100 placeholder:font-medium placeholder:text-neutral-700 focus:outline-none focus:ring-red-600 focus:placeholder:text-neutral-500"
