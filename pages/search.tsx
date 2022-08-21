@@ -186,7 +186,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
                       )}
                     </>
                   )}
-                  {searchResults.comics.length === 0 && (
+                  {searchResults.comics.length === 0 && !isLoading && (
                     <div className="flex flex-col justify-center gap-2">
                       <p className="text-center text-xl font-medium text-white">
                         No comics found for &apos;
