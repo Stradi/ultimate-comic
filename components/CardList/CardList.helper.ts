@@ -3,7 +3,6 @@ import {
   IIssueDocument,
   ITagDocument,
 } from '~/lib/database/models';
-import { toHumanReadable } from '~/lib/utils/date';
 import { ICardItem } from './CardList';
 
 const issueToCardListProp = (
@@ -63,19 +62,9 @@ const guideToCardListProps = (guide: GuidePage): ICardItem => {
   };
 };
 
-const postToCardListProps = (post: BlogPost): ICardItem => {
-  return {
-    image: post.coverImage as string,
-    href: `/blog/${post.slug}`,
-    title: post.title,
-    subtitle: `Published at ${toHumanReadable(post.publishedAt)}`,
-  };
-};
-
 export {
   issueToCardListProp,
   comicToCardListProp,
   tagToCardListProps,
   guideToCardListProps,
-  postToCardListProps,
 };

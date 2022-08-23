@@ -13,62 +13,10 @@ import { getAllFilesInDirectory, getFileContent } from './fs';
 import { handle } from './promise';
 
 const BLOG_DIRECTORY = path.join(process.cwd(), '_blog');
-const POSTS_DIRECTORY = path.join(BLOG_DIRECTORY, 'posts');
 const STATIC_PAGES_DIRECTORY = path.join(BLOG_DIRECTORY, 'staticPages');
 const GUIDE_PAGES_DIRECTORY = path.join(BLOG_DIRECTORY, 'guides');
 
 const PUBLIC_IMAGES_PATH = path.join(process.cwd(), 'public', 'images');
-
-const getAllPosts = async () => {
-  const [error, allPostsDirectory] = await handle(
-    getAllFilesInDirectory(POSTS_DIRECTORY)
-  );
-  if (error) return Promise.reject(error);
-
-  const mdContents = allPostsDirectory.flatMap((slug) =>
-    matter(fs.readFileSync(path.join(POSTS_DIRECTORY, slug, 'index.mdx')))
-  );
-
-  return mdContents.map((content) => ({
-    title: content.data.title,
-    slug: content.data.slug,
-    coverImage: content.data.coverImage || null,
-    content: content.content,
-    seo: {
-      description: content.data.seoDescription,
-    },
-    publishedAt: new Date(content.data.publishedAt),
-    updatedAt: new Date(content.data.updatedAt),
-  })) as BlogPost[];
-};
-
-const getBlogPostBySlug = async (slug: string) => {
-  const [error, fileContents] = await handle(
-    getFileContent(path.join(POSTS_DIRECTORY, slug, 'index.mdx'))
-  );
-  if (error) return Promise.reject(error);
-
-  moveImagesToPublicFolder(slug, 'blog');
-
-  const mdContent = matter(fileContents);
-
-  const [conversionError, mdx] = await handle(
-    convertMdxToHtml(mdContent.content, 'blog', mdContent.data.slug)
-  );
-  if (conversionError) return Promise.reject(conversionError);
-
-  return {
-    title: mdContent.data.title,
-    slug: mdContent.data.slug,
-    coverImage: mdContent.data.coverImage || null,
-    content: mdx,
-    seo: {
-      description: mdContent.data.seoDescription,
-    },
-    publishedAt: new Date(mdContent.data.publishedAt),
-    updatedAt: new Date(mdContent.data.updatedAt),
-  } as BlogPost;
-};
 
 const getAllStaticPages = async () => {
   const [error, allStaticPagesDirectory] = await handle(
@@ -172,7 +120,7 @@ const getGuideBySlug = async (slug: string) => {
 
 const convertMdxToHtml = async (
   content: string,
-  type: 'blog' | 'staticpage' | 'guide',
+  type: 'staticpage' | 'guide',
   slug: string
 ) => {
   const [error, html] = await handle(
@@ -209,14 +157,10 @@ const convertMdxToHtml = async (
 
 const moveImagesToPublicFolder = (
   slug: string,
-  type: 'blog' | 'staticpage' | 'guide'
+  type: 'staticpage' | 'guide'
 ) => {
   const directory = path.join(
-    type === 'blog'
-      ? POSTS_DIRECTORY
-      : type === 'staticpage'
-      ? STATIC_PAGES_DIRECTORY
-      : GUIDE_PAGES_DIRECTORY,
+    type === 'staticpage' ? STATIC_PAGES_DIRECTORY : GUIDE_PAGES_DIRECTORY,
     slug,
     'images'
   );
@@ -237,8 +181,6 @@ const moveImagesToPublicFolder = (
 };
 
 export {
-  getBlogPostBySlug,
-  getAllPosts,
   getStaticPageBySlug,
   getAllStaticPages,
   getGuideBySlug,
