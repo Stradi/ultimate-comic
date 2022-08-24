@@ -3,6 +3,7 @@ import { NextSeo } from 'next-seo';
 import { CardList } from '~/components/CardList';
 import { guideToCardListProps } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
+import { Section } from '~/components/Section';
 import { getAllGuides } from '~/lib/utils/blog';
 import { handle } from '~/lib/utils/promise';
 
@@ -20,21 +21,24 @@ const GuideListPage: NextPage<IGuideListPageProps> = ({
         title="Guides"
         description="Don't know where to start reading a comic. Check out these extensive guides we prepared for different characters and events."
       />
-      <h1 className="mb-2 block text-center text-lg font-medium text-white">
-        All Guides
-      </h1>
-      {guides.length > 0 ? (
-        <div>
-          <CardList
-            items={guides.map((guide) => guideToCardListProps(guide))}
-            responsive={false}
-          />
-        </div>
-      ) : (
-        <div className="text-center">
-          <p className="text-xl font-medium">There are no guides, yet.</p>
-        </div>
-      )}
+      <Section
+        title="All Guides"
+        subtitle="All of our guides for specific characters and events"
+        showSeeAllButton={false}
+      >
+        {guides.length > 0 ? (
+          <div>
+            <CardList
+              items={guides.map((guide) => guideToCardListProps(guide))}
+              responsive={false}
+            />
+          </div>
+        ) : (
+          <div className="text-center">
+            <p className="text-xl font-medium">There are no guides, yet.</p>
+          </div>
+        )}
+      </Section>
     </Container>
   );
 };
