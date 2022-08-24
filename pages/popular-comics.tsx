@@ -3,6 +3,7 @@ import { NextSeo } from 'next-seo';
 import { CardList } from '~/components/CardList';
 import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
+import { Section } from '~/components/Section';
 import { getAllComics } from '~/lib/database';
 import { IComicDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
@@ -21,13 +22,16 @@ const PopularComicsPage: NextPage<IPopularComicsPageProps> = ({
         description="Most popular comics in our extensive comic database. See which comic have most views and read it for free. Read Marvel, DC Comics, Valiant Comics and more."
       />
       <Container>
-        <h1 className="mb-2 block text-center text-lg font-medium text-white">
-          Most Popular 100 Comics
-        </h1>
-        <CardList
-          items={comics.map((comic) => comicToCardListProp(comic))}
-          responsive={false}
-        />
+        <Section
+          title="Popular Comics"
+          subtitle={`Most read ${comics.length} comics from UltimateComic`}
+          showSeeAllButton={false}
+        >
+          <CardList
+            items={comics.map((comic) => comicToCardListProp(comic))}
+            responsive={false}
+          />
+        </Section>
       </Container>
     </>
   );
