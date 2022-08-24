@@ -33,11 +33,6 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/blog',
-        destination: 'https://blog.ultimatecomic.com',
-        permanent: true,
-      },
-      {
         source: '/blog/:slug',
         destination: 'https://blog.ultimatecomic.com/:slug',
         permanent: true,
