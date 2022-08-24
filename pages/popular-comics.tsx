@@ -56,6 +56,7 @@ export const getStaticProps: GetStaticProps<
     props: {
       comics: popularComics,
     },
+    revalidate: 60,
   };
 };
 

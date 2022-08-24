@@ -38,6 +38,7 @@ export const getStaticProps: GetStaticProps<IGenresPageProps> = async () => {
     props: {
       tags,
     },
+    revalidate: 60,
   };
 };
 

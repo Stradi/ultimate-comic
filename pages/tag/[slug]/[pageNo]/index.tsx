@@ -163,6 +163,7 @@ export const getStaticProps: GetStaticProps<
       tag,
       pageNo,
     },
+    revalidate: 60,
   };
 };
 
