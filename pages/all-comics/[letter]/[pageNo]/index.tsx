@@ -12,6 +12,7 @@ import { ParsedUrlQuery } from 'querystring';
 import { CardList } from '~/components/CardList';
 import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
+import { Section } from '~/components/Section';
 import { getAllComics } from '~/lib/database';
 import { IComicDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
@@ -57,87 +58,94 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
         description="Full list of the largest comics database for Marvel, DC Comics, Dark Horse Comics, Image Comics, Valiant Comics, IDW Publishing Comics and more."
       />
       <Container>
-        <h1 className="mb-2 block text-center text-lg font-medium text-white">
-          {readableLetter.toUpperCase()}
-        </h1>
-        {letterNavigationDOM}
-        {comics.length > 0 ? (
-          <CardList
-            items={comics.map((comic) => comicToCardListProp(comic, true))}
-            responsive={false}
-          />
-        ) : (
-          <div className="mb-2 text-center">
-            <p className="text-xl font-medium">No comics found</p>
-            <p className="text-sm text-neutral-500">
-              Try selecting another letter
-            </p>
-          </div>
-        )}
-        {comics.length > 0 && letterNavigationDOM}
-        <div className="flex justify-center gap-1">
-          {pageNo !== 0 ? (
-            <>
-              <Link
-                href={`/all-comics/${letter}/${pageNo - 1}`}
-                prefetch={false}
-              >
-                <a className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
-                  {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-                  <i className="ri-arrow-left-s-line ri-fw align-middle" />
-                </a>
-              </Link>
-              <Link
-                href={`/all-comics/${letter}/${pageNo - 1}`}
-                prefetch={false}
-              >
-                <a className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
-                  {pageNo - 1}
-                </a>
-              </Link>
-            </>
-          ) : (
-            <>
-              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
-                -
+        <Section
+          title={`${readableLetter.toUpperCase()}`}
+          subtitle={`Comics starting with ${readableLetter.toUpperCase()}`}
+          showSeeAllButton={false}
+        >
+          <>
+            {letterNavigationDOM}
+            {comics.length > 0 ? (
+              <CardList
+                items={comics.map((comic) => comicToCardListProp(comic, true))}
+                responsive={false}
+              />
+            ) : (
+              <div className="mb-2 text-center">
+                <p className="text-xl font-medium">No comics found</p>
+                <p className="text-sm text-neutral-500">
+                  Try selecting another letter
+                </p>
               </div>
-              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
-                -
+            )}
+            {comics.length > 0 && letterNavigationDOM}
+            <div className="flex justify-center gap-1">
+              {pageNo !== 0 ? (
+                <>
+                  <Link
+                    href={`/all-comics/${letter}/${pageNo - 1}`}
+                    prefetch={false}
+                  >
+                    <a className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
+                      {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+                      <i className="ri-arrow-left-s-line ri-fw align-middle" />
+                    </a>
+                  </Link>
+                  <Link
+                    href={`/all-comics/${letter}/${pageNo - 1}`}
+                    prefetch={false}
+                  >
+                    <a className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
+                      {pageNo - 1}
+                    </a>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
+                    -
+                  </div>
+                  <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
+                    -
+                  </div>
+                </>
+              )}
+              <div className="rounded-md bg-neutral-800 py-1 px-3">
+                {pageNo}
               </div>
-            </>
-          )}
-          <div className="rounded-md bg-neutral-800 py-1 px-3">{pageNo}</div>
-          {comics.length == PAGES.ALL_COMICS.COMIC_PER_PAGE ? (
-            <>
-              <Link
-                href={`/all-comics/${letter}/${pageNo + 1}`}
-                prefetch={false}
-              >
-                <a className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
-                  {pageNo + 1}
-                </a>
-              </Link>
-              <Link
-                href={`/all-comics/${letter}/${pageNo + 1}`}
-                prefetch={false}
-              >
-                <a className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
-                  {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
-                  <i className="ri-arrow-right-s-line ri-fw align-middle" />
-                </a>
-              </Link>
-            </>
-          ) : (
-            <>
-              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
-                -
-              </div>
-              <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
-                -
-              </div>
-            </>
-          )}
-        </div>
+              {comics.length == PAGES.ALL_COMICS.COMIC_PER_PAGE ? (
+                <>
+                  <Link
+                    href={`/all-comics/${letter}/${pageNo + 1}`}
+                    prefetch={false}
+                  >
+                    <a className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
+                      {pageNo + 1}
+                    </a>
+                  </Link>
+                  <Link
+                    href={`/all-comics/${letter}/${pageNo + 1}`}
+                    prefetch={false}
+                  >
+                    <a className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600">
+                      {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
+                      <i className="ri-arrow-right-s-line ri-fw align-middle" />
+                    </a>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
+                    -
+                  </div>
+                  <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
+                    -
+                  </div>
+                </>
+              )}
+            </div>
+          </>
+        </Section>
       </Container>
     </>
   );
