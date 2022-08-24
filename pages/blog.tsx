@@ -1,10 +1,10 @@
-import { GetStaticProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 
 const BlogPage: NextPage = () => {
   return <></>;
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     redirect: {
       destination: 'https://blog.ultimatecomic.com',
