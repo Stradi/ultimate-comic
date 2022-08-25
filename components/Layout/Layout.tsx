@@ -1,3 +1,4 @@
+import { CookieConsent } from '../CookieConsent';
 import { Footer } from '../Footer';
 import { INavbarProps, Navbar } from '../Navbar';
 
@@ -35,6 +36,7 @@ const Layout = ({ children }: ILayoutProps) => {
   };
   return (
     <div className="flex min-h-screen flex-col">
+      <CookieConsent />
       <Navbar items={navbarItems.items} />
       <br></br>
       <main className="flex-1">{children}</main>
