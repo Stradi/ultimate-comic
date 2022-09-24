@@ -130,7 +130,7 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
   );
 
   const randomComics = await callDb(
-    getSampleComics(5, 'name slug coverImage releaseDate viewCount issues'),
+    getSampleComics(10, 'name slug coverImage releaseDate viewCount issues'),
     true
   );
 
