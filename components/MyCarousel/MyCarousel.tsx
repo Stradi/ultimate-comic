@@ -22,9 +22,11 @@ const MyCarousel = ({ items }: IMyCarouselProps) => {
   itemsDOM = items.map((item, idx) => {
     return (
       <div className={imageClasses} key={item.title}>
-        <div className="z-50 flex h-full flex-col bg-gradient-to-t from-[#0d0d0d] to-transparent px-4 text-left text-white sm:px-16">
+        <div className="z-50 flex h-full flex-col bg-gradient-to-t from-[#0d0d0d] to-transparent px-4 text-left text-white/75 sm:px-16">
           <div className="mt-auto flex flex-col gap-2 pb-8 sm:pb-16">
-            <p className="text-3xl font-bold sm:text-6xl">{item.title}</p>
+            <p className="text-3xl font-bold text-white sm:text-6xl">
+              {item.title}
+            </p>
             {item.meta && (
               <div className="text-base sm:text-lg">{item.meta}</div>
             )}
@@ -42,7 +44,7 @@ const MyCarousel = ({ items }: IMyCarouselProps) => {
             objectPosition="top"
             alt={item.title}
             priority={idx === 0 ? true : false}
-            sizes={'(max-width: 640px) 50vw, 33vw'}
+            sizes="75vw"
           />
         </div>
       </div>
