@@ -16,6 +16,7 @@ import { getAllIssues, getIssueBySlug } from '~/lib/database';
 import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { callDb } from '~/lib/utils/database';
 import { toHumanReadable } from '~/lib/utils/date';
+import { sendComicReadEvent } from '~/lib/utils/gtag';
 import { handle } from '~/lib/utils/promise';
 
 interface IIssueSlugPageProps {
@@ -54,6 +55,7 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
     };
 
     incrementView();
+    sendComicReadEvent(comic.slug, issue.slug);
   });
 
   const issueNavDOM = (
@@ -169,7 +171,7 @@ export const getStaticProps: GetStaticProps<
 
   const [error, currentIssue] = await handle(
     callDb(
-      getIssueBySlug(comicSlug, issueSlug, 'name images comic createdAt', [
+      getIssueBySlug(comicSlug, issueSlug, 'name slug images comic createdAt', [
         {
           fieldName: 'comic',
           fields: 'name slug',

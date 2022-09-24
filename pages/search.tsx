@@ -8,12 +8,13 @@ import { handle } from '~/lib/utils/promise';
 import debounce from 'lodash.debounce';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
-import { SearchInput } from '~/components/SearchInput';
-import { parseQuery } from '~/lib/utils/api';
-import { SearchResult } from '~/lib/utils/search';
 import { CardList } from '~/components/CardList';
 import { comicToCardListProp } from '~/components/CardList/CardList.helper';
+import { SearchInput } from '~/components/SearchInput';
 import { Section } from '~/components/Section';
+import { parseQuery } from '~/lib/utils/api';
+import { sendSearchEvent } from '~/lib/utils/gtag';
+import { SearchResult } from '~/lib/utils/search';
 
 interface ISearchPageProps {
   comicCount: number;
@@ -76,6 +77,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
 
   useEffect(() => {
     const fn = async () => {
+      sendSearchEvent(searchTerm);
       setIsLoading(true);
       const [error, response] = await handle(
         fetch(
@@ -148,7 +150,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
                         <div role="status">
                           <svg
                             aria-hidden="true"
-                            className="mr-2 h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+                            className="mr-2 h-8 w-8 animate-spin fill-red-600 text-gray-200 dark:text-gray-600"
                             viewBox="0 0 100 101"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"

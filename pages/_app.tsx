@@ -8,6 +8,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import 'remixicon/fonts/remixicon.css';
 import { Layout } from '~/components/Layout';
 import { WebSiteJsonLd } from '~/components/SEO/WebSiteJsonLd';
+import { sendPageView } from '~/lib/utils/gtag';
 import { SEO } from '../configs/seo';
 import '../styles/globals.css';
 
@@ -15,9 +16,7 @@ import '../styles/globals.css';
 function MyApp({ Component, pageProps }: AppProps) {
   Router.events.on('routeChangeStart', () => NProgress.start());
   Router.events.on('routeChangeComplete', (url) => {
-    window.gtag('config', process.env.NEXT_PUBLIC_GA_ID, {
-      page_path: url,
-    });
+    sendPageView(url);
     NProgress.done();
   });
   Router.events.on('routeChangeError', () => NProgress.done());
