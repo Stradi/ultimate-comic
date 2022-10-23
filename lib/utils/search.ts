@@ -1,76 +1,53 @@
-import { getAllComics, getAllTags } from '../database';
-import { IComicDocument, ITagDocument } from '../database/models';
+import { runSQL } from '../database';
+import { IComic, ITag } from '../database/models';
 
-import { handle } from './promise';
-
-type ComicSearchResult = IComicDocument[];
-type TagSearchResult = ITagDocument[];
+type ComicSearchResult = IComic[];
+type TagSearchResult = ITag[];
 
 type SearchResult = {
   comics: ComicSearchResult;
   tags: TagSearchResult;
 };
 
-const searchComics = async (
-  term: string,
-  count = 10,
-  skip = 0,
-  fields = 'name slug'
-) => {
-  const [error, results] = await handle(
-    getAllComics(count, skip, fields, [], {
-      name: new RegExp(term, 'i'),
-    })
-  );
-
-  if (error) return Promise.reject(error);
-
-  return Promise.resolve({
-    comics: results,
-    tags: [],
-  } as SearchResult);
-};
-
-const searchTags = async (
-  term: string,
-  count = 10,
-  skip = 0,
-  fields = 'name slug'
-) => {
-  const [error, results] = await handle(
-    getAllTags(count, skip, fields, [], {
-      name: new RegExp(term, 'i'),
-    })
-  );
-
-  if (error) return Promise.reject(error);
-
-  return Promise.resolve({
-    comics: [],
-    tags: results,
-  } as SearchResult);
-};
-
-const searchAll = async (
-  term: string,
-  count = 10,
-  skip = 0,
-  fields = 'name slug'
-) => {
-  const [comicError, comics] = await handle(
-    searchComics(term, count, skip, fields)
-  );
-
-  if (comicError) return Promise.reject(comicError);
-
-  const [tagError, tags] = await handle(searchTags(term, count, skip, fields));
-
-  if (tagError) return Promise.reject(tagError);
+const searchComics = async (term: string, count = 10, skip = 0) => {
+  const result = await runSQL(`
+    SELECT 
+      c.name as comic_name,
+      c.slug as comic_slug,
+      c.cover_image as comic_cover_image,
+      i.issue_count as comic_issue_count
+    FROM comic c
+    JOIN (
+      SELECT comic_id, COUNT(*) as issue_count FROM issue GROUP BY comic_id
+    ) i ON i.comic_id = c.id
+    WHERE name LIKE '%${term}%'
+    LIMIT ${skip}, ${count};
+  `);
 
   return {
-    comics: comics.comics,
-    tags: tags.tags,
+    comics: result.map(
+      (comic) =>
+        ({
+          name: comic.comic_name,
+          slug: comic.comic_slug,
+          coverImage: comic.comic_cover_image,
+          issues: new Array(comic.comic_issue_count).fill(null),
+        } as IComic)
+    ),
+    tags: [],
   } as SearchResult;
+};
+
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const searchTags = async (_term: string, _count = 10, _skip = 0) => {
+  throw new Error('Not implemented');
+};
+
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const searchAll = async (_term: string, _count = 10, _skip = 0) => {
+  throw new Error('Not implemented');
 };
 
 export { searchComics, searchTags, searchAll };

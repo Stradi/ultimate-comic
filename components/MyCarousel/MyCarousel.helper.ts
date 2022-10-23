@@ -1,13 +1,13 @@
-import React from 'react';
 import Link from 'next/link';
+import React from 'react';
 import { ICarouselItem } from '~/components/MyCarousel/MyCarousel';
-import { IComicDocument, ITagDocument } from '~/lib/database/models';
+import { IComic, ITag } from '~/lib/database/models';
 
-const comicToMyCarouselProp = (comic: IComicDocument): ICarouselItem => {
+const comicToMyCarouselProp = (comic: IComic): ICarouselItem => {
   const metaDOM = React.createElement('div', null, [
     `${(comic.issues as []).length} Issues`,
     ' · ',
-    ...(comic.tags as ITagDocument[]).map((tag) => {
+    ...(comic.tags as ITag[]).map((tag) => {
       return React.createElement(
         Link,
         { href: `/tag/${tag.slug}`, key: `${comic.name}, ${tag.name}` },

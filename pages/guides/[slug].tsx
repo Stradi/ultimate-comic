@@ -11,19 +11,17 @@ import { Container } from '~/components/Container';
 import { getAllGuides, getGuideBySlug } from '~/lib/utils/blog';
 import { handle } from '~/lib/utils/promise';
 
-import MDXComponents from '~/components/MDXComponents';
-import { toHumanReadable } from '~/lib/utils/date';
 import { CardList } from '~/components/CardList';
 import { comicToCardListProp } from '~/components/CardList/CardList.helper';
-import { callDb } from '~/lib/utils/database';
-import { getComicBySlug } from '~/lib/database';
-import { IComicDocument } from '~/lib/database/models';
+import MDXComponents from '~/components/MDXComponents';
+import { IComic } from '~/lib/database/models';
+import { toHumanReadable } from '~/lib/utils/date';
 import { convertFromCamelCase } from '~/lib/utils/text';
 
 interface IGuidePageProps {
   guide: GuidePage;
   metadata: GuideMetadata;
-  related: IComicDocument[];
+  related: IComic[];
 }
 
 const GuidePage: NextPage<IGuidePageProps> = ({
@@ -152,26 +150,26 @@ export const getStaticProps: GetStaticProps<
     };
   }
 
-  const relatedComics = [];
-  if (guide.metadata.related) {
-    for (const relatedComic of guide.metadata.related) {
-      const [error, comic] = await callDb(
-        handle(
-          getComicBySlug(relatedComic, 'name slug tags issues', [
-            {
-              fieldName: 'tags',
-              fields: 'name',
-            },
-          ])
-        ),
-        true
-      );
+  const relatedComics: IComic[] = [];
+  // if (guide.metadata.related) {
+  //   for (const relatedComic of guide.metadata.related) {
+  //     const [error, comic] = await callDb(
+  //       handle(
+  //         getComicBySlug(relatedComic, 'name slug tags issues', [
+  //           {
+  //             fieldName: 'tags',
+  //             fields: 'name',
+  //           },
+  //         ])
+  //       ),
+  //       true
+  //     );
 
-      if (!error && comic !== null) {
-        relatedComics.push(comic as IComicDocument);
-      }
-    }
-  }
+  //     if (!error && comic !== null) {
+  //       relatedComics.push(comic as IComic);
+  //     }
+  //   }
+  // }
 
   return {
     props: {

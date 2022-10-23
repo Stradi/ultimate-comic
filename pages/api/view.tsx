@@ -1,10 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { connectToDatabase, getIssueById } from '~/lib/database';
-import { IComicDocument, IIssueDocument } from '~/lib/database/models';
 import { apiHandler, parseQuery } from '~/lib/utils/api';
-import { isValidObjectID } from '~/lib/utils/database';
 import { ApiError } from '~/lib/utils/error';
-import { handle } from '~/lib/utils/promise';
 
 const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
   if (process.env.NODE_ENV === 'development') {
@@ -22,51 +18,10 @@ const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
       )
     );
 
-  const issueId = postData.issueId as string;
-  const isObjectId = isValidObjectID(issueId);
-  if (!isObjectId) {
-    return Promise.reject(
-      new ApiError(
-        400,
-        'Not a valid ID.',
-        `${issueId} is not a valid ID.`,
-        'Enter a valid ID parameter while sending the request.'
-      )
-    );
-  }
+  // const issueId = postData.issueId as string;
+  // TODO
 
-  await connectToDatabase();
-  const [getIssueError, issueData] = await handle<IIssueDocument>(
-    getIssueById(issueId, 'comic viewCount', [
-      {
-        fieldName: 'comic',
-        fields: 'viewCount',
-      },
-    ])
-  );
-  if (getIssueError) return Promise.reject(getIssueError);
-
-  if (isNaN(issueData.viewCount)) {
-    issueData.viewCount = 1;
-  } else {
-    issueData.viewCount++;
-  }
-
-  const comic = issueData.comic as IComicDocument;
-
-  if (isNaN(comic.viewCount)) {
-    comic.viewCount = 1;
-  } else {
-    comic.viewCount++;
-  }
-
-  const [issueSaveError] = await handle<IIssueDocument>(issueData.save());
-  if (issueSaveError) return Promise.reject(issueSaveError);
-
-  const [comicSaveError] = await handle<IComicDocument>(comic.save());
-  if (comicSaveError) return Promise.reject(comicSaveError);
-
-  return res.status(200).json({ data: issueData });
+  return res.status(200).json({ data: null });
 };
 
 const handler = apiHandler({

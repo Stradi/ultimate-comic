@@ -1,12 +1,8 @@
-import {
-  IComicDocument,
-  IIssueDocument,
-  ITagDocument,
-} from '~/lib/database/models';
+import { IComic, IIssue, ITag } from '~/lib/database/models';
 import { ICardItem } from './CardList';
 
 const issueToCardListProp = (
-  issue: IIssueDocument,
+  issue: IIssue,
   mini = false,
   showSubtitle = true,
   customURL = ''
@@ -20,13 +16,10 @@ const issueToCardListProp = (
   };
 };
 
-const comicToCardListProp = (
-  comic: IComicDocument,
-  mini = false
-): ICardItem => {
+const comicToCardListProp = (comic: IComic, mini = false): ICardItem => {
   let subtitle = '';
   if (mini) {
-    const subtitleTags = (comic.tags as ITagDocument[])
+    const subtitleTags = (comic.tags as ITag[])
       .map((tag) => tag.name)
       .join(', ');
     subtitle = `${(comic.issues as []).length} Issues, ${subtitleTags}`;
@@ -43,11 +36,11 @@ const comicToCardListProp = (
   };
 };
 
-const tagToCardListProps = (tag: ITagDocument): ICardItem => {
+const tagToCardListProps = (tag: ITag): ICardItem => {
   return {
     href: `/tag/${tag.slug}`,
     title: tag.name,
-    subtitle: `${(tag.comics as IComicDocument[]).length} Comics`,
+    subtitle: `${(tag.comics as IComic[]).length} Comics`,
     image: '',
     mini: true,
   };
