@@ -147,6 +147,12 @@ export const getStaticProps: GetStaticProps<
   const slug = (context.params as IStaticPathsQuery).comicSlug;
   const comic = await _getComic(slug);
 
+  if (!comic) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       comic: JSON.parse(JSON.stringify(comic)),
@@ -192,6 +198,10 @@ const _getComic = async (slug: string) => {
     GROUP BY c.id, i.name, i.slug, p.url, i.id
     ORDER BY i.id;
   `);
+
+  if (!result[0]) {
+    return null;
+  }
 
   return {
     name: result[0].comic_name,
