@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { connectToDatabase } from '~/lib/database';
 import { apiHandler, parseQuery } from '~/lib/utils/api';
 import { ApiError } from '~/lib/utils/error';
 import { handle } from '~/lib/utils/promise';
@@ -14,7 +13,6 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = parseQuery(req.query, [
     'term',
     'secret',
-    'fields',
     'count',
     'skip',
     'type',
@@ -27,17 +25,6 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
         'Insufficent query parameters.',
         "To use this route you need to define 'term' query parameter. The request you sent does not have a 'term' parameter.",
         "Include 'term' query parameter while sending the request."
-      )
-    );
-  }
-
-  if (!query.fields) {
-    return Promise.reject(
-      new ApiError(
-        400,
-        'No fields to return.',
-        "To use this route you need to define 'fields' query parameter. The request you sent does not have a 'fields' parameter.",
-        "Include 'fields' parameters while sending the request."
       )
     );
   }
@@ -78,8 +65,6 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
     );
   }
 
-  await connectToDatabase();
-
   let fn;
   switch (query.type) {
     case 'full':
@@ -99,7 +84,7 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
   );
 
   const [searchError, searchResult] = await handle<SearchResult>(
-    fn(escapedTerm, count, skip, query.fields as string)
+    fn(escapedTerm, count, skip)
   );
 
   if (searchError) return Promise.reject(searchError);

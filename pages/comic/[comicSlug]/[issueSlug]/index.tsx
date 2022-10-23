@@ -12,18 +12,16 @@ import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Reader } from '~/components/Reader';
 import { ComicIssueJsonLd } from '~/components/SEO/ComicIssueJsonLd';
-import { getAllIssues, getIssueBySlug } from '~/lib/database';
-import { IComicDocument, IIssueDocument } from '~/lib/database/models';
-import { callDb } from '~/lib/utils/database';
+import { runSQL } from '~/lib/database';
+import { IComic, IIssue } from '~/lib/database/models';
 import { toHumanReadable } from '~/lib/utils/date';
 import { sendComicReadEvent } from '~/lib/utils/gtag';
-import { handle } from '~/lib/utils/promise';
 
 interface IIssueSlugPageProps {
-  issue: IIssueDocument;
-  comic: IComicDocument;
-  nextIssue: IIssueDocument | null;
-  prevIssue: IIssueDocument | null;
+  issue: IIssue;
+  comic: IComic;
+  nextIssue: IIssue | null;
+  prevIssue: IIssue | null;
 }
 
 const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
@@ -49,7 +47,7 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          issueId: issue._id,
+          issueId: issue.id,
         }),
       });
     };
@@ -169,72 +167,68 @@ export const getStaticProps: GetStaticProps<
   const comicSlug = slugs.comicSlug;
   const issueSlug = slugs.issueSlug;
 
-  const [error, currentIssue] = await handle(
-    callDb(
-      getIssueBySlug(comicSlug, issueSlug, 'name slug images comic createdAt', [
-        {
-          fieldName: 'comic',
-          fields: 'name slug',
-        },
-      ]),
-      true
-    )
-  );
-
-  if (error) {
-    return {
-      notFound: true,
-      revalidate: 120,
-    };
-  }
-
-  const nextIssue = await callDb(
-    getAllIssues(
-      1,
-      0,
-      'slug comic',
-      [],
-      {
-        _id: {
-          $lt: currentIssue._id,
-        },
-        comic: (currentIssue.comic as IComicDocument)._id,
-      },
-      {
-        _id: 'descending',
-      }
-    ),
-    true
-  );
-
-  const previousIssue = await callDb(
-    getAllIssues(
-      1,
-      0,
-      'slug comic',
-      [],
-      {
-        _id: {
-          $gt: currentIssue._id,
-        },
-        comic: (currentIssue.comic as IComicDocument)._id,
-      },
-      {
-        _id: 'ascending',
-      }
-    ),
-    true
-  );
+  const currentIssue = await _getIssue(comicSlug, issueSlug);
+  const previousIssue = await _getRelatedIssue(currentIssue, true);
+  const nextIssue = await _getRelatedIssue(currentIssue, false);
 
   return {
     props: {
-      issue: currentIssue,
-      comic: currentIssue.comic as IComicDocument,
-      nextIssue: (nextIssue as IIssueDocument[])[0] || null,
-      prevIssue: (previousIssue as IIssueDocument[])[0] || null,
-      key: currentIssue._id,
+      issue: JSON.parse(JSON.stringify(currentIssue)),
+      comic: currentIssue.comic as IComic,
+      nextIssue: JSON.parse(JSON.stringify(nextIssue)) || null,
+      prevIssue: JSON.parse(JSON.stringify(previousIssue)) || null,
+      key: currentIssue.id,
     },
   };
+};
+
+const _getIssue = async (comicSlug: string, issueSlug: string) => {
+  const result = await runSQL(`
+    SELECT
+      i.id as issue_id,
+      i.name as issue_name,
+      i.slug as issue_slug,
+      i.created_at as issue_created_at,
+      c.name as comic_name,
+      c.slug as comic_slug,
+      p.url as page_url
+    FROM issue i
+    JOIN comic c ON c.id = i.comic_id
+    JOIN page p ON p.issue_id = i.id
+    WHERE c.slug = '${comicSlug}' AND i.slug = '${issueSlug}'
+  `);
+
+  return {
+    id: result[0].issue_id,
+    name: result[0].issue_name,
+    slug: result[0].issue_slug,
+    createdAt: result[0].issue_created_at,
+    comic: {
+      name: result[0].comic_name,
+      slug: result[0].comic_slug,
+    },
+    images: result.map((r) => r.page_url),
+  } as IIssue;
+};
+
+const _getRelatedIssue = async (currentIssue: IIssue, isPrevious: boolean) => {
+  const result = await runSQL(`
+    SELECT
+      i.slug as issue_slug
+    FROM issue i
+    JOIN comic c ON c.id = i.comic_id
+    WHERE c.slug = '${currentIssue.comic.slug}' AND i.id ${
+    isPrevious ? '<' : '>'
+  } ${currentIssue.id};
+  `);
+
+  if (result.length === 0) {
+    return null;
+  }
+
+  return {
+    slug: result[0].issue_slug,
+  } as IIssue;
 };
 
 export default IssueSlugPage;

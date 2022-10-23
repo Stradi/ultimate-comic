@@ -4,12 +4,11 @@ import { CardList } from '~/components/CardList';
 import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
 import { Section } from '~/components/Section';
-import { getAllComics } from '~/lib/database';
-import { IComicDocument } from '~/lib/database/models';
-import { callDb } from '~/lib/utils/database';
+import { runSQL } from '~/lib/database';
+import { IComic } from '~/lib/database/models';
 
 interface IPopularComicsPageProps {
-  comics: IComicDocument[];
+  comics: IComic[];
 }
 
 const PopularComicsPage: NextPage<IPopularComicsPageProps> = ({
@@ -40,21 +39,7 @@ const PopularComicsPage: NextPage<IPopularComicsPageProps> = ({
 export const getStaticProps: GetStaticProps<
   IPopularComicsPageProps
 > = async () => {
-  const popularComics = await callDb(
-    getAllComics(
-      100,
-      0,
-      'name slug coverImage viewCount issues',
-      [],
-      {
-        coverImage: {
-          $ne: null,
-        },
-      },
-      { viewCount: 'descending' }
-    ),
-    true
-  );
+  const popularComics = await _getPopularComics(100);
 
   return {
     props: {
@@ -62,6 +47,32 @@ export const getStaticProps: GetStaticProps<
     },
     revalidate: 60,
   };
+};
+
+const _getPopularComics = async (count: number) => {
+  const result = await runSQL(`
+    SELECT
+      c.name as comic_name,
+      c.slug as comic_slug,
+      c.cover_image as comic_cover_image,
+      i.issue_count as comic_issue_count
+    FROM comic c
+    JOIN (
+      SELECT comic_id, COUNT(*) as issue_count FROM issue GROUP BY comic_id
+    ) i ON i.comic_id = c.id
+    /* ORDER BY c.view_count DESC */
+    LIMIT ${count};
+  `);
+
+  return result.map(
+    (row) =>
+      ({
+        name: row.comic_name,
+        slug: row.comic_slug,
+        coverImage: row.comic_cover_image,
+        issues: new Array(row.comic_issue_count).fill(null),
+      } as IComic)
+  );
 };
 
 export default PopularComicsPage;

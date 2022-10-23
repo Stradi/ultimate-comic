@@ -12,18 +12,16 @@ import { Button } from '~/components/Button';
 import { CardList } from '~/components/CardList';
 import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
-import { getAllTags, getTagBySlug } from '~/lib/database';
-import { IComicDocument, ITagDocument } from '~/lib/database/models';
-import { callDb } from '~/lib/utils/database';
-import { handle } from '~/lib/utils/promise';
+import { runSQL } from '~/lib/database';
+import { IComic, ITag } from '~/lib/database/models';
 
 interface ITagPageProps {
-  tag: ITagDocument;
+  tag: ITag;
   pageNo: number;
 }
 
 const TagPage: NextPage<ITagPageProps> = ({ tag, pageNo }: ITagPageProps) => {
-  const comics = tag.comics as IComicDocument[];
+  const comics = tag.comics as IComic[];
   return (
     <>
       <NextSeo
@@ -111,9 +109,7 @@ interface IStaticPathsQuery extends ParsedUrlQuery {
 }
 
 export const getStaticPaths: GetStaticPaths<IStaticPathsQuery> = async () => {
-  const tags = (
-    await callDb(getAllTags(PAGES.TAG.GENERATE_ON_BUILD, 0, 'slug'))
-  ).map((tag) => tag.slug);
+  const tags = await _getTagSlugs(PAGES.TAG.GENERATE_ON_BUILD);
 
   const paths = tags.map((slug) => ({
     params: { slug, pageNo: '0' },
@@ -133,30 +129,7 @@ export const getStaticProps: GetStaticProps<
   const slug = params.slug;
   const pageNo = Number.parseInt(params.pageNo);
 
-  const [error, tag] = await handle(
-    callDb(
-      getTagBySlug(
-        slug,
-        'name slug comics',
-        [
-          {
-            fieldName: 'comics',
-            fields: 'name slug issues coverImage',
-          },
-        ],
-        PAGES.TAG.COMIC_PER_PAGE,
-        pageNo * PAGES.TAG.COMIC_PER_PAGE
-      ),
-      true
-    )
-  );
-
-  if (error) {
-    return {
-      notFound: true,
-      revalidate: 120,
-    };
-  }
+  const tag = await _getTags(slug, pageNo, PAGES.TAG.COMIC_PER_PAGE);
 
   return {
     props: {
@@ -165,6 +138,48 @@ export const getStaticProps: GetStaticProps<
     },
     revalidate: 60,
   };
+};
+
+const _getTagSlugs = async (count: number) => {
+  const result = await runSQL(`
+    SELECT
+      t.slug as tag_slug
+    FROM tag t
+    LIMIT ${count};
+  `);
+
+  return result.map((row) => row.tag_slug);
+};
+
+const _getTags = async (slug: string, pageNo: number, pageLength: number) => {
+  const result = await runSQL(`
+    SELECT
+      t.name as tag_name,
+      t.slug as tag_slug,
+      c.name as comic_name,
+      c.slug as comic_slug,
+      c.cover_image as comic_cover_image,
+      i.issue_count as comic_issue_count
+    FROM tag t
+    JOIN comic_tag ct ON ct.tag_id = t.id
+    JOIN comic c ON c.id = ct.comic_id
+    JOIN (
+      SELECT comic_id, COUNT(*) as issue_count FROM issue GROUP BY comic_id
+    ) i ON i.comic_id = c.id
+    WHERE t.slug = '${slug}'
+    LIMIT ${pageNo * pageLength}, ${pageLength};
+  `);
+
+  return {
+    name: result[0].tag_name,
+    slug: result[0].tag_slug,
+    comics: result.map((row) => ({
+      name: row.comic_name,
+      slug: row.comic_slug,
+      coverImage: row.comic_cover_image,
+      issues: new Array(row.comic_issue_count).fill(null),
+    })),
+  } as ITag;
 };
 
 export default TagPage;

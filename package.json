@@ -20,7 +20,7 @@
     "fs-extra": "^10.1.0",
     "gray-matter": "^4.0.3",
     "lodash.debounce": "^4.0.8",
-    "mongoose": "^6.5.0",
+    "mysql2": "^2.3.3",
     "next": "12.2.3",
     "next-mdx-remote": "^4.1.0",
     "next-seo": "^5.5.0",

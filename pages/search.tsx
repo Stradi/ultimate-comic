@@ -2,7 +2,6 @@ import { GetStaticProps, NextPage } from 'next';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { Container } from '~/components/Container';
 import { getComicCount, getIssueCount } from '~/lib/database';
-import { callDb } from '~/lib/utils/database';
 import { handle } from '~/lib/utils/promise';
 
 import debounce from 'lodash.debounce';
@@ -81,7 +80,7 @@ const SearchPage: NextPage<ISearchPageProps> = ({
       setIsLoading(true);
       const [error, response] = await handle(
         fetch(
-          `/api/search?term=${searchTerm}&fields=name slug coverImage issues&type=comics&count=${COMICS_TO_SHOW}&skip=${skipCount}`
+          `/api/search?term=${searchTerm}&type=comics&count=${COMICS_TO_SHOW}&skip=${skipCount}`
         )
       );
       setIsLoading(false);
@@ -210,8 +209,8 @@ const SearchPage: NextPage<ISearchPageProps> = ({
 };
 
 export const getStaticProps: GetStaticProps<ISearchPageProps> = async () => {
-  const comicCount = await callDb(getComicCount());
-  const issueCount = await callDb(getIssueCount());
+  const comicCount = await getComicCount();
+  const issueCount = await getIssueCount();
 
   return {
     props: {

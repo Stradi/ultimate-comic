@@ -1,5 +1,4 @@
 import { PAGES } from 'configs/ui';
-import mongoose from 'mongoose';
 import {
   GetStaticPaths,
   GetStaticProps,
@@ -13,13 +12,11 @@ import { CardList } from '~/components/CardList';
 import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
 import { Section } from '~/components/Section';
-import { getAllComics } from '~/lib/database';
-import { IComicDocument } from '~/lib/database/models';
-import { callDb } from '~/lib/utils/database';
-import { handle } from '~/lib/utils/promise';
+import { runSQL } from '~/lib/database';
+import { IComic } from '~/lib/database/models';
 
 interface IComicWithLetterPageProps {
-  comics: IComicDocument[];
+  comics: IComic[];
   readableLetter: string;
   letter: string;
   pageNo: number;
@@ -177,42 +174,17 @@ export const getStaticProps: GetStaticProps<
   const pageNo = Number.parseInt(params.pageNo);
 
   let readableLetter = letter;
-  let regexStr = '';
+  let likeParam = `${letter}%`;
   if (ALPHABET.indexOf(letter) === -1) {
-    regexStr = '^[^a-zA-Z]';
     readableLetter = '#';
-  } else {
-    regexStr = '^' + letter;
+    likeParam = '%';
   }
 
-  const filter: mongoose.FilterQuery<IComicDocument> = {
-    name: new RegExp(regexStr, 'i'),
-  };
-
-  const [error, comics] = await handle(
-    callDb(
-      getAllComics(
-        PAGES.ALL_COMICS.COMIC_PER_PAGE,
-        pageNo * PAGES.ALL_COMICS.COMIC_PER_PAGE,
-        'name slug issues tags',
-        [
-          {
-            fieldName: 'tags',
-            fields: 'name',
-          },
-        ],
-        filter
-      ),
-      true
-    )
+  const comics = await _getComicsStartingWith(
+    likeParam,
+    pageNo,
+    PAGES.ALL_COMICS.COMIC_PER_PAGE
   );
-
-  if (error) {
-    return {
-      notFound: true,
-      revalidate: 120,
-    };
-  }
 
   return {
     props: {
@@ -223,6 +195,42 @@ export const getStaticProps: GetStaticProps<
     },
     revalidate: 60,
   };
+};
+
+const _getComicsStartingWith = async (
+  letter: string,
+  pageNo: number,
+  pageLength: number
+) => {
+  const result = await runSQL(`
+    SELECT
+      c.id as comic_id,
+      c.name as comic_name,
+      c.slug as comic_slug,
+      GROUP_CONCAT(t.name) as tags,
+      issue_count
+    FROM comic c
+    LEFT JOIN comic_tag ct ON c.id = ct.comic_id
+    LEFT JOIN tag t ON ct.tag_id = t.id
+    JOIN (
+      SELECT comic_id, COUNT(*) as issue_count FROM issue GROUP BY comic_id
+    ) i ON c.id = i.comic_id
+    WHERE c.name LIKE '${letter}%'
+    GROUP BY c.id
+    ORDER BY c.name
+    LIMIT ${pageNo * pageLength}, ${pageLength};
+  `);
+
+  return result.map(
+    (comic) =>
+      ({
+        id: comic.comic_id,
+        name: comic.comic_name,
+        slug: comic.comic_slug,
+        tags: comic.tags.split(',').map((tag: string) => ({ name: tag })),
+        issues: new Array(comic.issue_count).fill(null),
+      } as IComic)
+  );
 };
 
 export default ComicWithLetterPage;
