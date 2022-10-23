@@ -1,10 +1,10 @@
 import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
-import { IIssueDocument } from '../../lib/database/models';
+import { IIssue } from '../../lib/database/models';
 import { CardList } from '../CardList';
 import { issueToCardListProp } from '../CardList/CardList.helper';
 
 interface IIssueListProps {
-  issues: IIssueDocument[];
+  issues: IIssue[];
   slug: string;
 }
 
