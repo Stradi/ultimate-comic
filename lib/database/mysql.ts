@@ -19,7 +19,6 @@ const isConnected = async (connection: mysql.Connection) => {
 
 const getConnection = async () => {
   if (global.connection && (await isConnected(global.connection))) {
-    console.log('Found a global connection, using it.');
     return global.connection;
   }
 
