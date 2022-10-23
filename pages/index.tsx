@@ -109,7 +109,7 @@ const _getLatestIssues = async (count = 10): Promise<Partial<IIssue[]>> => {
       p.url as page_url
     FROM comic c
     JOIN issue i ON i.id = (SELECT ii.id FROM issue ii WHERE ii.comic_id = c.id ORDER BY ii.created_at DESC LIMIT 1)
-    JOIN page p ON p.id = (SELECT pp.id FROM page pp WHERE pp.issue_id = i.id ORDER BY pp.created_at DESC LIMIT 1)
+    JOIN page p ON p.id = (SELECT pp.id FROM page pp WHERE pp.issue_id = i.id LIMIT 1)
     ORDER BY i.created_at DESC
     LIMIT ${count};
   `);
@@ -146,7 +146,7 @@ const _getPopularComics = async (count: number) => {
       SELECT comic_id, COUNT(*) as issue_count FROM issue GROUP BY comic_id
     ) i ON i.comic_id = c.id
     GROUP BY c.id
-    /* ORDER BY c.view_count DESC */
+    ORDER BY c.created_at DESC
     LIMIT ${count};
   `);
 
