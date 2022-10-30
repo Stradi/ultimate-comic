@@ -107,8 +107,8 @@ const _getLatestIssues = async (count = 10): Promise<Partial<IIssue[]>> => {
       c.name as comic_name,
       c.slug as comic_slug,
       p.url as page_url
-    FROM comic c
-    JOIN issue i ON i.id = (SELECT ii.id FROM issue ii WHERE ii.comic_id = c.id ORDER BY ii.created_at DESC LIMIT 1)
+    FROM issue i
+    JOIN comic c ON c.id = i.comic_id
     JOIN page p ON p.id = (SELECT pp.id FROM page pp WHERE pp.issue_id = i.id LIMIT 1)
     ORDER BY i.created_at DESC
     LIMIT ${count};
