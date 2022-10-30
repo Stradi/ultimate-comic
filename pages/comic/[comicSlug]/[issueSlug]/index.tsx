@@ -168,8 +168,12 @@ export const getStaticProps: GetStaticProps<
   const issueSlug = slugs.issueSlug;
 
   const currentIssue = await _getIssue(comicSlug, issueSlug);
-  const previousIssue = await _getRelatedIssue(currentIssue, true);
-  const nextIssue = await _getRelatedIssue(currentIssue, false);
+
+  // TODO: Currently we are just getting next and previous
+  // issues based on 'SOMETHING' scope in `issue-SOMETHING-NUMBER` slug.
+  // We can recursively get next and previous issues by popping 'SOMETHING'.
+  const nextIssue = await _getNextIssue(currentIssue);
+  const previousIssue = await _getPreviousIssue(currentIssue);
 
   return {
     props: {
@@ -211,24 +215,45 @@ const _getIssue = async (comicSlug: string, issueSlug: string) => {
   } as IIssue;
 };
 
-const _getRelatedIssue = async (currentIssue: IIssue, isPrevious: boolean) => {
-  const result = await runSQL(`
-    SELECT
-      i.slug as issue_slug
-    FROM issue i
-    JOIN comic c ON c.id = i.comic_id
-    WHERE c.slug = '${currentIssue.comic.slug}' AND i.id ${
-    isPrevious ? '<' : '>'
-  } ${currentIssue.id};
-  `);
+const _getPreviousIssue = async (currentIssue: IIssue) => {
+  const splittedSlug = currentIssue.slug.split('-');
+  const currentIssueNo = Number.parseInt(splittedSlug.pop() as string);
+  const previousIssueSlug = `${splittedSlug.join('-')}-${currentIssueNo - 1}`;
 
-  if (result.length === 0) {
-    return null;
+  const isExists = await _isIssueExists(currentIssue, previousIssueSlug);
+  if (isExists) {
+    return {
+      slug: previousIssueSlug,
+    } as IIssue;
   }
 
-  return {
-    slug: result[0].issue_slug,
-  } as IIssue;
+  return null;
+};
+
+const _getNextIssue = async (currentIssue: IIssue) => {
+  const splittedSlug = currentIssue.slug.split('-');
+  const currentIssueNo = Number.parseInt(splittedSlug.pop() as string);
+  const nextIssueSlug = `${splittedSlug.join('-')}-${currentIssueNo + 1}`;
+
+  const isExists = await _isIssueExists(currentIssue, nextIssueSlug);
+  if (isExists) {
+    return {
+      slug: nextIssueSlug,
+    } as IIssue;
+  }
+
+  return null;
+};
+
+const _isIssueExists = async (currentIssue: IIssue, slug: string) => {
+  const result = await runSQL(`
+    SELECT 1
+    FROM issue i
+    JOIN comic c ON c.id = i.comic_id
+    WHERE c.slug = '${currentIssue.comic.slug}' AND i.slug = '${slug}';
+  `);
+
+  return result.length > 0;
 };
 
 export default IssueSlugPage;
