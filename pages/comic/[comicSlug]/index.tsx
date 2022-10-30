@@ -157,7 +157,9 @@ export const getStaticProps: GetStaticProps<
     props: {
       comic: JSON.parse(JSON.stringify(comic)),
     },
-    revalidate: 60,
+    // Most of the comics are not updated regularly, so we can cache them for a long time
+    // 10080 minutes = 1 week
+    revalidate: 10080,
   };
 };
 
