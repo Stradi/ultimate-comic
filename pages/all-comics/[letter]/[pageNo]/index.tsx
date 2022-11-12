@@ -193,7 +193,6 @@ export const getStaticProps: GetStaticProps<
       letter,
       pageNo: pageNo,
     },
-    revalidate: 60,
   };
 };
 

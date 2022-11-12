@@ -146,7 +146,6 @@ export const getStaticProps: GetStaticProps<
   if (error) {
     return {
       notFound: true,
-      revalidate: 120,
     };
   }
 
