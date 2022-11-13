@@ -64,7 +64,7 @@ const _getCardListProps = (
       issue,
       idx >= sliceCount,
       false,
-      `/comic/${comicSlug}/issue/${issue.slug}`
+      `/comic/${comicSlug}/${issue.slug}`
     );
   });
 };
