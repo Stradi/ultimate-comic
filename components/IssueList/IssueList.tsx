@@ -1,105 +1,72 @@
-import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
+import useWindowSize from 'hooks/useWindowSize';
+import { useEffect, useState } from 'react';
 import { IIssue } from '../../lib/database/models';
 import { CardList } from '../CardList';
 import { issueToCardListProp } from '../CardList/CardList.helper';
+import { Section } from '../Section';
 
 interface IIssueListProps {
-  issues: IIssue[];
+  issues: { [key: string]: IIssue[] };
   slug: string;
 }
 
 const IssueList = ({ issues, slug }: IIssueListProps) => {
-  const SLICE_COUNT = 9;
-  const [searchTerm, setSearchTerm] = useState('');
-  const [issuesDOM, setIssuesDOM] = useState<ReactElement[]>([]);
-  const [showAll, setShowAll] = useState(false);
+  const [sliceCount, setSliceCount] = useState(0);
+  const { width } = useWindowSize();
 
-  const getFilteredIssues = () => {
-    const filteredIssues = issues.filter(
-      (issue) =>
-        issue.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
-    );
-
-    const finalDOM = [];
-
-    const bigIssues = filteredIssues.slice(0, SLICE_COUNT + 1);
-    const bigIssuesDOM = (
-      <CardList
-        items={bigIssues.map((issue) =>
-          issueToCardListProp(
-            issue,
-            false,
-            false,
-            `/comic/${slug}/${issue.slug}`
-          )
-        )}
-        responsive={false}
-      />
-    );
-
-    finalDOM.push(bigIssuesDOM);
-
-    if (showAll) {
-      const smallIssues = filteredIssues.slice(SLICE_COUNT + 1);
-      const smallIssuesDOM = (
-        <CardList
-          items={smallIssues.map((issue) =>
-            issueToCardListProp(
-              issue,
-              true,
-              false,
-              `/comic/${slug}/${issue.slug}`
-            )
-          )}
-          responsive={false}
-        />
-      );
-      finalDOM.push(<div className="pb-2"></div>);
-      finalDOM.push(smallIssuesDOM);
-    }
-
-    return finalDOM;
-  };
-
+  // This approach looks silly, but it's the only way I could get it to work.
+  // Change it if you can.
   useEffect(() => {
-    setIssuesDOM(getFilteredIssues());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm, slug, issues, showAll]);
-
-  const loadMoreIssues = () => {
-    setShowAll(true);
-  };
-
-  const applyFilter = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
+    if (width > 1024) {
+      setSliceCount(10);
+    } else if (width > 768) {
+      setSliceCount(8);
+    } else if (width > 640) {
+      setSliceCount(6);
+    } else {
+      setSliceCount(4);
+    }
+  }, [width]);
 
   return (
     <div>
-      <div className="my-2 flex justify-between">
-        <h2 className="self-center text-lg font-medium text-white">Issues</h2>
-        <input
-          type="text"
-          placeholder="Search for issue"
-          className="rounded-md bg-neutral-800 p-2 text-neutral-300 ring-2 ring-neutral-700 transition duration-100 placeholder:font-medium placeholder:text-neutral-700 focus:outline-none focus:ring-red-600"
-          onChange={(e) => applyFilter(e)}
-        />
-      </div>
-      <div className="">
-        {issuesDOM}
-        {!showAll && issues.length > SLICE_COUNT && (
-          <div className="mt-2 text-center">
-            <button
-              onClick={loadMoreIssues}
-              className="rounded-md bg-red-600 px-4 py-2 text-white transition-colors duration-100 hover:bg-red-700"
-            >
-              Load All Issues
-            </button>
-          </div>
-        )}
-      </div>
+      {Object.keys(issues)
+        .sort((a, b) => {
+          return issues[b].length - issues[a].length;
+        })
+        .map((issueGroup) => {
+          return (
+            <div key={issueGroup}>
+              <Section title={issueGroup} subtitle="" showSeeAllButton={false}>
+                <CardList
+                  items={_getCardListProps(
+                    issues[issueGroup],
+                    slug,
+                    sliceCount
+                  )}
+                  responsive={false}
+                />
+              </Section>
+            </div>
+          );
+        })}
     </div>
   );
+};
+
+const _getCardListProps = (
+  issues: IIssue[],
+  comicSlug: string,
+  sliceCount: number
+) => {
+  return issues.map((issue, idx) => {
+    return issueToCardListProp(
+      issue,
+      idx >= sliceCount,
+      false,
+      `/comic/${comicSlug}/issue/${issue.slug}`
+    );
+  });
 };
 
 export { IssueList };

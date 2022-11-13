@@ -11,17 +11,22 @@ import { ParsedUrlQuery } from 'querystring';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { IssueList } from '~/components/IssueList';
-import { Section } from '~/components/Section';
 import { ComicSeriesJsonLd } from '~/components/SEO/ComicSeriesJsonLd';
 import { runSQL } from '~/lib/database';
 import { IComic, IIssue, ITag } from '~/lib/database/models';
 
+interface IGroupedIssues {
+  [key: string]: IIssue[];
+}
+
 interface IComicSlugPageProps {
   comic: IComic;
+  groupedIssues: IGroupedIssues;
 }
 
 const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
   comic,
+  groupedIssues,
 }: IComicSlugPageProps) => {
   const releaseDate = new Date(
     Date.parse((comic.releaseDate as Date).toString())
@@ -116,9 +121,7 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
             </div>
           </div>
         </div>
-        <Section title="Issues" showSeeAllButton={false} subtitle="">
-          <IssueList issues={issues} slug={comic.slug} />
-        </Section>
+        <IssueList issues={groupedIssues} slug={comic.slug} />
       </Container>
     </>
   );
@@ -156,8 +159,23 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       comic: JSON.parse(JSON.stringify(comic)),
+      groupedIssues: _groupIssues(comic.issues as IIssue[]),
     },
   };
+};
+
+const _groupIssues = (arr: IIssue[]): IGroupedIssues => {
+  return arr.reduce((acc: { [key: string]: IIssue[] }, issue: IIssue) => {
+    const postfix = issue.name.substring('Issue #'.length).split(' ')[0];
+    const isNumber = !isNaN(Number(postfix));
+
+    const key = isNumber ? 'Default' : postfix;
+
+    const keyStore = acc[key] || (acc[key] = []);
+    keyStore.push(issue);
+
+    return acc;
+  }, {});
 };
 
 const _getComicSlugs = async (count: number) => {
