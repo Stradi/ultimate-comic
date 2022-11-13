@@ -89,6 +89,8 @@ export const getStaticProps: GetStaticProps<IHomePageProps> = async () => {
       randomComics: JSON.parse(JSON.stringify(randomComics)),
       guides: guides ? JSON.parse(JSON.stringify(guides.slice(0, 3))) : [],
     },
+    // 300 seoconds = 5 minutes
+    revalidate: 300,
   };
 };
 
