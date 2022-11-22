@@ -1,5 +1,7 @@
+import { IMAGE } from 'configs/ui';
 import { runSQL } from '../database';
 import { IComic, ITag } from '../database/models';
+import { resizeImage } from './image';
 
 type ComicSearchResult = IComic[];
 type TagSearchResult = ITag[];
@@ -30,7 +32,7 @@ const searchComics = async (term: string, count = 10, skip = 0) => {
         ({
           name: comic.comic_name,
           slug: comic.comic_slug,
-          coverImage: comic.comic_cover_image,
+          coverImage: resizeImage(comic.comic_cover_image, IMAGE.SIZES.SMALL),
           issues: new Array(comic.comic_issue_count).fill(null),
         } as IComic)
     ),

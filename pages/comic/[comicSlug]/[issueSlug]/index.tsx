@@ -1,3 +1,4 @@
+import { IMAGE } from 'configs/ui';
 import {
   GetStaticPaths,
   GetStaticProps,
@@ -16,6 +17,7 @@ import { runSQL } from '~/lib/database';
 import { IComic, IIssue } from '~/lib/database/models';
 import { toHumanReadable } from '~/lib/utils/date';
 import { sendComicReadEvent } from '~/lib/utils/gtag';
+import { resizeImage } from '~/lib/utils/image';
 
 interface IIssueSlugPageProps {
   issue: IIssue;
@@ -211,7 +213,7 @@ const _getIssue = async (comicSlug: string, issueSlug: string) => {
       name: result[0].comic_name,
       slug: result[0].comic_slug,
     },
-    images: result.map((r) => r.page_url),
+    images: result.map((r) => resizeImage(r.page_url, IMAGE.SIZES.LARGE)),
   } as IIssue;
 };
 

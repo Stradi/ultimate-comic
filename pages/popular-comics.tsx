@@ -1,3 +1,4 @@
+import { IMAGE } from 'configs/ui';
 import { GetStaticProps, NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import { CardList } from '~/components/CardList';
@@ -6,6 +7,7 @@ import { Container } from '~/components/Container';
 import { Section } from '~/components/Section';
 import { runSQL } from '~/lib/database';
 import { IComic } from '~/lib/database/models';
+import { resizeImage } from '~/lib/utils/image';
 
 interface IPopularComicsPageProps {
   comics: IComic[];
@@ -68,7 +70,7 @@ const _getPopularComics = async (count: number) => {
       ({
         name: row.comic_name,
         slug: row.comic_slug,
-        coverImage: row.comic_cover_image,
+        coverImage: resizeImage(row.comic_cover_image, IMAGE.SIZES.SMALL),
         issues: new Array(row.comic_issue_count).fill(null),
       } as IComic)
   );

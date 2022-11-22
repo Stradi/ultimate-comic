@@ -1,4 +1,4 @@
-import { PAGES } from 'configs/ui';
+import { IMAGE, PAGES } from 'configs/ui';
 import {
   GetStaticPaths,
   GetStaticProps,
@@ -14,6 +14,7 @@ import { IssueList } from '~/components/IssueList';
 import { ComicSeriesJsonLd } from '~/components/SEO/ComicSeriesJsonLd';
 import { runSQL } from '~/lib/database';
 import { IComic, IIssue, ITag } from '~/lib/database/models';
+import { resizeImage } from '~/lib/utils/image';
 
 interface IGroupedIssues {
   [key: string]: IIssue[];
@@ -226,7 +227,7 @@ const _getComic = async (slug: string) => {
     slug: result[0].comic_slug,
     isCompleted: result[0].comic_is_completed,
     releaseDate: result[0].comic_release_date,
-    coverImage: result[0].comic_cover_image,
+    coverImage: resizeImage(result[0].comic_cover_image, IMAGE.SIZES.MEDIUM),
     summary: result[0].comic_summary,
     authors: result[0].author_names
       .split(',')
@@ -242,7 +243,7 @@ const _getComic = async (slug: string) => {
       .map((row) => ({
         name: row.issue_name,
         slug: row.issue_slug,
-        images: [row.page_url],
+        images: [resizeImage(row.page_url, IMAGE.SIZES.SMALL)],
       }))
       .reverse(),
   } as IComic;

@@ -1,4 +1,4 @@
-import { PAGES } from 'configs/ui';
+import { IMAGE, PAGES } from 'configs/ui';
 import {
   GetStaticPaths,
   GetStaticProps,
@@ -14,6 +14,7 @@ import { comicToCardListProp } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
 import { runSQL } from '~/lib/database';
 import { IComic, ITag } from '~/lib/database/models';
+import { resizeImage } from '~/lib/utils/image';
 
 interface ITagPageProps {
   tag: ITag;
@@ -175,7 +176,7 @@ const _getTags = async (slug: string, pageNo: number, pageLength: number) => {
     comics: result.map((row) => ({
       name: row.comic_name,
       slug: row.comic_slug,
-      coverImage: row.comic_cover_image,
+      coverImage: resizeImage(row.comic_cover_image, IMAGE.SIZES.SMALL),
       issues: new Array(row.comic_issue_count).fill(null),
     })),
   } as ITag;

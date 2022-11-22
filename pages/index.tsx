@@ -1,3 +1,4 @@
+import { IMAGE } from 'configs/ui';
 import type { GetStaticProps, NextPage } from 'next';
 import { CardList } from '~/components/CardList';
 import {
@@ -14,6 +15,7 @@ import { Section } from '~/components/Section';
 import { runSQL } from '~/lib/database';
 import { IComic, IIssue } from '~/lib/database/models';
 import { getAllGuides } from '~/lib/utils/blog';
+import { resizeImage } from '~/lib/utils/image';
 
 interface IHomePageProps {
   newIssues: IIssue[];
@@ -122,7 +124,7 @@ const _getLatestIssues = async (count = 10): Promise<Partial<IIssue[]>> => {
           name: issue.comic_name,
           slug: issue.comic_slug,
         },
-        images: [issue.page_url],
+        images: [resizeImage(issue.page_url, IMAGE.SIZES.SMALL)],
       } as IIssue)
   );
 };
@@ -152,7 +154,18 @@ const _getPopularComics = async (count: number) => {
       ({
         name: row.comic_name,
         slug: row.comic_slug,
-        coverImage: row.comic_cover_image,
+        /*
+          TODO: Since we currently don't have view counter on comics
+          carousel content and popular comics section will be the same.
+          This causes carousel image size to be same as popular comics.
+          Which we don't want.
+          
+          After adding view counter and updating the query, we should
+          update the image size here.
+
+          Reminder, Carousel Image Size = LARGE
+        */
+        coverImage: resizeImage(row.comic_cover_image, IMAGE.SIZES.MEDIUM),
         issues: new Array(row.comic_issue_count).fill(null),
         tags: row.tag_names.split(',').map((tag: string) => ({
           name: tag,
@@ -185,7 +198,7 @@ const _getRandomComics = async (count = 10): Promise<Partial<IComic[]>> => {
         id: comic.comic_id,
         name: comic.comic_name,
         slug: comic.comic_slug,
-        coverImage: comic.comic_cover_image,
+        coverImage: resizeImage(comic.comic_cover_image, IMAGE.SIZES.SMALL),
         releaseDate: comic.comic_release_date,
         issues: new Array(comic.issue_count).fill(null),
       } as IComic)

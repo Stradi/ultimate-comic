@@ -11,4 +11,12 @@ const PAGES = {
   },
 };
 
-export { PAGES };
+const IMAGE = {
+  SIZES: {
+    SMALL: 400,
+    MEDIUM: 700,
+    LARGE: 1600,
+    FULL: 0,
+  },
+};
+export { PAGES, IMAGE };
