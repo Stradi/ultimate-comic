@@ -90,6 +90,7 @@ const BigCard = ({
               sizes={'(max-width: 640px) 50vw, 20vw'}
               className="rounded-md"
               alt={title}
+              unoptimized={true}
             />
           </div>
           <p

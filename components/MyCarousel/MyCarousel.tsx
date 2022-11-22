@@ -45,6 +45,7 @@ const MyCarousel = ({ items }: IMyCarouselProps) => {
             alt={item.title}
             priority={idx === 0 ? true : false}
             sizes="75vw"
+            unoptimized={true}
           />
         </div>
       </div>

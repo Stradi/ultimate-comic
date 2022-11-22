@@ -79,6 +79,7 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
               className="rounded-md"
               priority
               sizes={'(max-width: 640px) 100vw, 33vw'}
+              unoptimized={true}
             />
           </div>
           <div className="m-auto w-full rounded-md bg-neutral-900 p-4 sm:w-10/12 md:w-3/5 md:rounded-r-md md:rounded-l-none lg:w-2/3">
