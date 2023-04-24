@@ -1,5 +1,5 @@
 import { SEO } from 'configs/seo';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -31,26 +31,31 @@ const Navbar = ({ items }: INavbarProps) => {
   };
 
   return (
+    // {/* <nav className="mx-auto w-full sm:flex sm:justify-between sm:h-16 md:w-9/12">
+    //   <ul className="flex gap-2 justify-evenly self-center">{leftSideDOM}</ul>
+    //   <ul className="flex gap-2 justify-evenly self-center">
+    //     {rightSideDOM}
+    //   </ul>
+    // </nav> */}
     <nav className="rounded bg-neutral-900 py-2.5 px-2 sm:px-4">
       <Container>
         <div className="mx-auto flex flex-wrap items-center justify-between">
-          <Link href="/">
-            <a
-              onClick={handleBrandClick}
-              onContextMenu={handleBrandClick}
-              className="group relative flex items-center gap-2 rounded-md py-2 px-4 text-neutral-400 transition duration-100 hover:bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-600"
-            >
-              <Image
-                src="/brand/logo_dark_2x.png"
-                className="h-6 transition duration-100 group-hover:brightness-125 sm:h-9"
-                alt="UltimateComic Logo"
-                width={51.2}
-                height={40.25}
-              />
-              <span className="relative -translate-x-1/3 self-center whitespace-nowrap font-semibold opacity-0 transition duration-100 group-hover:translate-x-0 group-hover:opacity-100">
-                {SEO.WEBSITE_NAME}
-              </span>
-            </a>
+          <Link
+            href="/"
+            onClick={handleBrandClick}
+            onContextMenu={handleBrandClick}
+            className="group relative flex items-center gap-2 rounded-md py-2 px-4 text-neutral-400 transition duration-100 hover:bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+          >
+            <Image
+              src="/brand/logo_dark_2x.png"
+              className="h-6 transition duration-100 group-hover:brightness-125 sm:h-9"
+              alt="UltimateComic Logo"
+              width={51.2}
+              height={40.25}
+            />
+            <span className="relative -translate-x-1/3 self-center whitespace-nowrap font-semibold opacity-0 transition duration-100 group-hover:translate-x-0 group-hover:opacity-100">
+              {SEO.WEBSITE_NAME}
+            </span>
           </Link>
           <div className="flex">
             <button
@@ -91,13 +96,6 @@ const Navbar = ({ items }: INavbarProps) => {
         </div>
       </Container>
     </nav>
-
-    // {/* <nav className="mx-auto w-full sm:flex sm:justify-between sm:h-16 md:w-9/12">
-    //   <ul className="flex gap-2 justify-evenly self-center">{leftSideDOM}</ul>
-    //   <ul className="flex gap-2 justify-evenly self-center">
-    //     {rightSideDOM}
-    //   </ul>
-    // </nav> */}
   );
 };
 

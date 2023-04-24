@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { RowDataPacket } from 'mysql2/promise';
 import { getConnection } from './mysql';
 
 const runSQL = async <T extends RowDataPacket>(sql: string): Promise<T[]> => {
   const connection = await getConnection();
+  // @ts-ignore
   const result = await connection.query<T[]>(sql);
 
   return result[0];
@@ -10,6 +12,7 @@ const runSQL = async <T extends RowDataPacket>(sql: string): Promise<T[]> => {
 
 const getComicCount = async (): Promise<number> => {
   const connection = await getConnection();
+  // @ts-ignore
   const result = await connection.query<RowDataPacket[]>(
     'SELECT COUNT(*) as count FROM comic'
   );
@@ -19,6 +22,7 @@ const getComicCount = async (): Promise<number> => {
 
 const getIssueCount = async (): Promise<number> => {
   const connection = await getConnection();
+  // @ts-ignore
   const result = await connection.query<RowDataPacket[]>(
     'SELECT COUNT(*) as count FROM issue'
   );

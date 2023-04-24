@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import Link from 'next/link';
 
 import cx from 'classnames';
@@ -38,18 +38,18 @@ const Card = ({
 type IMiniCardProps = Pick<ICardProps, 'href' | 'title' | 'subtitle'>;
 const MiniCard = ({ href, title, subtitle }: IMiniCardProps) => {
   return (
-    <Link href={href} prefetch={false}>
-      <a
-        className="group rounded-md bg-neutral-900 p-2 xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600"
-        title={`${title}, ${subtitle}`}
-      >
-        <p className="text-base transition-colors duration-100 line-clamp-1 group-hover:text-white xs:text-lg">
-          {title}
-        </p>
-        <p className="truncate text-sm text-neutral-400 group-hover:text-neutral-200">
-          {subtitle}
-        </p>
-      </a>
+    <Link
+      href={href}
+      prefetch={false}
+      className="group rounded-md bg-neutral-900 p-2 xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600"
+      title={`${title}, ${subtitle}`}
+    >
+      <p className="text-base transition-colors duration-100 line-clamp-1 group-hover:text-white xs:text-lg">
+        {title}
+      </p>
+      <p className="truncate text-sm text-neutral-400 group-hover:text-neutral-200">
+        {subtitle}
+      </p>
     </Link>
   );
 };
@@ -77,31 +77,34 @@ const BigCard = ({
   });
 
   return (
-    <Link href={href} prefetch={false}>
-      <a className={anchorClasses} title={`${title}, ${subtitle}`}>
-        <div className={divClasses}>
-          <div className="relative h-full w-full">
-            <Image
-              src={
-                image ||
-                'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNU/Q8AAU8BJijqIsEAAAAASUVORK5CYII='
-              }
-              layout="fill"
-              sizes={'(max-width: 640px) 50vw, 20vw'}
-              className="rounded-md"
-              alt={title}
-              unoptimized={true}
-            />
-          </div>
-          <p
-            className="text-lg font-medium text-white line-clamp-1"
-            title={title}
-          >
-            {title}
-          </p>
-          <p>{subtitle}</p>
+    <Link
+      href={href}
+      prefetch={false}
+      className={anchorClasses}
+      title={`${title}, ${subtitle}`}
+    >
+      <div className={divClasses}>
+        <div className="relative h-full w-full">
+          <Image
+            src={
+              image ||
+              'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNU/Q8AAU8BJijqIsEAAAAASUVORK5CYII='
+            }
+            layout="fill"
+            sizes={'(max-width: 640px) 50vw, 20vw'}
+            className="rounded-md"
+            alt={title}
+            unoptimized={true}
+          />
         </div>
-      </a>
+        <p
+          className="text-lg font-medium text-white line-clamp-1"
+          title={title}
+        >
+          {title}
+        </p>
+        <p>{subtitle}</p>
+      </div>
     </Link>
   );
 };

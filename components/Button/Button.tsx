@@ -1,6 +1,5 @@
-import Link from 'next/link';
-
 import cx from 'classnames';
+import Link from 'next/link';
 
 interface IButtonProps {
   href: string;
@@ -21,8 +20,8 @@ const DefaultButton = ({ href, text, className }: IButtonTypeProps) => {
     className
   );
   return (
-    <Link href={href}>
-      <a className={classes}>{text}</a>
+    <Link href={href} className={classes}>
+      {text}
     </Link>
   );
 };
@@ -33,8 +32,8 @@ const MinimalButton = ({ href, text, className }: IButtonTypeProps) => {
     className
   );
   return (
-    <Link href={href}>
-      <a className={classes}>{text}</a>
+    <Link href={href} className={classes}>
+      {text}
     </Link>
   );
 };

@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { ReactElement } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import { Button } from '../Button';

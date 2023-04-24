@@ -15,16 +15,18 @@ const Footer = () => {
         </a>
         .<br></br>
         For more information see{' '}
-        <Link href="/privacy-policy">
-          <a className="rounded-sm text-neutral-400 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-600">
-            Privacy Policy
-          </a>
+        <Link
+          href="/privacy-policy"
+          className="rounded-sm text-neutral-400 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-600"
+        >
+          Privacy Policy
         </Link>{' '}
         and{' '}
-        <Link href="/dmca">
-          <a className="rounded-sm text-neutral-400 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-600">
-            DMCA
-          </a>
+        <Link
+          href="/dmca"
+          className="rounded-sm text-neutral-400 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-600"
+        >
+          DMCA
         </Link>
         .
       </p>
