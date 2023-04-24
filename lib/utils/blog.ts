@@ -174,7 +174,6 @@ const moveImagesToPublicFolder = (
       path.join(PUBLIC_IMAGES_PATH, type, slug, name),
       {
         overwrite: true,
-        recursive: true,
       }
     );
   });

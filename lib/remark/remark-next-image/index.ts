@@ -1,4 +1,4 @@
-import { Node, visit } from 'unist-util-visit';
+import { visit } from 'unist-util-visit';
 
 interface IOptions {
   publicPath: string;
@@ -70,7 +70,7 @@ const remarkNextImage = ({ publicPath }: IOptions) => {
     }
   };
 
-  const transform = (tree: Node) => {
+  const transform = (tree: any) => {
     visit(tree, 'mdxJsxFlowElement', visitor);
     visit(tree, 'image', visitor);
   };
