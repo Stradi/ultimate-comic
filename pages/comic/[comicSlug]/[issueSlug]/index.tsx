@@ -6,12 +6,11 @@ import {
   NextPage,
 } from 'next';
 import { NextSeo } from 'next-seo';
-import { useRouter } from 'next/router';
 import { ParsedUrlQuery } from 'querystring';
 import { useEffect } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
-import { Reader } from '~/components/Reader';
+import { NewReader } from '~/components/NewReader';
 import { ComicIssueJsonLd } from '~/components/SEO/ComicIssueJsonLd';
 import { runSQL } from '~/lib/database';
 import { IComic, IIssue } from '~/lib/database/models';
@@ -32,15 +31,6 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
   nextIssue,
   prevIssue,
 }: IIssueSlugPageProps) => {
-  const router = useRouter();
-  const goNextIssue = () => {
-    if (nextIssue) {
-      router.push(`/comic/${comic.slug}/${nextIssue.slug}`);
-    } else {
-      router.push(`/comic/${comic.slug}`);
-    }
-  };
-
   useEffect(() => {
     const incrementView = async () => {
       await fetch('/api/view', {
@@ -130,7 +120,23 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
           {issueNavDOM}
         </div>
         {(issue.images as string[]).length > 0 ? (
-          <Reader images={issue.images as string[]} onFinished={goNextIssue} />
+          <>
+            <NewReader images={issue.images as string[]} />
+            <div className="mx-auto mt-4 md:flex md:max-w-4xl md:justify-between">
+              <h1 className="mx-auto self-center text-center font-medium md:w-1/2 md:text-left">
+                Back to{' '}
+                <Button
+                  href={`/comic/${comic.slug}`}
+                  text="Comic Page"
+                  type="minimal"
+                />
+              </h1>
+              <h2 className="mt-2 min-w-max grow self-center text-center text-lg font-medium md:mt-0">
+                {issue.name}
+              </h2>
+              {issueNavDOM}
+            </div>
+          </>
         ) : (
           <div className="mt-32 text-center sm:mt-44">
             <p className="text-4xl font-medium text-white">
