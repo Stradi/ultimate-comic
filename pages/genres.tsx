@@ -1,14 +1,15 @@
 import { GetStaticProps, NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import { CardList } from '~/components/CardList';
-import { tagToCardListProps } from '~/components/CardList/CardList.helper';
 import { Container } from '~/components/Container';
 import { Section } from '~/components/Section';
 import { runSQL } from '~/lib/database';
-import { ITag } from '~/lib/database/models';
+import { IComic, ITag } from '~/lib/database/models';
 
 interface IGenresPageProps {
-  tags: ITag[];
+  tags: (ITag & {
+    comicCount: number;
+  })[];
 }
 
 const GenresPage: NextPage<IGenresPageProps> = ({ tags }: IGenresPageProps) => {
@@ -25,7 +26,13 @@ const GenresPage: NextPage<IGenresPageProps> = ({ tags }: IGenresPageProps) => {
           showSeeAllButton={false}
         >
           <CardList
-            items={tags.map((tag) => tagToCardListProps(tag))}
+            items={tags.map((tag) => ({
+              href: `/tag/${tag.slug}`,
+              title: tag.name,
+              subtitle: `${tag.comicCount} Comics`,
+              image: '',
+              mini: true,
+            }))}
             responsive={false}
           />
         </Section>
@@ -62,8 +69,9 @@ const _getAllTags = async () => {
       ({
         name: tag.name,
         slug: tag.slug,
-        comics: new Array(tag.comic_count).fill(null),
-      } as ITag)
+        comics: [] as IComic[],
+        comicCount: tag.comic_count,
+      } as ITag & { comicCount: number })
   );
 };
 
