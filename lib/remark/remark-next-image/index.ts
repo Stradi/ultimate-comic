@@ -70,7 +70,8 @@ const remarkNextImage = ({ publicPath }: IOptions) => {
     }
   };
 
-  const transform = (tree: never) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const transform = (tree: any) => {
     visit(tree, 'mdxJsxFlowElement', visitor);
     visit(tree, 'image', visitor);
   };
