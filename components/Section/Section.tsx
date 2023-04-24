@@ -17,7 +17,7 @@ const Section = ({
 }: ISectionProps) => {
   return (
     <div>
-      <header className="mt-4 mb-2 flex items-center justify-between">
+      <header className="mb-2 mt-4 flex items-center justify-between">
         <div className="flex w-2/3 flex-col">
           <h2 className="text-2xl font-bold text-white sm:text-3xl">{title}</h2>
           <p className="text-neutral-400 sm:text-lg">{subtitle}</p>

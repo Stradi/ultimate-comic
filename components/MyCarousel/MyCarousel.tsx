@@ -30,7 +30,7 @@ const MyCarousel = ({ items }: IMyCarouselProps) => {
             {item.meta && (
               <div className="text-base sm:text-lg">{item.meta}</div>
             )}
-            <p className="text-base line-clamp-2 sm:text-lg">{item.subtitle}</p>
+            <p className="line-clamp-2 text-base sm:text-lg">{item.subtitle}</p>
             <div className="mt-2">
               <Button href={item.href} text={item.buttonText} type="default" />
             </div>

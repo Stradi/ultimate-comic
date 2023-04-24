@@ -23,7 +23,7 @@ const CookieConsent = () => {
 
   if (!isAccepted) {
     return (
-      <div className="absolute top-0 left-0 z-50 h-full w-full bg-black/75">
+      <div className="absolute left-0 top-0 z-50 h-full w-full bg-black/75">
         <div className="fixed bottom-0 flex h-32 w-full items-center rounded-t-lg bg-neutral-900 px-4 align-middle">
           <div className="flex w-full justify-between">
             <div>

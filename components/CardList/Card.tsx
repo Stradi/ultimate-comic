@@ -44,7 +44,7 @@ const MiniCard = ({ href, title, subtitle }: IMiniCardProps) => {
       className="group rounded-md bg-neutral-900 p-2 xs:transition-shadow xs:duration-100 xs:hover:ring-2 xs:hover:ring-red-600"
       title={`${title}, ${subtitle}`}
     >
-      <p className="text-base transition-colors duration-100 line-clamp-1 group-hover:text-white xs:text-lg">
+      <p className="line-clamp-1 text-base transition-colors duration-100 group-hover:text-white xs:text-lg">
         {title}
       </p>
       <p className="truncate text-sm text-neutral-400 group-hover:text-neutral-200">
@@ -98,7 +98,7 @@ const BigCard = ({
           />
         </div>
         <p
-          className="text-lg font-medium text-white line-clamp-1"
+          className="line-clamp-1 text-lg font-medium text-white"
           title={title}
         >
           {title}

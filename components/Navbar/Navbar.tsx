@@ -37,14 +37,14 @@ const Navbar = ({ items }: INavbarProps) => {
     //     {rightSideDOM}
     //   </ul>
     // </nav> */}
-    <nav className="rounded bg-neutral-900 py-2.5 px-2 sm:px-4">
+    <nav className="rounded bg-neutral-900 px-2 py-2.5 sm:px-4">
       <Container>
         <div className="mx-auto flex flex-wrap items-center justify-between">
           <Link
             href="/"
             onClick={handleBrandClick}
             onContextMenu={handleBrandClick}
-            className="group relative flex items-center gap-2 rounded-md py-2 px-4 text-neutral-400 transition duration-100 hover:bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+            className="group relative flex items-center gap-2 rounded-md px-4 py-2 text-neutral-400 transition duration-100 hover:bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-600"
           >
             <Image
               src="/brand/logo_dark_2x.png"

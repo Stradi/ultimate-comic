@@ -81,7 +81,7 @@ const GuidePage: NextPage<IGuidePageProps> = ({
             </p>
           </div>
           <br></br>
-          <div className="prose-lg prose prose-invert mx-auto max-w-full prose-h1:mb-2 prose-a:text-inherit prose-a:transition prose-a:duration-100 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-li:marker:font-bold prose-li:marker:text-red-600 prose-img:my-0 prose-img:p-2">
+          <div className="prose prose-lg prose-invert mx-auto max-w-full prose-h1:mb-2 prose-a:text-inherit prose-a:transition prose-a:duration-100 hover:prose-a:text-red-600 prose-blockquote:border-l-red-600 prose-li:marker:font-bold prose-li:marker:text-red-600 prose-img:my-0 prose-img:p-2">
             <p>{guide.excerpt}</p>
             <MDXRemote {...guide.content} components={MDXComponents} />
           </div>

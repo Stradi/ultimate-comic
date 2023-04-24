@@ -49,7 +49,7 @@ const IssueSlugPage: NextPage<IIssueSlugPageProps> = ({
   });
 
   const issueNavDOM = (
-    <div className="my-2 mx-auto flex justify-center gap-4 md:w-1/2 md:justify-end">
+    <div className="mx-auto my-2 flex justify-center gap-4 md:w-1/2 md:justify-end">
       {prevIssue && (
         <Button
           type="minimal"

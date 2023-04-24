@@ -70,7 +70,7 @@ const remarkNextImage = ({ publicPath }: IOptions) => {
     }
   };
 
-  const transform = (tree: any) => {
+  const transform = (tree: never) => {
     visit(tree, 'mdxJsxFlowElement', visitor);
     visit(tree, 'image', visitor);
   };

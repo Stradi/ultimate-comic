@@ -83,7 +83,7 @@ const ComicSlugPage: NextPage<IComicSlugPageProps> = ({
               unoptimized={true}
             />
           </div>
-          <div className="m-auto w-full rounded-md bg-neutral-900 p-4 sm:w-10/12 md:w-3/5 md:rounded-r-md md:rounded-l-none lg:w-2/3">
+          <div className="m-auto w-full rounded-md bg-neutral-900 p-4 sm:w-10/12 md:w-3/5 md:rounded-l-none md:rounded-r-md lg:w-2/3">
             <h1 className="mb-2 text-left text-2xl font-medium text-white">
               {comic.name}
             </h1>

@@ -24,7 +24,7 @@ const ReadingOrderIssue = ({
         <a
           href={`${hrefTemplate}${i}`}
           key={`${name} Issue #${i}`}
-          className="mb-1 block rounded-lg bg-neutral-900 py-1 px-2 no-underline transition duration-100 hover:translate-x-2 hover:bg-neutral-800 hover:!text-white"
+          className="mb-1 block rounded-lg bg-neutral-900 px-2 py-1 no-underline transition duration-100 hover:translate-x-2 hover:bg-neutral-800 hover:!text-white"
         >
           {`${name} #${i}`}
         </a>

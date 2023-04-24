@@ -81,7 +81,7 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
                   <Link
                     href={`/all-comics/${letter}/${pageNo - 1}`}
                     prefetch={false}
-                    className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600"
+                    className="rounded-md bg-neutral-900 px-2 py-1 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600"
                   >
                     {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
                     <i className="ri-arrow-left-s-line ri-fw align-middle" />
@@ -89,22 +89,22 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
                   <Link
                     href={`/all-comics/${letter}/${pageNo - 1}`}
                     prefetch={false}
-                    className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600"
+                    className="rounded-md bg-neutral-900 px-3 py-1 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600"
                   >
                     {pageNo - 1}
                   </Link>
                 </>
               ) : (
                 <>
-                  <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
+                  <div className="rounded-md bg-black/50 px-3 py-1 hover:cursor-not-allowed">
                     -
                   </div>
-                  <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
+                  <div className="rounded-md bg-black/50 px-3 py-1 hover:cursor-not-allowed">
                     -
                   </div>
                 </>
               )}
-              <div className="rounded-md bg-neutral-800 py-1 px-3">
+              <div className="rounded-md bg-neutral-800 px-3 py-1">
                 {pageNo}
               </div>
               {comics.length == PAGES.ALL_COMICS.COMIC_PER_PAGE ? (
@@ -112,14 +112,14 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
                   <Link
                     href={`/all-comics/${letter}/${pageNo + 1}`}
                     prefetch={false}
-                    className="rounded-md bg-neutral-900 py-1 px-3 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600"
+                    className="rounded-md bg-neutral-900 px-3 py-1 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600"
                   >
                     {pageNo + 1}
                   </Link>
                   <Link
                     href={`/all-comics/${letter}/${pageNo + 1}`}
                     prefetch={false}
-                    className="rounded-md bg-neutral-900 py-1 px-2 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600"
+                    className="rounded-md bg-neutral-900 px-2 py-1 transition duration-100 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-red-600"
                   >
                     {/* eslint-disable-next-line tailwindcss/no-custom-classname */}
                     <i className="ri-arrow-right-s-line ri-fw align-middle" />
@@ -127,10 +127,10 @@ const ComicWithLetterPage: NextPage<IComicWithLetterPageProps> = ({
                 </>
               ) : (
                 <>
-                  <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
+                  <div className="rounded-md bg-black/50 px-3 py-1 hover:cursor-not-allowed">
                     -
                   </div>
-                  <div className="rounded-md bg-black/50 py-1 px-3 hover:cursor-not-allowed">
+                  <div className="rounded-md bg-black/50 px-3 py-1 hover:cursor-not-allowed">
                     -
                   </div>
                 </>
